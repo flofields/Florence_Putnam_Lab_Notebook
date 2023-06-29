@@ -8,3 +8,4 @@ permalink: /about/
 ## Curriculum Vitae
 View or download my CV [HERE](file:///C:/Users/flo_f/OneDrive%20-%20University%20of%20Rhode%20Island/GitHub/GitHub/Flo_Putnam_Lab_Notebook/Florence_Putnam_Lab_Notebook/Curriculum%20Vitae%20(1).pdf)
 
+ 
