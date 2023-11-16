@@ -10,7 +10,7 @@ PROJECTS: ENCORE Bermuda
 ## Bermuda **Porites astreoides** Making Squaricals
 
 **About**: This protocol oulines the design of the squarials used to hold Porites astreoides larvae after spawning
-Orignating from [JillAshely](https://github.com/JillAshey/JillAshey_Putnam_Lab_Notebook/blob/master/_posts/2021-07-28-MakingSquaricals.md),
+Orignating from [JillAshey](https://github.com/JillAshey/JillAshey_Putnam_Lab_Notebook/blob/master/_posts/2021-07-28-MakingSquaricals.md),
 this design was created by Dr. Ariana Huffmyer and modififed specfically for Porites astreoides larvae in this post.
 
 ### Materials & Equipment
