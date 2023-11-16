@@ -1,34 +1,34 @@
-POST_DATE=$(date '2023-06-29')
-MD_LINE="---"
-LAYOUT="layout: post"
-TITLE="Making Squaricals: "
-DATE_LINE="date: "
-CATEGORIES="categories: Protocols "
-TAGS="tags: Coral Reproduction, Protocols, Porites astreoides "
-PROJECTS= "ENCORE Bermuda "
+---
+LAYOUT: Post
+TITLE: Making Squaricals
+DATE: '2023-06-29'
+CATEGORIES: Protocols
+TAGS: [Coral Reproduction, Protocols, Porites astreoides]
+PROJECTS: ENCORE Bermuda
+---
 
 ## Bermuda **Porites astreoides** Making Squaricals
 
 **About**: This protocol oulines the design of the squarials used to hold Porites astreoides larvae after spawning
 Orignating from [JillAshely](https://github.com/JillAshey/JillAshey_Putnam_Lab_Notebook/blob/master/_posts/2021-07-28-MakingSquaricals.md),
-this design was created by Dr. Ariana Huffmyer and modififed specfically for Porites astreoides larvae in this post. 
+this design was created by Dr. Ariana Huffmyer and modififed specfically for Porites astreoides larvae in this post.
 
-### Materials & Equipment 
-- Squaricals 
-- Drill & 1/2" hole saw 
-- 10ft of 1/2" PVC 
-- 1/2" couplers, tees and elbows 
+### Materials & Equipment
+- Squaricals
+- Drill & 1/2" hole saw
+- 10ft of 1/2" PVC
+- 1/2" couplers, tees and elbows
 - 10 ft of 3" PVC pipe
 - Water line tubing (blue silicone)
 - Hot glue
 - Zipties
-- 100um mesh 
+- 100um mesh
 
-Note: The Drill, PVC and mesh size may differ between species and systems. 
+Note: The Drill, PVC and mesh size may differ between species and systems.
 
 ## Protocol
 
-- Drill a 1/2" hole into a 18 quart squarical between the 14 and 16 quart mark. 
+- Drill a 1/2" hole into a 18 quart squarical between the 14 and 16 quart mark.
 - Cut a section of the blue silicone water line tubing
     note: the length of the tube should be long enough to outline the inner hole that was drilled in the squarical.
 Cut the tube length wise and place in the drilled hole's diameter.
@@ -40,10 +40,10 @@ Place 1/2" PVC coupler through the hole and cut the excess blue tube from around
 
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/pipe%20attached%20to%20squarical.jpg)
 
-glue the coupler to the hole around the diameter both inside and outside and ensure to fill in any remaining openings between the hole's edges and coupler. 
+glue the coupler to the hole around the diameter both inside and outside and ensure to fill in any remaining openings between the hole's edges and coupler.
 Cut 1/2" PVC pipe into 3 inches and attach to the coupler end inside of the squarical.
 Cut 3" PVC into circles of equal size and drill a 1/2" hole into its side.
-Cut a section of the blue tubing and like before cut it length waise and outline the diameter of the hole drilled into the circular PVC. Place a 1/2" coupler through the hole, cut the excess blue tube from the diameter and hot glue the coupler to the hole and the diameter both inside and outside. Fill in any spaces or openings between the hole's edges and coupler. 100um mesh was placed and glued on both sides of the 3" PVC. These are called banjo filters. 
+Cut a section of the blue tubing and like before cut it length waise and outline the diameter of the hole drilled into the circular PVC. Place a 1/2" coupler through the hole, cut the excess blue tube from the diameter and hot glue the coupler to the hole and the diameter both inside and outside. Fill in any spaces or openings between the hole's edges and coupler. 100um mesh was placed and glued on both sides of the 3" PVC. These are called banjo filters.
 Cut 1/2" PVC pipe into 3 inches and attach to the coupler on the banjo filter. Once attached secure the PVC elbow to the end of the 1/2" PVC pipe.
 Attach the other end of the elbow to the 1/2" PVC pipe attached to the coupler end inside of the squarical.
 
