@@ -3,7 +3,7 @@
 Location on Andromeda, the HPC server for URI:
 
 ---
-cd/data/putnamlab/KITT/hputnam/??????
+cd/data/putnamlab/KITT/hputnam/20230825_Bermuda_Reference_Transcriptomes
 
 MDEC_R1_001.fastq.gz
 MDEC_R1_001.fastq.gz.md5
@@ -255,5 +255,64 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
 Submitted batch job 294032
 ```
+```
+module load MultiQC/1.9-intel-2020a-Python-3.8.2
+multiqc /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/*fastqc.zip -o /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc
+```
+```
+scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trim2_fastqc
+scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/*.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trim2_fastqc
+```
+## 9) Run Trinity with forward and reverse sequences
+[Documentation on steps to running trinity](https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-Trinity#strand_specific_assembly)
+[Danielle Becker Pollinksi's Notebook Post](https://github.com/daniellembecker/DanielleBecker_Lab_Notebook/blob/master/_posts/2023-08-31-Acropora-pulchra-denovo-transcriptome.md) was also used a source.
 
+Before creating a script to run trinity determine whether the reads are parired or unparied to select the library type
+
+Note: The reads being used are non-stranded and [paired](https://github.com/flofields/MDEC_Reference_Transcriptome/blob/main/metadata/30-818136646_R4%20(3).pdf) therefore the library type RF and FR will be used.
+
+
+seqType :fq - for Fastq format
+max_memory :100G = max memory for trinity 100G should not be changed, per communications with the developer
+CPU 36 = the number of CPUs should match the amount your computing cluster has access to, for andromeda the maximum number of cores is 36
+
+#### a) Write Trinity Script
+```
+nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trinity.sh
+```
+```
+#!/bin/bash
+#SBATCH --job-name=20240213_trinity
+#SBATCH --time=30-00:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1
+#SBATCH --exclusive
+#SBATCH --export=NONE
+#SBATCH --mem=500GB
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/trim2
+#SBATCH --error="script_error" #if your job fails, the error report will be put in this file
+#SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
+
+
+#Load Trinity module
+
+module load Trinity/2.15.1-foss-2022a
+module load java -jar $EBROOTPICARD/libs/picard.jar mean
+
+#Run Trinity
+
+Trinity \
+--seqType fq \
+--max_memory 50G \
+--left \
+/data/putnamlab/flofields/denovo_transcriptome/MDEC_001_trim2_R1.fastq.gz \
+--right \
+/data/putnamlab/flofields/denovo_transcriptome/MDEC_001_trim2_R2.fastq.gz \
+--CPU 36
+
+sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trinity.sh
+
+Submitted batch job 304129
 
