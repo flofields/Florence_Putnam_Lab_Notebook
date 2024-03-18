@@ -79,16 +79,16 @@ These Mdec samples were pooled and had RNA concentrations of [Qbit 67.20ng/ul an
   
 - Adapter content present in sequences. Adapters have not been removed yet via trimming.
 
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/fastqc_adapter_content_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/543dd3185cc809ab2b43abd8dc93e0a2ad9f564f/images/Mdec_RNAseq/raw_multiqc/fastqc_adapter_content_plot.png)
 
 - Warnings were attached to the GC content. This could be a result of poly-G tails from Illumina NextSeq.
 
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/fastqc_per_sequence_gc_content_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/543dd3185cc809ab2b43abd8dc93e0a2ad9f564f/images/Mdec_RNAseq/raw_multiqc/fastqc_per_sequence_gc_content_plot.png)
 
 - Sequence counts shows that their is a high number of over-represented sequences. This can occur when they are highly expressed genes.
 
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/fastqc_sequence_counts_plot.png)
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/fastqc_sequence_duplication_levels_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/543dd3185cc809ab2b43abd8dc93e0a2ad9f564f/images/Mdec_RNAseq/raw_multiqc/fastqc_sequence_counts_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/543dd3185cc809ab2b43abd8dc93e0a2ad9f564f/images/Mdec_RNAseq/raw_multiqc/fastqc_sequence_duplication_levels_plot.png)
 
 - Quality scores are good
 
@@ -374,8 +374,9 @@ The MultiQC report results
 
 - Fastp filtering: most reads filtered were due to low quality
 
-Sequence counts shows that 30.4% of reads in R1 is unique and 33.9% in R2 is unique 
+Sequence counts shows that 30.4% of reads in R1 is unique and 33.9% in R2 is unique however dulication levels/over represented sequences are high This can occur when they are highly expressed genes. It is possible to have good libraries with small peaks at high duplication levels.
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_counts_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_duplication_levels_plot.png)
 
 Sequence Quality is good
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_quality_scores_plot.png)
@@ -386,10 +387,6 @@ Per Sequence GC Content came with warmings this could mean that tey are alot of 
 
 Per base n content is good
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_n_content_plot.png)
-
-
-duplication levels are high. It is possible to have good libraries with small peaks at high duplication levels.
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_duplication_levels_plot.png)
 
 The status check below shows the overall status for each FastQC section where gree is normal, orange is slightly abnormal and red being very unsual.
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc-status-check-heatmap.png)
