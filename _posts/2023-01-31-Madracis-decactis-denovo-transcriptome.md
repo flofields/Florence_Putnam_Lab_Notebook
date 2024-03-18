@@ -252,6 +252,27 @@ Submitted batch job 293922
 ```
 mkdir fastqc_results_trim2
 nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
+```
+```
+#!/bin/bash
+#SBATCH -t 24:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/trim2
+#SBATCH --error="script_error" #if your job fails, the error report will be put in this file
+#SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
+
+module load FastQC/0.11.9-Java-11
+
+for file in /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC*
+do
+fastqc $file --outdir /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/
+```
+```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
 Submitted batch job 294032
 ```
@@ -295,11 +316,11 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trinity.sh
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
+cd /data/putnamlab/flofields/denovo_transcriptome/data/trim2
 
 #Load Trinity module
 
 module load Trinity/2.15.1-foss-2022a
-module load java -jar $EBROOTPICARD/libs/picard.jar mean
 
 #Run Trinity
 
@@ -307,12 +328,138 @@ Trinity \
 --seqType fq \
 --max_memory 50G \
 --left \
-/data/putnamlab/flofields/denovo_transcriptome/MDEC_001_trim2_R1.fastq.gz \
+/data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq.gz \
 --right \
-/data/putnamlab/flofields/denovo_transcriptome/MDEC_001_trim2_R2.fastq.gz \
+/data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq.gz \
 --CPU 36
-
+```
+```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trinity.sh
+Submitted batch job 304139
+```
+```
+squeue -u ffields
+```
+Trinity completed successfully!!!! When Trinity completes, it creates a 'trinity_out_dir.Trinity.fasta' output file (or prefix based on the output directory you specify).
 
-Submitted batch job 304129
+Trinity groups transcripts into clusters based on shared sequence content. Such a transcript cluster is very loosely referred to as a 'gene'. This information is encoded in the Trinity fasta accession. An example Fasta entry for one of the transcripts is formatted like so:
 
+```
+>TRINITY_DN100465_c0_g1_i1 len=518 path=[0:0-517]
+TAACCGATTACACGACGAACAGAGTGTAATAGAGACATCAGGAAGAAGGGACCGATAGTA
+CTGATATTTCAGTGGAGGAGGCCACTTCTTTACCATTACCTCACGGCTGTTCATGGTCTG
+CAATGTTGCCCGACCCACGCGGACTGGAACGAACTCAGATCCACCTTGCTCAAAGCTCAT
+TAGCTTGGCAGTGAAAGGATCCTCTTCCTCTTCTTCGGGGGGTTCATCTGTCAACTGCAG
+GGACTGAAAGTTGCCCATGTCTCTTTCCTGCCAGTTCGAGTGCTTCTTTTCTCGACCCCT
+TGGCGGCTCTACCTCGATCAATTTCAAAGCATCCTCGTCACTACAAAAACAGTGATATTT
+AGTTAGCACAAATCCTGTGTCACGCCATCTCACGTCACGCTTTCTTCTGTCACGCTACTT
+CAATTACCTGATGCCATCCTCCAAGACAAACTCGACCAGCGGGAGTACCTCGAAAGATGA
+GAATGAATAGACAAATGGCTGTCGACAGTTGATACACT
+```
+Download Trinity fasta to Desktop if needed, too large to have stored there always
+
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta /Users/flo_f/OneDrive/Desktop/Putnam-Lab/mdec-rnaseq
+
+## Assessing assembly quality
+Use [Trinity toolkit utilities](https://github.com/trinityrnaseq/trinityrnaseq/wiki/Transcriptome-Contig-Nx-and-ExN50-stats) for a assembly quality assessment
+
+#### a) Run TrinityStats.pl script for the stats output, the path of the trinity module needs to be used and then add the util folder before you can access the .pl script
+
+This script will compute the contig Nx statistics (eg. the contig N50 value), in addition to a modification of the Nx statistic that takes into consideration transcript expression (read support) data, which we call the ExN50 statistic.
+
+Based on the lengths of the assembled transcriptome contigs, we can compute the conventional Nx length statistic, such that at least x% of the assembled transcript nucleotides are found in contigs that are at least of Nx length. The traditional method is computing N50, such that at least half of all assembled bases are in transcript contigs of at least the N50 length value.
+```
+/opt/software/Trinity/2.15.1-foss-2022a/trinityrnaseq-v2.15.1/util/TrinityStats.pl trinity_out_dir.Trinity.fasta > trinity_assembly_stats
+```
+Trinity_assembly stata output 
+```
+################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':  468945
+Total trinity transcripts:      752474
+Percent GC: 42.90
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+        Contig N10: 4386
+        Contig N20: 2940
+        Contig N30: 2181
+        Contig N40: 1653
+        Contig N50: 1227
+
+        Median contig length: 420
+        Average contig: 761.95
+        Total assembled bases: 573346771
+```
+
+The N10 through N50 values are shown computed based on all assembled contigs. In this example, 10% of the assembled bases are found in transcript contigs at least 3,786 bases in length (N10 value), and the N50 value indicates that at least half the assembled bases are found in contigs that are at least 1,227 bases in length.
+
+The contig N50 values can often be exaggerated due to an assembly program generating too many transcript isoforms, especially for the longer transcripts. To mitigate this effect, the script will also compute the Nx values based on using only the single longest isoform per 'gene':
+```qq
+#####################################################
+## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+#####################################################
+
+        Contig N10: 3786
+        Contig N20: 2476
+        Contig N30: 1798
+        Contig N40: 1309
+        Contig N50: 924
+
+        Median contig length: 362
+        Average contig: 636.26
+        Total assembled bases: 298370046
+```
+
+You can see that the Nx values based on the single longest isoform per gene are lower than the Nx stats based on all assembled contigs, as expected, and even though the Nx statistic is really not a reliable indicator of the quality of a transcriptome assembly, the Nx value based on using the longest isoform per gene is perhaps better for reasons described above.
+
+## 10) Run Busco (Benchmarking Universal Single-Copy Orthologs)
+
+- Commands and overview for running BUSCO here: https://busco.ezlab.org/busco_userguide.html
+
+- uses highly conserved single-copy orthologs; evolutionary informed expectations of gene content.
+
+- appears that you can focus a BUSCO analysis to orthologs related to your target taxa.
+
+- below shows a BUSCO analysis comparing the crayfish targetted for the novo transcriptome assembly to 44 other arthropod species assemblies and a single vertebrate assembly:
+
+[Theissinger et al. 2016](https://www.sciencedirect.com/science/article/abs/pii/S1874778716300137) 
+Citation: Theissinger, K., Falckenhayn, C., Blande, D., Toljamo, A., Gutekunst, J., Makkonen, J., ... & Kokko, H. (2016). De Novo assembly and annotation of the freshwater crayfish Astacus astacus transcriptome. Marine Genomics, 28, 7-10.
+
+#### a) Make run-busco-transcriptome.sh script
+```
+nano /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
+```
+```
+#!/bin/bash
+
+#SBATCH --job-name="busco"
+#SBATCH --time="100:00:00"
+#SBATCH --nodes 1 --ntasks-per-node=20
+#SBATCH --mem=250G
+##SBATCH --output="busco-%u-%x-%j"
+##SBATCH --account=putnamlab
+##SBATCH --export=NONE
+
+echo "START" $(date)
+
+labbase=/data/putnamlab
+busco_shared="${labbase}/shared/busco"
+[ -z "$query" ] && query="${labbase}/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
+[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
+
+source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
+
+# This will generate output under your $HOME/busco_output
+cd "${labbase}/${flofields}"
+busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o busco_output -m transcriptome
+
+echo "STOP" $(date)
+```
+```
+sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
+Submitted batch job 309316
+```
