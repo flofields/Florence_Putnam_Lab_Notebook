@@ -435,13 +435,14 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
 ```
 ```
 #!/bin/bash
-
 #SBATCH --job-name="busco"
 #SBATCH --time="100:00:00"
 #SBATCH --nodes 1 --ntasks-per-node=20
 #SBATCH --mem=250G
-##SBATCH --output="busco-%u-%x-%j"
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 ##SBATCH --account=putnamlab
+##SBATCH --output="busco-%u-%x-%j"
 ##SBATCH --export=NONE
 
 echo "START" $(date)
@@ -455,11 +456,11 @@ source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required f
 
 # This will generate output under your $HOME/busco_output
 cd "${labbase}/${flofields}"
-busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o busco_output -m transcriptome
+busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_output -m transcriptome
 
 echo "STOP" $(date)
 ```
 ```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
-Submitted batch job 309316
+Submitted batch job 309345
 ```
