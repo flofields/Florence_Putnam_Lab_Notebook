@@ -169,6 +169,7 @@ mkdir fastqc_results_trimmed
 ```
 nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trimmed.sh
 ```
+
 ```
 #!/bin/bash
 #SBATCH -t 24:00:00
@@ -189,19 +190,23 @@ do
 fastqc $file --outdir /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/
 done
 ```
+
 ```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trimmed.sh
 ```
+
 #### Submitted Batch Job 293773 Jan 29 2024
 #### Finished Jan 29 2024
 
 #### Combined QC output into 1 file with MultiQC and copied to my destop to look at the trimming information
+
 ```
 #load module 
 module load MultiQC/1.9-intel-2020a-Python-3.8.2
 
 multiqc /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/*fastqc.zip -o /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc
 ```
+
 ```
 scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
 scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/*.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
@@ -223,13 +228,17 @@ See the [status check heat map](https://github.com/flofields/Florence_Putnam_Lab
 The adapter was removed which meant it was not necessary to remove base pairs from the end of the foward and reverse stands so I trimmed the raw data again removing only the adapter and poly g tail
 
 ---
+
 #### A new folder and script was created for the trim 2 data files
+
 ```
 mkdir /data/putnamlab/flofields/denovo_transcriptome/data/trim2
 ```
+
 ```
 nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
 ```
+
 ```
 #!/bin/bash
 #SBATCH -t 24:00:00
@@ -306,10 +315,12 @@ These results show that filtering improved quality of reads and removed about 2%
 
 ### 3ii) Fastqc and MultiQC on trim2 sequences
 #### Run fastqc on trim 2 data
+
 ```
 mkdir fastqc_results_trim2
 nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
 ```
+
 ```
 #!/bin/bash
 #SBATCH -t 24:00:00
@@ -330,13 +341,16 @@ do
 fastqc $file --outdir /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/
 done
 ```
+
 ```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
 ```
+
 #### Submitted batch job 294032 on Jan 31 2024
 #### Finished on Jan 31 2024
 
 #### Combined QC output into 1 file with MultiQC and fastp and copied to my destop to look at the trim 2 information
+
 ```
 #load module 
 module load MultiQC/1.9-intel-2020a-Python-3.8.2
@@ -344,8 +358,11 @@ module load MultiQC/1.9-intel-2020a-Python-3.8.2
 #Copy the multiqc html file to my computer
 multiqc /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/*fastqc.zip -o /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc
 ```
+
 ```
 scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-Lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
+```
+
 #### The raw sequence [MultiQC report can be found here in Github](https://github.com/flofields/MDEC_Reference_Transcriptome/blob/main/data/rna_seq/QC/trim2/multiqc_report.html)
 
 The MultiQC report results
@@ -357,6 +374,20 @@ The MultiQC report results
 | MDEC_R2_001 |            |           |    |        | 66.1% | 43%  | 218.0  |
 
 - Fastp filtering: most reads filtered were due to low quality
+
+Sequence counts shows that 30.4% of reads in R1 is unique and 33.9% in R2 is unique 
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_counts_plot.png)
+
+Sequence Quality is good
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_quality_scores_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_sequence_quality_plot.png)
+
+Per Sequence GC Content came with warmings this could mean that tey are alot of PCR duplicates
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_gc_content_plot.png)
+
+Per base n content is good
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_n_content_plot.png)
+
 
 
 
