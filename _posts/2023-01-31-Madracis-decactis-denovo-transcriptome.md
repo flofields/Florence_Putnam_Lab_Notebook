@@ -1,3 +1,13 @@
+---
+LAYOUT: post
+TITLE: Workflow for Madracis decactis de novo transcriptome
+CATEGORY: [ de novo transcriptome, RNA seq ]
+TAG: [ Madracis decactis, de novo transcriptome ]
+---
+## Designing a workflow to create a de novo transcriptome for *Madracis decactis*
+
+**About**: This post details the steps taken to create a de novo transcriptome for *Madracis decactis* using samples obtained in August 2022 as part of the ENCORE project in the TPC-PI experiment. 
+
 ### *MDEC* transcriptome data files on URI andromeda:
 
 Location on Andromeda, the HPC server for URI:
