@@ -1,4 +1,3 @@
-
 ---
 LAYOUT: Post
 TITLE: QC of RNAseq Mdec files from the ENCORE 2022 TPC project 
@@ -376,11 +375,11 @@ The MultiQC report results
 - Fastp filtering: most reads filtered were due to low quality
 
 Sequence counts shows that 30.4% of reads in R1 is unique and 33.9% in R2 is unique 
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_counts_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_counts_plot.png)
 
 Sequence Quality is good
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_quality_scores_plot.png)
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_sequence_quality_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_quality_scores_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_sequence_quality_plot.png)
 
 Per Sequence GC Content came with warmings this could mean that tey are alot of PCR duplicates
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_gc_content_plot.png)
@@ -389,5 +388,11 @@ Per base n content is good
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_n_content_plot.png)
 
 
+duplication levels are high. It is possible to have good libraries with small peaks at high duplication levels.
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_duplication_levels_plot.png)
 
+The status check below shows the overall status for each FastQC section where gree is normal, orange is slightly abnormal and red being very unsual.
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc-status-check-heatmap.png)
 
+Next I will be using the trim2 data to run in trinity. 
+This QC was for the purpose of assembling a denov transciptome. The entire process can be found on Github [Here.](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2023-01-31-Madracis-decactis-denovo-transcriptome.md)
