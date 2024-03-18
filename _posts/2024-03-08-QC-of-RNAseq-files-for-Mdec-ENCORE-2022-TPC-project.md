@@ -92,11 +92,11 @@ These Mdec samples were pooled and had RNA concentrations of [Qbit 67.20ng/ul an
 
 - Quality scores are good
 
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/fastqc_per_sequence_quality_scores_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/52a6e9c629da8f19efa400ac211a4a6a6764c362/images/Mdec_RNAseq/raw_multiqc/fastqc_per_sequence_quality_scores_plot.png)
 
 - Low base N content
 
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/Mdec_RNAseq/fastqc_per_base_n_content_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/52a6e9c629da8f19efa400ac211a4a6a6764c362/images/Mdec_RNAseq/raw_multiqc/fastqc_per_base_n_content_plot.png)
 
 ### 2) Trimming 
 Trimming steps below were taken then another QC report was generated to decide if other trimming decisions needed to be made.
@@ -374,21 +374,21 @@ The MultiQC report results
 
 - Fastp filtering: most reads filtered were due to low quality
 
-Sequence counts shows that 30.4% of reads in R1 is unique and 33.9% in R2 is unique however dulication levels/over represented sequences are high This can occur when they are highly expressed genes. It is possible to have good libraries with small peaks at high duplication levels.
+- Sequence counts shows that 30.4% of reads in R1 is unique and 33.9% in R2 is unique however dulication levels/over represented sequences are high This can occur when they are highly expressed genes. It is possible to have good libraries with small peaks at high duplication levels.
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_counts_plot.png)
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_duplication_levels_plot.png)
 
-Sequence Quality is good
+- Sequence Quality is good
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_quality_scores_plot.png)
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_sequence_quality_plot.png)
 
-Per Sequence GC Content came with warmings this could mean that tey are alot of PCR duplicates
+- Per Sequence GC Content came with warmings this could mean that tey are alot of PCR duplicates
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_gc_content_plot.png)
 
-Per base n content is good
+- Low base n content
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_n_content_plot.png)
 
-The status check below shows the overall status for each FastQC section where gree is normal, orange is slightly abnormal and red being very unsual.
+- The status check below shows the overall status for each FastQC section where gree is normal, orange is slightly abnormal and red being very unsual.
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc-status-check-heatmap.png)
 
 Next I will be using the trim2 data to run in trinity. 
