@@ -527,7 +527,7 @@ echo "START" $(date)
 labbase=/data/putnamlab
 busco_shared="${labbase}/shared/busco"
 [ -z "$query" ] && query="${labbase}/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
-[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
+[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
 
 source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
 
@@ -540,5 +540,28 @@ echo "STOP" $(date)
 
 ```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
-```
 Submitted batch job 309636 on March 19th 2024
+```
+
+Failed again, I changed ff in the orginal script to db, Submitted batch job 309639 on March 19th 2024
+
+Job failed. I checked the output file which states that permission was denied for the directory '/glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv'
+Checked permissions using the code below 
+
+```
+ls -l /glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv
+```
+
+Recieved output and consulted jill who was able to give me permission to access the folder
+
+```
+ls -l /glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv
+-rw-r--r--. 1 jillashey putnamlab 18129 Mar 11 12:52 /glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv
+```
+
+Jill used this code below to give everyone in the group access to the folder
+
+```
+chmod ugo+rwx *
+```
+Submitted batch job 309641 on March 19th 2024
