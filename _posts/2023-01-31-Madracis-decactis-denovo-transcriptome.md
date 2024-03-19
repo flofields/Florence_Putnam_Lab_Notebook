@@ -212,13 +212,15 @@ module load MultiQC/1.9-intel-2020a-Python-3.8.2
 multiqc /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/*fastqc.zip -o /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc
 ```
 ---
-## 8) Copy multiqc and fastqc to computer, use terminal window fro desktop not in server
+## 8) Copy multiqc and fastqc to computer, use terminal window from desktop not in server
 ```
 scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
 scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/*.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
 ```
 ---
 # Changing parameters for fastqc by just removing the adapter and trimming poly g tail
+
+The removal of bp from the tail of both reads was not necessary if the adapter was being trimmed.
 
 #### a) Trim and clean reads
 
