@@ -12,14 +12,16 @@ TAG: [ Madracis decactis, de novo transcriptome ]
 
 Location on Andromeda, the HPC server for URI:
 
----
+```
 cd/data/putnamlab/KITT/hputnam/20230825_Bermuda_Reference_Transcriptomes
+```
 
+```
 MDEC_R1_001.fastq.gz
 MDEC_R1_001.fastq.gz.md5
 MDEC_R2_001.fastq.gz
 MDEC_R2_001.fastq.gz.md5
-
+```
 
 All files were downloaded to andromeda URI HPC location
 
