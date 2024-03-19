@@ -472,7 +472,71 @@ busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -
 
 echo "STOP" $(date)
 ```
+
 ```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
-Submitted batch job 309345
 ```
+Submitted batch job 309345 on March 18th 2024
+Finished March 19th 2024
+
+The run in BUSCO failed, I checked the busco_154851.log found in the derectory below. It seems there was an error with the output path.
+```
+cd /data/putnamlab
+```
+```
+2024-03-19 00:43:52 INFO:busco.ConfigManager    Configuring BUSCO with /opt/software/BUSCO/5.2.2-foss-2020b/config/config.ini
+2024-03-19 00:43:52 INFO:busco.BuscoConfig      Mode is transcriptome
+2024-03-19 00:43:52 ERROR:busco.BuscoRunner     Please do not provide a full path in --out parameter, no slash. Use out_path in the config.ini file to specify the full path.
+2024-03-19 00:43:52 DEBUG:busco.BuscoRunner     Please do not provide a full path in --out parameter, no slash. Use out_path in the config.ini file to specify the full path.
+Traceback (most recent call last):
+  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/run_BUSCO.py", line 103, in run
+    self.load_config()
+  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/run_BUSCO.py", line 94, in load_config
+    self.config_manager.load_busco_config_main(sys.argv)
+  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/BuscoLogger.py", line 62, in wrapped_func
+    self.retval = func(*args, **kwargs)
+  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/ConfigManager.py", line 56, in load_busco_config_main
+    self.config_main.validate()
+  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/BuscoConfig.py", line 407, in validate
+    self._cleanup_config()
+  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/BuscoConfig.py", line 644, in _cleanup_config
+    self._check_out_value()
+  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/BuscoConfig.py", line 592, in _check_out_value
+    raise BatchFatalError(
+busco.Exceptions.BatchFatalError: Please do not provide a full path in --out parameter, no slash. Use out_path in the config.ini file to specify the full path.
+2024-03-19 00:43:52 ERROR:busco.BuscoRunner     BUSCO analysis failed !
+2024-03-19 00:43:52 ERROR:busco.BuscoRunner     Check the logs, read the user guide (https://busco.ezlab.org/busco_userguide.html), and check the BUSCO issue board on https://gitlab.com/ezlab/busco/issues
+```
+In this new script I changed /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_output to busco_oput
+```
+#!/bin/bash
+#SBATCH --job-name="busco"
+#SBATCH --time="100:00:00"
+#SBATCH --nodes 1 --ntasks-per-node=20
+#SBATCH --mem=250G
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
+##SBATCH --account=putnamlab
+##SBATCH --output="busco-%u-%x-%j"
+##SBATCH --export=NONE
+
+echo "START" $(date)
+
+labbase=/data/putnamlab
+busco_shared="${labbase}/shared/busco"
+[ -z "$query" ] && query="${labbase}/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
+[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
+
+source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
+
+# This will generate output under your $HOME/busco_output
+cd "${labbase}/${flofields}"
+busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o busco_output -m transcriptome
+
+echo "STOP" $(date)
+```
+
+```
+sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
+```
+Submitted batch job 309636 on March 19th 2024
