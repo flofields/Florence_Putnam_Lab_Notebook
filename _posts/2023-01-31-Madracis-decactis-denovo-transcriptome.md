@@ -612,3 +612,33 @@ mv slurm-309641.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/sl
 ```
 mv busco_output /data/putnamlab/flofields/denovo_transcriptome/data/busco
 ```
+
+### BUSCO Resuts
+
+```
+# BUSCO version is: 5.2.2
+# The lineage dataset is: metazoa_odb10 (Creation date: 2024-01-08, number of genomes: 65, number of BUSCOs: 954)
+# Summarized benchmarking in BUSCO notation for file /data/putnamlab/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta
+# BUSCO was run in mode: transcriptome
+
+        ***** Results: *****
+
+        C:98.5%[S:13.6%,D:84.9%],F:0.6%,M:0.9%,n:954
+        940     Complete BUSCOs (C)
+        130     Complete and single-copy BUSCOs (S)
+        810     Complete and duplicated BUSCOs (D)
+        6       Fragmented BUSCOs (F)
+        8       Missing BUSCOs (M)
+        954     Total BUSCO groups searched
+
+Dependencies and versions:
+        hmmsearch: 3.3
+        metaeuk: GITDIR-NOTFOUND
+```
+
+BUSCO completeness looks great. Completeness looks for the presence or absence of highly conserved genes in an assembly. The aim is to have the highest percentage of genes identified in your assembly, a BUSCO complete score above 95% is considered good.
+The complete and duplicated BUSCOs are high. Transcriptomes and protein sets that are not filtered for isoforms will lead to a high proportion of duplicates. So, next step suggestions:
+
+Filter for isoforms
+Map to closest genome
+Filter symbiont genes to check if it helps duplication
