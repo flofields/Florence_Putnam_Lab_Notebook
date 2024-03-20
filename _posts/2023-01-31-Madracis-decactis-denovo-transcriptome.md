@@ -25,6 +25,17 @@ MDEC_R2_001.fastq.gz.md5
 
 All files were downloaded to andromeda URI HPC location
 
+Copied all data files to new location on Andromeda
+
+```
+cp -r /data/putnamlab/KITT/hputnam/20230825_Bermuda_Reference_Transcriptomes/MDEC* /data/putnamlab/flofields/denovo_transcriptome/data/raw
+
+MDEC_R1_001.fastq.gz
+MDEC_R1_001.fastq.gz.md5
+MDEC_R2_001.fastq.gz
+MDEC_R2_001.fastq.gz.md5
+```
+
 ---
 ## 1) Run FastQC on MDEC_R1 and MDEC_R2
 
@@ -543,16 +554,26 @@ sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
 Submitted batch job 309636 on March 19th 2024
 ```
 
-Failed again, I changed ff in the orginal script to db, Submitted batch job 309639 on March 19th 2024
+Failed again
+Changes to the script made
+```
+[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10" 
 
-Job failed. I checked the output file which states that permission was denied for the directory '/glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv'
+#to 
+
+[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
+
+Submitted batch job 309639 on March 19th 2024
+```
+
+Job failed again . I checked the output file which states that permission was denied for the directory '/glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv'
 Checked permissions using the code below 
 
 ```
 ls -l /glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv
 ```
 
-Recieved output and consulted jill who was able to give me permission to access the folder
+Recieved output below then consulted jill who had permissions for this folder and was able to give me permission to access the folder
 
 ```
 ls -l /glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv
@@ -565,3 +586,29 @@ Jill used this code below to give everyone in the group access to the folder
 chmod ugo+rwx *
 ```
 Submitted batch job 309641 on March 19th 2024
+
+The busco_154851.log, busco_136325.log, busco_138450.log, busco_137567.log files where in the putnamlab folder. Moved them to /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
+The script output files slurm-309345.out, slurm-309639.out, slurm-309636.out, slurm-309641.out where found in the flofields script folder. Moved them to /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm_output_
+#### The busco_output file was found in /data/putnamlab, was moved to /data/putnamlab/flofields/denovo_transcriptome/data/busco/
+
+The entire busco dir was manually made.
+```
+mkdir /data/putnamlab/flofields/denovo_transcriptome/data/busco/
+mkdir /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
+mkdir /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
+```
+```
+mv busco_154851.log /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
+mv busco_136325.log /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
+mv busco_138450.log /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs (file to be located)
+mv busco_137567.log /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
+```
+```
+mv slurm-309345.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
+mv slurm-309639.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
+mv slurm-309636.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
+mv slurm-309641.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
+```
+```
+mv busco_output /data/putnamlab/flofields/denovo_transcriptome/data/busco
+```
