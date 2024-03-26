@@ -28,7 +28,7 @@ All files were downloaded to andromeda URI HPC location
 Copied all data files to new location on Andromeda
 
 ```
-cp -r /data/putnamlab/KITT/hputnam/20230825_Bermuda_Reference_Transcriptomes/MDEC* /data/putnamlab/flofields/denovo_transcriptome/data/raw
+cp -r /data/putnamlab/KITT/hputnam/20230825_Bermuda_Reference_Transcriptomes/MDEC* /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw
 
 MDEC_R1_001.fastq.gz
 MDEC_R1_001.fastq.gz.md5
@@ -42,10 +42,10 @@ MDEC_R2_001.fastq.gz.md5
 ##### a) Make folders for raw FastQC results and scripts
 
 ```
-cd /data/putnamlab/flofields/denovo_transcriptome/data
+cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data
 mkdir fastqc_results
 
-cd /data/putnamlab/flofields/denovo_transcriptome
+cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome
 mkdir scripts
 ```
 
@@ -67,7 +67,7 @@ module -avail #shows the lastest module release to be used
 
 ##### e) Write script for checking quality with FastQC and submit as job on Andromeda
 ```
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc.sh
+nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/fastqc.sh
 ```
 ```
 #!/bin/bash
@@ -78,19 +78,19 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc.sh
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/raw
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
 module load FastQC/0.11.9-Java-11
 
-for file in /data/putnamlab/flofields/denovo_transcriptome/data/raw/MDEC*
+for file in /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw/MDEC*
 do
-fastqc $file --outdir /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results/
+fastqc $file --outdir /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results/
 done
 ```
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc.sh
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/fastqc.sh
 
 Submitted batch job 289531
 ```
@@ -99,13 +99,13 @@ Submitted batch job 289531
 ```
 module load MultiQC/1.9-intel-2020a-Python-3.8.2
 
-multiqc /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results/*fastqc.zip -o /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results/multiqc/
+multiqc /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results/*fastqc.zip -o /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results/multiqc/
 ```
 ---
 ## 3) Copy MultiQC and FastQC files to local computer: These lines of code should not be ran in the server
 ```
-scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results/multiqc/multiqc_report.html /Users/flo_f/Putnam-lab/bioinformatics/MDEC_transcriptome/original_fastqc
-scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results/*.html /Users/flo_f/Putnam-lab/bioinformatics/MDEC_transcriptome/original_fastqc
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results/multiqc/multiqc_report.html /Users/flo_f/Putnam-lab/bioinformatics/MDEC_transcriptome/original_fastqc
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results/*.html /Users/flo_f/Putnam-lab/bioinformatics/MDEC_transcriptome/original_fastqc
 ```
 ---
 ### [Output MultiQC Report](https://github.com/flofields/MDEC_Reference_Transcriptome/tree/c02b9093942749497552c2e5e5018301b1b9f231/FastQC_Reports/Original)
@@ -130,7 +130,7 @@ Trims 15bp from the 3'R1 and 5'R2 end of reads
 Trims poly G tail if present
 
 ```
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim.sh
+nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trim.sh
 ```
 ```
 #!/bin/bash
@@ -141,17 +141,17 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim.sh
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/raw
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
-cd /data/putnamlab/flofields/denovo_transcriptome/data/raw
+cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw
 module load fastp/0.19.7-foss-2018b
 
-fastp --in1 MDEC_R1_001.fastq --int2 MDEC_R2_001.fastq --detect_adapter_for_pe --trim_poly_g --trim_tail1 15 --trim_tail2 15 --out1 /data/putnamlab/flofields/denovo_transcriptome/data/trimmed/MDEC_001_trim_R1.fastq --out2 /data/putnamlab/flofields/denovo_transcriptome/data/trimmed/MDEC_001_trim_R2.fastq
+fastp --in1 MDEC_R1_001.fastq --int2 MDEC_R2_001.fastq --detect_adapter_for_pe --trim_poly_g --trim_tail1 15 --trim_tail2 15 --out1 /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trimmed/MDEC_001_trim_R1.fastq --out2 /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trimmed/MDEC_001_trim_R2.fastq
 ```
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trim.sh
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trim.sh
 Submitted batch job 290641
 ```
 ---
@@ -190,7 +190,7 @@ nohup zgrep -c "@A01587"MDEC* > trimmed_seq_counts &
 mkdir fastqc_results_trimmed
 ```
 ```
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trimmed.sh
+nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/fastqc_trimmed.sh
 ```
 ```
 #!/bin/bash
@@ -201,32 +201,32 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trimmed.sh
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/trimmed
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trimmed
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
 module load FastQC/0.11.9-Java-11
 
-for file in /data/putnamlab/flofields/denovo_transcriptome/data/trimmed/MDEC*
+for file in /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trimmed/MDEC*
 do
-fastqc $file --outdir /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/
+fastqc $file --outdir /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trimmed/
 done
 ```
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trimmed.sh
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/fastqc_trimmed.sh
 Submitted Batch Job 293773
 ```
 ---
 ## 7) Run MultiQC on trimmed data, Combined QC output into 1 file with MultiQC
 ```
 module load MultiQC/1.9-intel-2020a-Python-3.8.2
-multiqc /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/*fastqc.zip -o /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc
+multiqc /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trimmed/*fastqc.zip -o /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc
 ```
 ---
 ## 8) Copy multiqc and fastqc to computer, use terminal window from desktop not in server
 ```
-scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
-scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trimmed/*.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
+scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trimmed/trimmed_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
+scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trimmed/*.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trimmed_fastqc
 ```
 ---
 # Changing parameters for fastqc by just removing the adapter and trimming poly g tail
@@ -248,7 +248,7 @@ Run fastq on files
 Turn on poly G tail trimming
 
 ```
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
+nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trim2.sh
 ```
 ```
 #!/bin/bash
@@ -259,24 +259,24 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/raw
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
-cd /data/putnamlab/flofields/denovo_transcriptome/data/raw
+cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw
 module load fastp/0.19.7-foss-2018b
 
-fastp --in1 MDEC_R1_001.fastq --int2 MDEC_R2_001.fastq --detect_adapter_for_pe -D --trim_poly_g --out1 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq --out2 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq
+fastp --in1 MDEC_R1_001.fastq --int2 MDEC_R2_001.fastq --detect_adapter_for_pe -D --trim_poly_g --out1 /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq --out2 /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq
 ```
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trim2.sh
 Submitted batch job 293922
 ```
 ---
 ## Repeated steps 5 through 8  
 ```
 mkdir fastqc_results_trim2
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
+nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/fastqc_trim2.sh
 ```
 ```
 #!/bin/bash
@@ -287,27 +287,27 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/trim2
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
 module load FastQC/0.11.9-Java-11
 
-for file in /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC*
+for file in /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/MDEC*
 do
-fastqc $file --outdir /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/
+fastqc $file --outdir /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim2/
 ```
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/fastqc_trim2.sh
 Submitted batch job 294032
 ```
 ```
 module load MultiQC/1.9-intel-2020a-Python-3.8.2
-multiqc /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/*fastqc.zip -o /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc
+multiqc /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim2/*fastqc.zip -o /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc
 ```
 ```
-scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trim2_fastqc
-scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/*.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trim2_fastqc
+scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trim2_fastqc
+scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim2/*.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trim2_fastqc
 ```
 ## 9) Run Trinity with forward and reverse sequences
 [Documentation on steps to running trinity](https://github.com/trinityrnaseq/trinityrnaseq/wiki/Running-Trinity#strand_specific_assembly)
@@ -324,7 +324,7 @@ CPU 36 = the number of CPUs should match the amount your computing cluster has a
 
 #### a) Write Trinity Script
 ```
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trinity.sh
+nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trinity.sh
 ```
 ```
 #!/bin/bash
@@ -337,11 +337,11 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trinity.sh
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/trim2
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
-cd /data/putnamlab/flofields/denovo_transcriptome/data/trim2
+cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
 
 #Load Trinity module
 
@@ -353,13 +353,13 @@ Trinity \
 --seqType fq \
 --max_memory 50G \
 --left \
-/data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq.gz \
+/data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq.gz \
 --right \
-/data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq.gz \
+/data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq.gz \
 --CPU 36
 ```
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trinity.sh
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trinity.sh
 Submitted batch job 304139
 ```
 ```
@@ -383,7 +383,7 @@ GAATGAATAGACAAATGGCTGTCGACAGTTGATACACT
 ```
 Download Trinity fasta to Desktop if needed, too large to have stored there always
 
-scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta /Users/flo_f/OneDrive/Desktop/Putnam-Lab/mdec-rnaseq
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta /Users/flo_f/OneDrive/Desktop/Putnam-Lab/mdec-rnaseq
 
 ## Assessing assembly quality
 Use [Trinity toolkit utilities](https://github.com/trinityrnaseq/trinityrnaseq/wiki/Transcriptome-Contig-Nx-and-ExN50-stats) for a assembly quality assessment
@@ -456,7 +456,7 @@ Citation: Theissinger, K., Falckenhayn, C., Blande, D., Toljamo, A., Gutekunst, 
 
 #### a) Make run-busco-transcriptome.sh script
 ```
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
+nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/busco.sh
 ```
 ```
 #!/bin/bash
@@ -474,20 +474,20 @@ echo "START" $(date)
 
 labbase=/data/putnamlab
 busco_shared="${labbase}/shared/busco"
-[ -z "$query" ] && query="${labbase}/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
+[ -z "$query" ] && query="${labbase}/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
 [ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
 
 source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
 
 # This will generate output under your $HOME/busco_output
 cd "${labbase}/${flofields}"
-busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_output -m transcriptome
+busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_output -m transcriptome
 
 echo "STOP" $(date)
 ```
 
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/busco.sh
 ```
 Submitted batch job 309345 on March 18th 2024
 Finished March 19th 2024
@@ -520,7 +520,7 @@ busco.Exceptions.BatchFatalError: Please do not provide a full path in --out par
 2024-03-19 00:43:52 ERROR:busco.BuscoRunner     BUSCO analysis failed !
 2024-03-19 00:43:52 ERROR:busco.BuscoRunner     Check the logs, read the user guide (https://busco.ezlab.org/busco_userguide.html), and check the BUSCO issue board on https://gitlab.com/ezlab/busco/issues
 ```
-In this new script I changed /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_output to busco_oput
+In this new script I changed /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_output to busco_oput
 ```
 #!/bin/bash
 #SBATCH --job-name="busco"
@@ -537,7 +537,7 @@ echo "START" $(date)
 
 labbase=/data/putnamlab
 busco_shared="${labbase}/shared/busco"
-[ -z "$query" ] && query="${labbase}/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
+[ -z "$query" ] && query="${labbase}/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
 [ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
 
 source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
@@ -550,7 +550,7 @@ echo "STOP" $(date)
 ```
 
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/busco.sh
 Submitted batch job 309636 on March 19th 2024
 ```
 
@@ -587,30 +587,32 @@ chmod ugo+rwx *
 ```
 Submitted batch job 309641 on March 19th 2024
 
-The busco_154851.log, busco_136325.log, busco_138450.log, busco_137567.log files where in the putnamlab folder. Moved them to /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
-The script output files slurm-309345.out, slurm-309639.out, slurm-309636.out, slurm-309641.out where found in the flofields script folder. Moved them to /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm_output_
-#### The busco_output file was found in /data/putnamlab, was moved to /data/putnamlab/flofields/denovo_transcriptome/data/busco/
+The busco_154851.log, busco_136325.log, busco_138450.log, busco_137567.log files where in the putnamlab folder. Moved them to /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
+The script output files slurm-309345.out, slurm-309639.out, slurm-309636.out, slurm-309641.out where found in the flofields script folder. Moved them to /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm_output
+#### The busco_output file was found in /data/putnamlab and was moved to /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/
 
 The entire busco dir was manually made.
 ```
-mkdir /data/putnamlab/flofields/denovo_transcriptome/data/busco/
-mkdir /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
-mkdir /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
+mkdir /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/
+mkdir /data/putnamlab/flofields//ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
+mkdir /data/putnamlab/flofields//ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
 ```
 ```
-mv busco_154851.log /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
-mv busco_136325.log /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
-mv busco_138450.log /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs (file to be located)
-mv busco_137567.log /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_logs
+mv busco_154851.log /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
+mv busco_136325.log /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
+mv busco_138450.log /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs (file to be located)
+mv busco_137567.log /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
 ```
 ```
-mv slurm-309345.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
-mv slurm-309639.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
-mv slurm-309636.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
-mv slurm-309641.out /data/putnamlab/flofields/denovo_transcriptome/data/busco/slurm-output
+mv slurm-309345.out /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
+mv slurm-309639.out /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
+mv slurm-309636.out /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
+mv slurm-309641.out /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
+
+#slurm-output folder did not exsit so this path was incorrect, as a result when I ran it did generate a single slurm-output file that had the completed busco slurm-output results.
 ```
 ```
-mv busco_output /data/putnamlab/flofields/denovo_transcriptome/data/busco
+mv busco_output /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco
 ```
 
 ### BUSCO Resuts
@@ -618,7 +620,7 @@ mv busco_output /data/putnamlab/flofields/denovo_transcriptome/data/busco
 ```
 # BUSCO version is: 5.2.2
 # The lineage dataset is: metazoa_odb10 (Creation date: 2024-01-08, number of genomes: 65, number of BUSCOs: 954)
-# Summarized benchmarking in BUSCO notation for file /data/putnamlab/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta
+# Summarized benchmarking in BUSCO notation for file /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta
 # BUSCO was run in mode: transcriptome
 
         ***** Results: *****
