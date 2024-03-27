@@ -148,7 +148,7 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim.sh
 cd /data/putnamlab/flofields/denovo_transcriptome/data/raw
 module load fastp/0.19.7-foss-2018b
 
-fastp --in1 MDEC_R1_001.fastq --int2 MDEC_R2_001.fastq --detect_adapter_for_pe --trim_poly_g --trim_tail1 15 --trim_tail2 15 --out1 /data/putnamlab/flofields/denovo_transcriptome/data/trimmed/MDEC_001_trim_R1.fastq --out2 /data/putnamlab/flofields/denovo_transcriptome/data/trimmed/MDEC_001_trim_R2.fastq
+fastp --in1 MDEC_R1_001.fastq --in2 MDEC_R2_001.fastq --detect_adapter_for_pe --trim_poly_g --trim_tail1 15 --trim_tail2 15 --out1 /data/putnamlab/flofields/denovo_transcriptome/data/trimmed/MDEC_001_trim_R1.fastq --out2 /data/putnamlab/flofields/denovo_transcriptome/data/trimmed/MDEC_001_trim_R2.fastq
 ```
 ```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trim.sh
@@ -266,7 +266,7 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
 cd /data/putnamlab/flofields/denovo_transcriptome/data/raw
 module load fastp/0.19.7-foss-2018b
 
-fastp --in1 MDEC_R1_001.fastq --int2 MDEC_R2_001.fastq --detect_adapter_for_pe -D --trim_poly_g --out1 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq --out2 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq
+fastp --in1 MDEC_R1_001.fastq --in2 MDEC_R2_001.fastq --detect_adapter_for_pe --trim_poly_g --out1 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq --out2 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq
 ```
 ```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
@@ -492,7 +492,7 @@ sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
 Submitted batch job 309345 on March 18th 2024
 Finished March 19th 2024
 
-The run in BUSCO failed, I checked the busco_154851.log found in the derectory below. It seems there was an error with the output path.
+The run in BUSCO failed, I checked the busco_154851.log found in the directory below. It seems there was an error with the output path.
 ```
 cd /data/putnamlab
 ```
@@ -520,7 +520,51 @@ busco.Exceptions.BatchFatalError: Please do not provide a full path in --out par
 2024-03-19 00:43:52 ERROR:busco.BuscoRunner     BUSCO analysis failed !
 2024-03-19 00:43:52 ERROR:busco.BuscoRunner     Check the logs, read the user guide (https://busco.ezlab.org/busco_userguide.html), and check the BUSCO issue board on https://gitlab.com/ezlab/busco/issues
 ```
-In this new script I changed /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_output to busco_oput
+In this new script I changed /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_output to busco_output
+```
+#!/bin/bash
+#SBATCH --job-name="busco"
+#SBATCH --time="100:00:00"
+#SBATCH --nodes 1 --ntasks-per-node=20
+#SBATCH --mem=250G
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
+##SBATCH --account=putnamlab
+##SBATCH --output="busco-%u-%x-%j"
+##SBATCH --export=NONE
+
+echo "START" $(date)
+
+labbase=/data/putnamlab
+busco_shared="${labbase}/shared/busco"
+[ -z "$query" ] && query="${labbase}/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
+[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
+
+source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
+
+# This will generate output under your $HOME/busco_output
+cd "${labbase}/${flofields}"
+busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o busco_output -m transcriptome
+
+echo "STOP" $(date)
+```
+
+```
+sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
+Submitted batch job 309636 on March 19th 2024
+```
+
+Failed again
+Changes to the script 
+```
+[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10" 
+
+#to 
+
+[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
+```
+
+Script used.
 ```
 #!/bin/bash
 #SBATCH --job-name="busco"
@@ -551,22 +595,10 @@ echo "STOP" $(date)
 
 ```
 sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
-Submitted batch job 309636 on March 19th 2024
-```
-
-Failed again
-Changes to the script made
-```
-[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10" 
-
-#to 
-
-[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
-
 Submitted batch job 309639 on March 19th 2024
 ```
 
-Job failed again . I checked the output file which states that permission was denied for the directory '/glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv'
+Job failed again. I checked the output file which states that permission was denied for the directory '/glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv'
 Checked permissions using the code below 
 
 ```
