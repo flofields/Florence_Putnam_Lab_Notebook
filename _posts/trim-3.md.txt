@@ -1,13 +1,8 @@
-# Changing parameters for fastqc by just removing the adapter and trimming poly g tail
-
-The removal of bp from the tail of both reads was not necessary if the adapter was being trimmed.
-
-#### a) Trim and clean reads
 
 ##### i) Make trimmed reads folder in data file
 ```
-mkdir data/trim2
-cd trim2
+mkdir data/trim3
+cd trim3
 ```
 
 ##### ii) Write script for Trimming and run on Andromeda
@@ -17,7 +12,7 @@ Run fastq on files
 Turn on poly G tail trimming
 
 ```
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
+nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim3.sh
 ```
 ```
 #!/bin/bash
@@ -34,20 +29,28 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
 
 cd /data/putnamlab/flofields/denovo_transcriptome/data/raw
 module load fastp/0.19.7-foss-2018b
+module load FastQC/0.11.8-Java-1.8
+module load MultiQC/1.9-intel-2020a-Python-3.8.2
 
-fastp --in1 MDEC_R1_001.fastq --int2 MDEC_R2_001.fastq --detect_adapter_for_pe -D --trim_poly_g --out1 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq --out2 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq
+fastp --in1 MDEC_R1_001.fastq --int2 MDEC_R2_001.fastq --detect_adapter_for_pe --qualified_quality_phred 30 --unqualified_percent_limit 10 --length_required 100 --trim_poly_g --out1 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R1.fastq --out2 /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC_001_trim2_R2.fastq
 ```
+
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trim2.sh
-Submitted batch job 293922
+sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/trim.sh
+Submitted batch job 309803
 ```
----
-## Repeated steps 5 through 8  
-```
-mkdir fastqc_results_trim2
-nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
-```
-```
+FAILED
+Told andormeda to run the wrong script with the wrong folder name.
+Submitted batch job 309804
+
+FAILED
+module conflict I removed load FastQC and MultiQC
+309805
+changed int2 to in2
+309806
+removed -D
+309807
+
 #!/bin/bash
 #SBATCH -t 24:00:00
 #SBATCH --nodes=1 --ntasks-per-node=1
@@ -56,25 +59,67 @@ nano /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/denovo_transcriptome/data/trim2
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim3
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
 module load FastQC/0.11.9-Java-11
+module load MultiQC/1.9-intel-2020a-Python-3.8.2
 
-for file in /data/putnamlab/flofields/denovo_transcriptome/data/trim2/MDEC*
+for file in /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim3/MDEC*
 do
-fastqc $file --outdir /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/
+fastqc $file --outdir /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim3/
 ```
 ```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/fastqc_trim2.sh
-Submitted batch job 294032
-```
+ sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/fastqc_trim3.sh
+Submitted batch job 309810
+
 ```
 module load MultiQC/1.9-intel-2020a-Python-3.8.2
-multiqc /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/*fastqc.zip -o /data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc
+multiqc /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim3/*fastqc.zip -o /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim3/trim3_multiqc
 ```
 ```
-scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/trim2_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trim2_fastqc
+scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/fastqc_results_trim3/trim3_multiqc/multiqc_report.html /Users/flo_f/OneDrive/Desktop/Putnam-Lab/Mdec-rnaseq/trim3
 scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/denovo_transcriptome/data/fastqc_results_trim2/*.html /Users/flo_f/OneDrive/Desktop/Putnam-lab/bioinformatics/MDEC_transcriptome/trim2_fastqc
+
+Run in trinity
+
+#### a) Write Trinity Script
 ```
+nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trinity2.sh
+```
+```
+#!/bin/bash
+#SBATCH --job-name=20240213_trinity
+#SBATCH --time=30-00:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1
+#SBATCH --exclusive
+#SBATCH --export=NONE
+#SBATCH --mem=500GB
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim3
+#SBATCH --error="script_error" #if your job fails, the error report will be put in this file
+#SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
+
+cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim3
+
+#Load Trinity module
+
+module load Trinity/2.15.1-foss-2022a
+
+#Run Trinity
+
+Trinity \
+--seqType fq \
+--max_memory 50G \
+--left \
+/data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim3/MDEC_001_trim3_R1.fastq.gz \
+--right \
+/data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim3/MDEC_001_trim3_R2.fastq.gz \
+--CPU 36
+```
+```
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trinity2.sh
+Submitted batch job 309840
