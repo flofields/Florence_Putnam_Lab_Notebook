@@ -91,7 +91,11 @@ Mdec-D2_S110_L001_R1_001
 Mdec-E2_S91_L001_R1_001
 Mdec-E3_S93_L001_R1_001
 
-#input all samples, dups, gc and m seqs
+General Statistics
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/32cfd9e3cba553bad234f6401361d981ace285bf/images/ENCORE/Mdec_taqseq/General-statistics.png)
+
+Sequence Counts
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/32cfd9e3cba553bad234f6401361d981ace285bf/images/ENCORE/Mdec_taqseq/fastqc_sequence_counts_plot.png)
 
 Mean Quality Scores
 Scores are high.
@@ -287,43 +291,10 @@ Here are the results
 
 ### General statistics 
 
-| fastp version:                | 0.19.7 (https://github.com/OpenGene/fastp) |
-|-------------------------------|--------------------------------------------|
-| sequencing:                   |        |
-| mean length before filtering: |                              |
-| mean length after filtering:  |                              |
-| duplication rate:             |                                 |
-| Insert size peak:             |                                         |
-| Detected read1 adapter:       |          |
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/4d76e28207cd12a2c274b9f78800f5e5660cc5d5/images/ENCORE/Mdec_tagseq_trim3/General-statistics.png)
 
-### Before filtering 
-
-| total reads: | 5071645            |
-|--------------|-------------------------|
-| total bases: | 512236145               |
-| Q20 bases:   | 504067448(98.4053%)     |
-| Q30 bases:   | 60.960502 G (90.881082%)|
-| GC content:  |     |
-
-### After filtering 
-
-| total reads: | 4984633                 |
-|--------------|-------------------------|
-| total bases: | 501658345               |
-| Q20 bases:   | 495151911(98.703%)      |
-| Q30 bases:   | 480594040(95.8011%)     |
-| GC content:  |            |
-
-### Filtering results 
-
-| reads passed filters:   | 4984633|
-|-------------------------|--------------------------|
-| reads with low quality: | 45416                    |
-| reads with too many N:  | 47  |
-| reads too short:        | 25396 |
-| reads failed due to low complexity: | 16153 |
-| reads with adapter trimmed: | 7921 |
-|bases trimmed due to adapters: | 181527 |
+Sequence Counts
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/4d76e28207cd12a2c274b9f78800f5e5660cc5d5/images/ENCORE/Mdec_tagseq_trim3/fastqc_sequence_counts_plot.png)
 
 Mean Quality Scores
 Scores are high.
@@ -357,3 +328,6 @@ Shows that the sequences are not the same and is due to the trimming parameters 
 Status Check
 Showing the overall status of the multiqc report
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/7a8e3f351217323956c2514ed5e0a962cc5d4e6a/images/ENCORE/Mdec_tagseq_trim3/fastqc-status-check-heatmap.png)
+
+
+#### Next steps is to align with de novo transcriptome
