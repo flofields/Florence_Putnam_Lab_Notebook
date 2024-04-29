@@ -323,8 +323,7 @@ scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_MDEC_denovo_tr
 
 Before creating a script to run trinity determine whether the reads are parired or unparied to select the library type
 
-Note: The reads being used are non-stranded and [paired](https://github.com/flofields/MDEC_Reference_Transcriptome/blob/main/metadata/30-818136646_R4%20(3).pdf) therefore the library type RF and FR will be used.
-
+Note: The reads being used are non-stranded and [paired](https://github.com/flofields/MDEC_Reference_Transcriptome/blob/main/metadata/30-818136646_R4%20(3).pdf). Because the read are not stranded a library type such as RF or FR will not be used.
 
 seqType :fq - for Fastq format
 max_memory :100G = max memory for trinity 100G should not be changed, per communications with the developer
