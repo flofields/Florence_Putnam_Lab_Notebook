@@ -111,6 +111,6 @@ Also look at Putnam Lab Management Page [here](https://github.com/Putnam-Lab/Lab
 
 ![micro](https://github.com/emmastrand/EmmaStrand_Notebook/blob/master/images/microhomogenizer.JPG?raw=true)
 
-![bleach](https://github.com/emmastrand/EmmaStrand_Notebook/blob/master/images/Corals_bleach.JPG?raw=true).
+![bleach](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/b041ac6a4e7ef58631b41bf133f737cac38a87b7/images/ENCORE/Priming_Experiment/samples_in_bleaching_container_with_label.jpg).
 
 ![drying](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/56d485e3316cd9ea46edd20d225e958e81096b44/images/ENCORE/Priming_Experiment/drying_bleached_coral_fragments.jpg).
