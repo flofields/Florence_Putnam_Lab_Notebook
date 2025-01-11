@@ -76,7 +76,7 @@ scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Dlab_denovo_tra
 ```
 ---
 
-### The raw sequence [MultiQC Report can be found here on GitHub](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/DLAB_Reference_Transcriptome/data/fastqc_results/multiqc/multiqc_report.html)
+### The raw sequence [MultiQC Report can be found here on GitHub](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/DLAB_Reference_Transcriptome/data/fastqc_results_raw/multiqc/multiqc_report.html)
 ---
 
 ### Understanding a [MultiQC Report](https://nf-co.re/eager/2.5.0/docs/output#multiqc-report) and [Fastp](https://github.com/OpenGene/fastp#adapters)
@@ -158,7 +158,7 @@ Check the quality of the trimmed files by confirming the number of files that we
 ```
 scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/raw/fastp.html /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/fastp_stats
 ```
-This file can be found [here on Github](https://github.com/flofields/MDEC_Reference_Transcriptome/blob/main/data/rna_seq/QC/fastp.html)
+This file can be found [here on Github](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/DLAB_Reference_Transcriptome/data/fastp_stats/fastp.html)
 
 Here are the results 
 
@@ -262,41 +262,39 @@ multiqc /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_r
 ```
 
 ```
-scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results_trimmed/multiqc_trimmed/multiqc_report.html /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/fastqc_results_trimmed
+scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results_trimmed/multiqc_trimmed /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/fastqc_results_trimmed
 scp -r ffields@ssh3.hac.uri.edu://data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results_trimmed/*.html /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/fastqc_results_trimmed
 ```
 ---
 
 
 
-#### The raw sequence [MultiQC report can be found here in Github](https://github.com/flofields/MDEC_Reference_Transcriptome/blob/main/data/rna_seq/QC/trim2/multiqc_report.html)
+#### The raw sequence [MultiQC report can be found here in Github](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/DLAB_Reference_Transcriptome/data/fastqc_results_trimmed/multiqc_trimmed/multiqc_report.html)
 
 The MultiQC report results
 
 | Sample Name |%Duplication| GC content| %PF|%Adapter| % Dups| % GC | M Seqs |
 |-------------|------------|-----------|----|--------|-------|------|--------|
 | Fastp       |  25.72%    |  43.27    |97.9|
-| MDEC_R1_001 |            |           |    |        | 69.6% | 43%  | 218.0  |
-| MDEC_R2_001 |            |           |    |        | 66.1% | 43%  | 218.0  |
+| MDEC_R1_001 |            |           |    |        | 72.7% | 42%  | 179.8.  |
+| MDEC_R2_001 |            |           |    |        | 69.3% | 42%  | 179.8.  |
 
 - Fastp filtering: most reads filtered were due to low quality
 
-- Sequence counts shows that 30.4% of reads in R1 is unique and 33.9% in R2 is unique however dulication levels/over represented sequences are high This can occur when they are highly expressed genes. It is possible to have good libraries with small peaks at high duplication levels.
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_counts_plot.png)
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_sequence_duplication_levels_plot.png)
+- Sequence counts shows that 27.3% of reads in R1 is unique and 30.7% in R2 is unique however dulication levels/over represented sequences are high This can occur when they are highly expressed genes. It is possible to have good libraries with small peaks at high duplication levels.
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/f3b9ab9d17c889e93de3d2be7ae01d7939c13c8d/images/ENCORE/Dlab_RNAseq/Trimmed_results/fastqc_sequence_counts_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/f3b9ab9d17c889e93de3d2be7ae01d7939c13c8d/images/ENCORE/Dlab_RNAseq/Trimmed_results/fastqc_sequence_duplication_levels_plot.png)
 
 - Sequence Quality is good
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_quality_scores_plot.png)
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_sequence_quality_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/f3b9ab9d17c889e93de3d2be7ae01d7939c13c8d/images/ENCORE/Dlab_RNAseq/Trimmed_results/fastqc_per_base_sequence_quality_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/ENCORE/Dlab_RNAseq/Trimmed_results/fastqc_per_sequence_quality_scores_plot.png)
 
 - Per Sequence GC Content came with warmings this could mean that tey are alot of PCR duplicates
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_sequence_gc_content_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/f3b9ab9d17c889e93de3d2be7ae01d7939c13c8d/images/ENCORE/Dlab_RNAseq/Trimmed_results/fastqc_per_sequence_gc_content_plot.png)
 
 - Low base n content
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/3f977efdc7e2c7897b84dfa67f79a1b3f566d489/images/Mdec_RNAseq/trim2_multiqc/fastqc_per_base_n_content_plot.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/f3b9ab9d17c889e93de3d2be7ae01d7939c13c8d/images/ENCORE/Dlab_RNAseq/Trimmed_results/fastqc_per_base_n_content_plot.png)
 
 - The status check below shows the overall status for each FastQC section where gree is normal, orange is slightly abnormal and red being very unsual.
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/dc0cd33982f0f8de074d0662a69ac8942640439d/images/Mdec_RNAseq/trim2_multiqc/fastqc-status-check-heatmap.png)
+![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/f3b9ab9d17c889e93de3d2be7ae01d7939c13c8d/images/ENCORE/Dlab_RNAseq/Trimmed_results/fastqc-status-check-heatmap.png)
 
-Next I will be using the trim2 data to run in trinity. 
-This QC was for the purpose of assembling a denov transciptome. The entire process can be found on Github [Here.](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2023-01-31-Madracis-decactis-denovo-transcriptome.md)
