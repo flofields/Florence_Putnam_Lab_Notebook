@@ -1,14 +1,14 @@
 ---
 LAYOUT: post
-TITLE: Workflow for Diploria labyrinthiformis de novo transcriptome
+TITLE: Workflow for Montastraea cavernosa de novo transcriptome
 CATEGORY: [ de novo transcriptome, RNA seq ]
-TAG: [ Diploria labyrinthiformis, de novo transcriptome ]
+TAG: [ Montastraea cavernosa, de novo transcriptome ]
 ---
-## Designing a workflow to create a de novo transcriptome for *Diploria labyrinthiformis*
+## Designing a workflow to create a de novo transcriptome for *Montastraea cavernosa*
 
-**About**: This post details the steps taken to create a de novo transcriptome for *Diploria labyrinthiformis* using samples obtained in August 2022 as part of the ENCORE project in the TPC-PI experiment. 
+**About**: This post details the steps taken to create a de novo transcriptome for *Montastraea cavernosa* using samples obtained in August 2022 as part of the ENCORE project in the TPC-PI experiment. 
 
-### *Dlab* transcriptome data files on URI andromeda:
+### *MCAV* transcriptome data files on URI andromeda:
 
 Location on Andromeda, the HPC server for URI:
 
@@ -17,10 +17,10 @@ cd/data/putnamlab/KITT/hputnam/20230825_Bermuda_Reference_Transcriptomes
 ```
 
 ```
-DLAB_R1_001.fastq.gz
-DLAB_R1_001.fastq.gz.md5
-DLAB_R2_001.fastq.gz
-DLAB_R2_001.fastq.gz.md5
+MCAV_R1_001.fastq.gz
+MCAV_R1_001.fastq.gz.md5
+MCAV_R2_001.fastq.gz
+MCAV_R2_001.fastq.gz.md5
 ```
 
 All files were downloaded to andromeda URI HPC location
@@ -28,8 +28,8 @@ All files were downloaded to andromeda URI HPC location
 Created directory for fastq files in home folder names flofields
 
 ```
-mkdir ENCORE_Dlab_denovo_transcriptome
-cd ENCORE_Dlab_denovo_transcriptome
+mkdir ENCORE_Mcav_denovo_transcriptome
+cd ENCORE_Mcav_denovo_transcriptome
 mkdir data
 cd data
 mkdir raw
@@ -38,12 +38,12 @@ mkdir raw
 Copied all data files to new location on Andromeda
 
 ```
-cp -r /data/putnamlab/KITT/hputnam/20230825_Bermuda_Reference_Transcriptomes/DLAB* /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/raw
+cp -r /data/putnamlab/KITT/hputnam/20230825_Bermuda_Reference_Transcriptomes/MCAV* /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/raw
 
-DLAB_R1_001.fastq.gz
-DLAB_R1_001.fastq.gz.md5
-DLAB_R2_001.fastq.gz
-DLAB_R2_001.fastq.gz.md5
+MCAV_R1_001.fastq.gz
+MCAV_R1_001.fastq.gz.md5
+MCAV_R2_001.fastq.gz
+MCAV_R2_001.fastq.gz.md5
 ```
 
 ---
@@ -75,9 +75,14 @@ rm DLAB_R2_001.fastq.gz.md5
 module -avail #shows the lastest module release to be used
 ```
 
-##### e) Write script for checking quality with FastQC and submit as job on Andromeda
+##### e) Write script for checking quality with FastQC, submit as job on Andromeda and make folder for scripts and the fastqc results
+
 ```
-nano /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/fastqc.sh
+mkdir scripts
+mkdir fastqc_results
+```
+```
+nano /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/scripts/fastqc.sh
 ```
 ```
 #!/bin/bash
@@ -88,56 +93,39 @@ nano /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/fastqc.s
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/raw
+#SBATCH -D /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/raw
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
 module load FastQC/0.11.9-Java-11
 
-for file in /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/raw/DLAB*
+for file in /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/raw/MCAV*
 do
-fastqc $file --outdir /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/
+fastqc $file --outdir /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/
 done
 ```
 ```
-sbatch /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/fastqc.sh
+sbatch /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/scripts/fastqc.sh
 
-Submitted batch job 350913
-Date of Submission 20241126
+Submitted batch job 354836
+Date of Submission 20250113
 ```
 
-Job failed so the script error was checked
-```
-cd /flofields/ENCORE_Dlab_denovo_transcriptome/data/raw/nano script_error
-
-Specified output directory '/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/' does not e$
-```
-This issue is that there is no directory named fastqc_results which is where the script instructs the results to be placed._
-
-```
-mkdir fastqc_results
-```
-```
-sbatch /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/fastqc.sh
-
-Submitted batch job 351022
-Date of Submission 20241126
-```
 ---
 ## 2) Combined QC output into 1 file with MultiQC, do not need a script due to fast computational time
 ```
 module load MultiQC/1.9-intel-2020a-Python-3.8.2
 
-multiqc /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/*fastqc.zip -o /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/multiqc
+multiqc /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/*fastqc.zip -o /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/multiqc
 ```
 ---
 ## 3) Copy MultiQC and FastQC files to local computer: These lines of code should not be ran in the server
 ```
-scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/multiqc /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/fastqc_results
-scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/*.html /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/fastqc_results
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/multiqc /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/MCAV_Reference_Transcriptome/data/fastqc_results
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/*.html /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/MCAV_Reference_Transcriptome/data/fastqc_results
 ```
 ---
-### [Output MultiQC Report](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/DLAB_Reference_Transcriptome/data/fastqc_results_raw/multiqc/multiqc_report.html)
+### [Output MultiQC Report](https://github.com/flofields/ENCORE_Transcriptomes/blob/bd733b923bc0b62cdfba5094ff4226666d184eca/MCAV_Reference_Transcriptome/data/fastqc_results/multiqc/multiqc_report.html)
 ---
 ### Understanding a [MultiQC Report](https://nf-co.re/eager/2.5.0/docs/output#multiqc-report) and [Fastp](https://github.com/OpenGene/fastp#adapters)
 ### [Secondary Fastp source](https://open.bioqueue.org/home/knowledge/showKnowledge/sig/fastp)

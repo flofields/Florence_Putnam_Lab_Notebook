@@ -1,20 +1,24 @@
 ---
 LAYOUT: Post
-TITLE: QC of RNAseq Dlab files from the ENCORE 2022 TPC project 
-DATE: '2024-12-10'
+TITLE: QC of RNAseq Mcav files from the ENCORE 2022 TPC project 
+DATE: '2025-01-13'
 CATEGORIES: QC
-TAGS: [Coral, Quailty Control, Madracis decactis, RNAseq ]
+TAGS: [Coral, Quailty Control, Montastraea cavernosa, RNAseq ]
 PROJECTS: ENCORE
 ---
 
-## Quality Control of RNAseq files for *Diploria labyrinthiformis* (*Dlab*) ENCORE 2022 TPC project  
+## Quality Control of RNAseq files for *Montastraea cavernosa* (*Mcav*) ENCORE 2022 TPC project  
 
 **About**: This post details the QC of Mdec from the ENCORE 2022 Thermal performance curve (TPC) project RNAseq files. See [here](https://github.com/flofields/MDEC_Reference_Transcriptome/blob/aba1fd09f33816aff2abfebccfd25423cd0ec537/metadata/Project-Summary-ENCORE-MDEC-RNA-DNA-Extractions.md) for the project summary for the Mdec DNA and RNA extractions and [my notebook post](https://flofields.github.io/Florence_Putnam_Lab_Notebook/Madracis-decactis-denovo-transcriptome/) for the denovo transcriptome which this QC was used for.
 
 ### 1) Write and run script with raw data for checking quality with FastQC on Andromeda (untrimmed and unfiltered)
 
 ```
-nano /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/fastqc.sh
+mkdir scripts
+mkdir fastqc_results
+```
+```
+nano /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/scripts/fastqc.sh
 ```
 ```
 #!/bin/bash
@@ -25,69 +29,56 @@ nano /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/fastqc.s
 #SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
 #SBATCH --mail-user=ffields@uri.edu #your email to send notifications
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/raw
+#SBATCH -D /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/raw
 #SBATCH --error="script_error" #if your job fails, the error report will be put in this file
 #SBATCH --output="output_script" #once your job is completed, any final job report comments will be put in this file
 
 module load FastQC/0.11.9-Java-11
 
-for file in /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/raw/DLAB*
+for file in /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/raw/MCAV*
 do
-fastqc $file --outdir /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/
+fastqc $file --outdir /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/
 done
 ```
 ```
-sbatch /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/fastqc.sh
+sbatch /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/scripts/fastqc.sh
 ```
-#### Submitted batch job 350913 on Nov 26 2024
-#### Finished Nov 26 2024
-
-Job failed so the script error was checked
-
-```
-cd /flofields/ENCORE_Dlab_denovo_transcriptome/data/raw/nano script_error
-
-Specified output directory '/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/' does not e$
-```
-This issue is that there is no directory named fastqc_results which is where the script instructs the results to be placed._
-
-```
-sbatch /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/fastqc.sh
-```
-#### Resubmitted batch job 351022 on Nov 26 2024
-#### Finished Nov 26 2024
+#### Submitted batch job 354836 on Jan 13 2025
+#### Finished Jan 13 2025
 
 ---
 
 #### Combined QC output into 1 file with MultiQC, a script is not needed due to fast computational time
-```
-#load module 
-module load MultiQC/1.9-intel-2020a-Python-3.8.2
 
+#load module 
+```
+module load MultiQC/1.9-intel-2020a-Python-3.8.2
+```
 #Combined files 
-multiqc /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/*fastqc.zip -o /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/multiqc
+```
+multiqc /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/*fastqc.zip -o /data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/multiqc
 ```
 ---
 
 #### Copied MultiQC and FastQC report to my computer : Run this in the computer's terminal not the server
 ```
-scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/multiqc /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/fastqc_results
-scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/fastqc_results/*.html /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/fastqc_results
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/multiqc /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/MCAV_Reference_Transcriptome/data/fastqc_results
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Mcav_denovo_transcriptome/data/fastqc_results/*.html /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/MCAV_Reference_Transcriptome/data/fastqc_results
 ```
 ---
 
-### The raw sequence [MultiQC Report can be found here on GitHub](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/DLAB_Reference_Transcriptome/data/fastqc_results_raw/multiqc/multiqc_report.html)
+### The raw sequence [MultiQC Report can be found here on GitHub](https://github.com/flofields/ENCORE_Transcriptomes/blob/bd733b923bc0b62cdfba5094ff4226666d184eca/MCAV_Reference_Transcriptome/data/fastqc_results/multiqc/multiqc_report.html)
 ---
 
 ### Understanding a [MultiQC Report](https://nf-co.re/eager/2.5.0/docs/output#multiqc-report) and [Fastp](https://github.com/OpenGene/fastp#adapters)
 ### [Secondary Fastp source](https://open.bioqueue.org/home/knowledge/showKnowledge/sig/fastp)
 ---
-These Dlab samples were pooled and had RNA concentrations of [Qbit 49.60ng/ul and Nanodrop 68.0ng/ul](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/MDEC_Reference_Transcriptome/data/rna_seq/metadata/Sample%20QC%20report%20of_30-818136646_230814121610.pdf)
+These Dlab samples were pooled and had RNA concentrations of [Qbit 96.40ng/ul and Nanodrop 148.20ng/ul](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/MDEC_Reference_Transcriptome/data/rna_seq/metadata/Sample%20QC%20report%20of_30-818136646_230814121610.pdf)
 
  | Sample Name | % Dups| % GC | M Seqs |
  |-------------|-------|------|--------|
- | DLAB_R1_001 | 72.6% | 43%  | 183.7  |
- | DLAB_R2_001 | 68.2% | 43%  | 183.7  |
+ | DLAB_R1_001 | 71.1% | 44%  | 206.8  |
+ | DLAB_R2_001 | 66.1% | 44%  | 206.8  |
   
 - Adapter content present in sequences. Adapters have not been removed yet via trimming.
 
