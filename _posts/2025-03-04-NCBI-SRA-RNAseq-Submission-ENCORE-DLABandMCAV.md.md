@@ -35,19 +35,19 @@ Manatory fields were highlighted in green and were identified as sample_name, or
 Fields highlighed in blue meant i have to fill at least one of those fields. I filled out the isolate field and indicated not applicable for the fields breed, host and isolation_source.
 Non-manatory fields filled were sample_title, bioproject_accession,age,collected_by, dev_stage,env_broad_scale,	host_tissue_sampled,identified_by,lat_lon,temp and description
 
-My attribute file can be found [here]()
+My attribute file can be found [here](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/NCBI_Uploads/Invertebrate.1.0.xlsx)
 
 submission number SUB15111384
 
 The BioSample were approved under the following numbers  SAMN47213160, SAMN47213161
 |Accession | Sample Name  | SPUID | Organism | Tax ID | Breed | Isolate| BioProject | Link|
 |---|---|---|---|---|---|---|---|---|---|
-|SAMN47213160| Dlab_R1_R2| Dlab_R1_R2 | Diploria labyrinthiformis |242715|Not applicable | Coral host | PRJNA911752 | |
-|SAMN47213161| Mcav_R1_R2| Mcav_R1_R2| Montastrea cavernosa |63558|Not applicable | Coral host | PRJNA911752 | |
+|SAMN47213160| Dlab_R1_R2| Dlab_R1_R2 | Diploria labyrinthiformis |242715|Not applicable | Coral host | PRJNA911752 |https://dataview.ncbi.nlm.nih.gov/object/SAMN47213160 |
+|SAMN47213161| Mcav_R1_R2| Mcav_R1_R2| Montastrea cavernosa |63558|Not applicable | Coral host | PRJNA911752 |https://dataview.ncbi.nlm.nih.gov/object/SAMN47213161 |
 
 #### 3. Sequence Read Archive (SRA)
 
-See here for the [SRA metadata]()
+See here for the [SRA metadata](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/NCBI_Uploads/SRA_metadata2.xlsx)
 
 First, set up folder in Andromeda that contains symlinks to only the raw sequence files that we want to upload to NCBI.
 
@@ -90,3 +90,5 @@ The upload to SRA will proceed for each file with messages â€œtransfer completeâ
 Continue with the submission by selecting the preload folder on SRA.
 
 RNAseq sequence files were submitted under SUB15153279.
+
+Link to [BioProject](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1228646)

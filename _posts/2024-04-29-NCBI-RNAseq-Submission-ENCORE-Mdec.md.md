@@ -51,12 +51,13 @@ Once you have gathered those, the next thing to do is **login to the [submission
 
 - Right **next** to the blue box that says **New Submission** 
 - The first step is to fill out the submitter information, next general info which ask when the submission should be releases to the public and to specfic submission of a single or file containing multiple samples
-![4](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/4773cd336c38a557052fe3a5eff504112800ba1b/images/SRA_images/general_information.jpg)
-- click **Release immediately following processing and batch/Multiple Biosamples**.
-- ![5](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/a6d30d3b530a898dc47b48450f6929a26f3701c7/images/SRA_images/step_2.png)
+![4](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/4773cd336c38a557052fe3a5eff504112800ba1b/images/SRA_images/general_information.jpg?raw=true)
+- Click **Release immediately following processing and batch/Multiple Biosamples**.
+![5](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/a6d30d3b530a898dc47b48450f6929a26f3701c7/images/SRA_images/step_2.png?raw=true)
 - The thrid step is to fill out the sample type portion. Choose the sample type that your samples fit under. **Most often it is invertebrate. However if you know these samples include/are for holobiont or microbiome or symbiont sequences you want to choose the MIMS Environmental/Metagenome host associated excel sheet**  
-![6](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/a6d30d3b530a898dc47b48450f6929a26f3701c7/images/SRA_images/step_3.png)
+![6](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/a6d30d3b530a898dc47b48450f6929a26f3701c7/images/SRA_images/step_3.png?raw=true)
 
+Note: I chose MIMS Enviromental/Metagenome but then emailed NCBI to have them change it to invertebrate
 - Step four, fill out the attributes page. choose upload a file using Excel or text format then download Excel option for the template
 
 All the examples in this workflow are going to be with the Invertebrate sample type. If you're using the metagenome type most of these still apply, and other headings should be intuitive after looking through this.
@@ -74,6 +75,7 @@ Geo-loc name : Word description of location; Country : State/Province : City/loc
 lat_lon : The geographical coordinates of the location where the sample was collected. Specify as degrees latitude and longitude
 
 Here is an example of my attribute table
+Link to attribute table found [here](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/NCBI_Uploads/MIMS.me.host-associated.6.xlsx)
 
 |sample_name|	sample_title|	bioproject_accession|	*organism|	*collection_date|	*env_broad_scale|*env_local_scale|*env_medium|*geo_loc_name	|*host	|*lat_lon|altitude|ances_data|biol_stat|chem_administration|collection_method|depth|elev|genetic_mod|gravidity|host_age	|host_blood_press_diast|host_blood_press_syst|host_body_habitat|host_body_product|host_body_temp|host_color|host_common_name|host_diet|host_disease|host_dry_mass	|host_family_relationship|host_genotype|host_growth_cond|host_height|host_last_meal	|host_length|host_life_stage|host_phenotype	|host_sex|host_shape|host_subject_id|host_subspecf_genlin|host_substrate|host_symbiont|host_taxid|host_tissue_sampled|host_tot_mass|isolation_source|misc_param	|neg_cont_type|omics_observ_id|organism_count|oxy_stat_samp|perturbation|pos_cont_type|ref_biomaterial|rel_to_oxygen|samp_capt_status|samp_collect_device|samp_dis_stage|samp_mat_process|samp_salinity|samp_size|samp_store_dur|samp_store_loc|samp_store_temp|samp_vol_we_dna_ext|size_frac|source_material_id|temp|	description|
 |-----------|---------------|-----------------------|------------|------------------|-------------------|----------------|-----------|--------------|-------|--------|--------|----------|---------|-------------------|-----------------|-----|----|-----------|---------|---------|----------------------|---------------------|-----------------|-----------------|--------------|----------|----------------|---------|------------|----------------|------------------------|---------------|--------------|-----------|---------------|-----------|---------------|---------------|--------|----------|---------------|--------------------|--------------|-------------|----------|-------------------|-------------|----------------|-----------|-------------|---------------|--------------||------------|------------|-------------|---------------|-------------||---------------|-------------------|--------------|----------------|-------------|---------|--------------|--------------|---------------|-------------------|---------|------------------|-----|------------|  
@@ -93,16 +95,15 @@ Next the biosamples needs to be uploaded to NCBI. To do this you must first crea
 Now you can go back to the BioSample submission portal and click BioProject in the blue box that says Start a New Submission.
 
 - Again the first section of the portal is submitter info. There should be nothing to change but I advise to unclick Update my contact information in profile
-![7]()
+![7](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/SRA_images/bioproject_1submitter.png?raw=true)
 
 - The next section is project type. 
 Choose all types of data that are applicable for this project. Usually raw sequence reads is one of them. If you have metagenome or holobiont sequences then targeted loci environmental is the type of sequence for that (target loci as the amplicon).
 Choose the sample scope of the whole project, so be mindful if it is actually multi-species even though you are uploading data from one species at the moment.
-![8]()
+![8](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/SRA_images/bioproject_2projecttype.png?raw=true)
 
 - This section is for target information 
 If this is a multispecies project, the target information allows you to describe each species.
-![9]()
 
 - The next section is for the project information. Release information should be the same as for the BioSamples. Create a descriptive and informative title, and give more information in the public description. It is important to see that it says public, so this description needs to be clear and informative enough for someone from the public to be able to understand the data from this project and know if they want to use it for their purposes. For relevance, choose one of these in the dropdown menu.
 Evolution
@@ -112,11 +113,11 @@ Industrial
 Model Organism
 Other
 If you know the Grant ID associated with this project, now is a good time to add it, although it can be added later. If this is part of a Consortium initiative include that information as well.
-![10]()
+![10](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/SRA_images/bioproject_4General_Info.png?raw=true)
 
 - The next section is to add the BioSample SAMN#s that you created above. This is why it's easier to make these first instead of stopping in the middle of this submission to make them. If you make more later they can still be added in afterwards.
 Then paste the SAMN# into the portal for the BioProject. Wait a second or two until the number comes up in the drop down and click on it to choose that sample.
-- ![11]()
+- ![11](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/SRA_images/bioproject_5BioSample.png?raw=true)
 
 ## 3 SRA Sequence Upload
 - Go to the Start a new submission tab in My submission and choose Sequence Read Archive and start a new submission.
@@ -125,10 +126,10 @@ Then paste the SAMN# into the portal for the BioProject. Wait a second or two un
 - We will be doing the ftp upload, so make sure you can access your sequence via the command line
 Again, the submitter info is the first step and shouldn't be changed.
 For general information, paste in your new PRJNA# and say yes you have BioSamples (these will be added in the metadata sheet). Then choose the release data option that fits will all your other submissions.
-![13]()
+![13](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/SRA_images/SRA_2GeneralInfo.png?raw=true)
 
 - Next, for the metadata upload choose the Excel format and download the excel spreadsheet from NCBI.
-![14]()SRA METADATA
+![14](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/SRA_images/SRA_3metadata.png?raw=true)
 
 - In the excel sheet, the first tab is general instructions about the file, the second tab is where you input your information. The third tab is all of the terms that can be used for Strategy, Source, Selection, and Platforms, as well as definitions of what they are (you should know these before hand, see information to gather before processing).
 - In the first column add the SAMN# so NCBI can connect this data with the other information you have already put together.
@@ -144,13 +145,11 @@ For general information, paste in your new PRJNA# and say yes you have BioSample
 	- Sequence file-type
 - The design description column is where you should put all information about how the libraries were prepped, what method, and by whom.
 - Then, in the filename column add the Read 1 complete file name. If you have paired end sequence data, add Read 2 in the filename 2 column of that same row. *note: make sure that your files are zipped with gzip and note zip.
-- Examples of a filled out and accepted SRA metadata sheet:
-![15]()SRA 3metadata
 
 - Please triple check that your file names match your sample number and matches your SAMN#. This is the most crucial. It is best to always stay in numerical order to help alleviate confusion, especially when you have to copy and paste single cells, or write out names completely.
 - Then choose the tab-delimited version of the file for the metatdata upload in the SRA submission portal. It will check that everything is in the right format and flag you if something needs to be changed.
 - Next you go to upload your files. Choose the FTP command line preload option and click the button to request a pre-load folder.
-![16]()SRA 4files
+![16](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/images/SRA_images/SRA_4files.png?raw=true)
 
 Set folder in Andromeda that only contains the symlinks to the raw sequences you want to upload to NCBI. To do this I will create a folder then add asymlink file to the sequence I want to upload.
 
@@ -161,7 +160,7 @@ ln -s /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw/MDEC_R
 ln -s /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/raw/MDEC_R2_001.fastq .
 ```
 
-Metadata for samples above found [here]()
+Metadata for samples above found [here](https://github.com/flofields/ENCORE_Transcriptomes/blob/main/NCBI_Uploads/SRA_metadata.xlsx)
 The path for downloading is /data/putnamlab/flofields/ENCORE_raw_data/raw_files_rnaseq_sra .
 
 To upload files, log on to Andromeda and enter the following:
