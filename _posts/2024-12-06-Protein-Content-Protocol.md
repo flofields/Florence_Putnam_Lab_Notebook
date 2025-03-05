@@ -36,10 +36,12 @@ Contents
 3. Label a new microcentrifuge tube with the coral ID, total protein assay date, and "prot". If aliquot tube already contains exactly 500 μL of tissue sample, no need to make a new microcentrifuge tube.
 4. Pipette 500 μL of the adult coral tissue sample into the new labeled 1.5 mL microcentrifuge tube. 
 5. Add 10 μL of 1M NaOH (pH should be ~10) in the tube. 
-6. Pipette a very small amount of sample onto pH paper to confirm the pH ~10. 
-7. Incubate the tube at 50&deg;C for 4 hours flicking to mix throughout to solublize protein with the use of the [incubator](https://www.scientificindustries.com/incubator-genie.html) at 35rmp  
+6. Invert tube to mix the 1M NaOH in the tissue homogenate. 
+7. Pipette a very small amount of sample onto pH paper to confirm the pH ~10. 
+8. Incubate the tube at 50&deg;C for 4 hours flicking to mix throughout to solublize protein with the use of the [incubator](https://www.scientificindustries.com/incubator-genie.html) at 35rmp  
 8. Add 280 μL of 0.1M HCl to the tube to neutralize the sample. Add this volume in small amounts and continue to test the pH of the sample using pH paper. pH needs to be at 7.0 to move onto the next steps.  
-9. **_It is critical to record exactly how much volume of NaOH and HCl was added_**
+9. Invert tube to mix
+10. **_It is critical to record exactly how much volume of NaOH and HCl was added_**
 
 **Preparation of Diluted Albumin (BSA) Standards**    
 1. Dilute the contents of one Albumin Standard (BSA) ampule into several clean vials, preferably using the same diluent as the samples.

@@ -301,7 +301,7 @@ nano /data/putnamlab/flofields/ENCORE_DLAB_denovo_transcriptome/scripts/trinity.
 
 cd /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/trimmed
 
-#Load Trinity module
+#Load Trinity and picard module
 
 module load Trinity/2.15.1-foss-2022a
 
@@ -311,14 +311,14 @@ Trinity \
 --seqType fq \
 --max_memory 50G \
 --left \
-/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/trimmed/DLAB_001_trim_R1.fastq.gz \
+/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/trimmed/DLAB_001_trim_R1.fastq \
 --right \
-/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/trimmed/DLAB_001_trim_R2.fastq.gz \
+/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/trimmed/DLAB_001_trim_R2.fastq \
 --CPU 36
 ```
 ```
 sbatch /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/trinity.sh
-Submitted batch job 354803
+Submitted batch job 355114
 
 ```
 ```
@@ -329,20 +329,29 @@ Trinity completed successfully!!!! When Trinity completes, it creates a 'trinity
 Trinity groups transcripts into clusters based on shared sequence content. Such a transcript cluster is very loosely referred to as a 'gene'. This information is encoded in the Trinity fasta accession. An example Fasta entry for one of the transcripts is formatted like so:
 
 ```
->TRINITY_DN100465_c0_g1_i1 len=518 path=[0:0-517]
-TAACCGATTACACGACGAACAGAGTGTAATAGAGACATCAGGAAGAAGGGACCGATAGTA
-CTGATATTTCAGTGGAGGAGGCCACTTCTTTACCATTACCTCACGGCTGTTCATGGTCTG
-CAATGTTGCCCGACCCACGCGGACTGGAACGAACTCAGATCCACCTTGCTCAAAGCTCAT
-TAGCTTGGCAGTGAAAGGATCCTCTTCCTCTTCTTCGGGGGGTTCATCTGTCAACTGCAG
-GGACTGAAAGTTGCCCATGTCTCTTTCCTGCCAGTTCGAGTGCTTCTTTTCTCGACCCCT
-TGGCGGCTCTACCTCGATCAATTTCAAAGCATCCTCGTCACTACAAAAACAGTGATATTT
-AGTTAGCACAAATCCTGTGTCACGCCATCTCACGTCACGCTTTCTTCTGTCACGCTACTT
-CAATTACCTGATGCCATCCTCCAAGACAAACTCGACCAGCGGGAGTACCTCGAAAGATGA
-GAATGAATAGACAAATGGCTGTCGACAGTTGATACACT
+>TRINITY_DN248_c0_g1_i12 len=3995 path=[0:0-84 2:85-86 4:87-1132 5:1133-1134 6:1135-2916 7:2917-2963 10:2964-3994]
+TTTTCTTCCCTAACAGACACTCTATTGTTTTGAAGGCATGAATGTATGCTTTCTTGGTCA
+TCCCAGAGAGACGAATAGCCACATTCTTATCGCGCCATAATCTGTCATGTCTTCCCGCTA
+AACCAACACGAAGAGCGAGGGCTCCAGAAACGTCTCTGCTTTGAACGTCATATCGGCCTA
+AATCGTACTGGTACTCAATGTCGTGCTCGCAGTCCAATGTAAAGGTCCTTTTTTAGTATT
+TTGTCTGGCCCCAGACCTATAAAGCAAGCTTTTTTTAAGACTGAACAGTTTTTTGGCAAA
+ACATTGAGCTGCTTGCTTTACAGAAGAGGGCCAGGGATTCTTATTTTCTCTGAATCTCTA
+TTGATAACACGTTCAAGTTTCCAAATTTTGTTGTTGAAATCCTGAGTAGAAAAGATCGGT
+ATTAATGTTTGAGTGCTTTACTACGAAAACCCGCCTTCATGTCAGGCTATATGACAAAGC
+GGCTTGATACACTGTAATGGAATAACTAAACTTCTTTCAATCAGTTCGCTGGAGATAATA
+TCAGTTTATGATCAGATACTATCAGGTCTGTCAGGTTTAAGAAACTTTACTTGATAATTA
+ACTATTCAACTTTGATCCAATTCTATCATGCACTTATGATGTTTATAGTTTCAGTTTAAA
+TATCAACAGTGTAACCTCAAACGCTTTACACGCTAGGGCTTGAGCCATATTGTTTGAATA
+ACATATGAAGTAATTAATAGTGACTATTTGTTTCGCCGTCTATAACGGTTCATGGAAGTA
+ACCCACAAGTGTGATCATTCAAATTAGAGAACAGACTACACTCAGAGTCTGTAACCCGAC
+TTGCTTCCACATTTGTAAGCTTGTCCAAAGAGGTTGATCATCCTTTGAGTTGAAAAGAGT
+TTTTGTTACTTTGGACTTCTCAATTTGATTCTCTGACGGGAAAATCTCAACTATAGATTA
+CATTTTGCATAGAATCATTTCTCTAGCAAGTCTGATCAGCTCCCTTTGATTTCACCTGAC
 ```
-Download Trinity fasta to Desktop if needed, too large to have stored there always
-
-scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta /Users/flo_f/OneDrive/Desktop/Putnam-Lab/mdec-rnaseq
+Download Trinity fasta to Desktop if needed, too large to have stored there always. Should run on your computer's terminal not Andormeda or Unity
+```
+scp -r ffields@ssh3.hac.uri.edu:/data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/trimmed/trinity_out_dir.Trinity.fasta /Users/flo_f/"OneDrive - University of RHode Island"/Github/ENCORE_Transcriptomes/DLAB_Reference_Transcriptome/data/Trinity_fasta/
+```
 
 ## Assessing assembly quality
 Use [Trinity toolkit utilities](https://github.com/trinityrnaseq/trinityrnaseq/wiki/Transcriptome-Contig-Nx-and-ExN50-stats) for a assembly quality assessment
@@ -352,50 +361,51 @@ Use [Trinity toolkit utilities](https://github.com/trinityrnaseq/trinityrnaseq/w
 This script will compute the contig Nx statistics (eg. the contig N50 value), in addition to a modification of the Nx statistic that takes into consideration transcript expression (read support) data, which we call the ExN50 statistic.
 
 Based on the lengths of the assembled transcriptome contigs, we can compute the conventional Nx length statistic, such that at least x% of the assembled transcript nucleotides are found in contigs that are at least of Nx length. The traditional method is computing N50, such that at least half of all assembled bases are in transcript contigs of at least the N50 length value.
+Should be ran while in the directory containing the fasta trinity file.
 ```
 /opt/software/Trinity/2.15.1-foss-2022a/trinityrnaseq-v2.15.1/util/TrinityStats.pl trinity_out_dir.Trinity.fasta > trinity_assembly_stats
 ```
-Trinity_assembly stata output 
+Trinity_assembly stats output 
 ```
 ################################
 ## Counts of transcripts, etc.
 ################################
-Total trinity 'genes':  468945
-Total trinity transcripts:      752474
-Percent GC: 42.90
+Total trinity 'genes':  372737
+Total trinity transcripts:      545197
+Percent GC: 42.83
 
 ########################################
 Stats based on ALL transcript contigs:
 ########################################
 
-        Contig N10: 4386
-        Contig N20: 2940
-        Contig N30: 2181
-        Contig N40: 1653
-        Contig N50: 1227
+        Contig N10: 6105
+        Contig N20: 4214
+        Contig N30: 3104
+        Contig N40: 2321
+        Contig N50: 1714
 
-        Median contig length: 420
-        Average contig: 761.95
-        Total assembled bases: 573346771
+        Median contig length: 435
+        Average contig: 902.74
+        Total assembled bases: 492172365
 ```
 
-The N10 through N50 values are shown computed based on all assembled contigs. In this example, 10% of the assembled bases are found in transcript contigs at least 3,786 bases in length (N10 value), and the N50 value indicates that at least half the assembled bases are found in contigs that are at least 1,227 bases in length.
+The N10 through N50 values are shown computed based on all assembled contigs. In this example, 10% of the assembled bases are found in transcript contigs at least 4,855 bases in length (N10 value), and the N50 value indicates that at least half the assembled bases are found in contigs that are at least 999 bases in length.
 
 The contig N50 values can often be exaggerated due to an assembly program generating too many transcript isoforms, especially for the longer transcripts. To mitigate this effect, the script will also compute the Nx values based on using only the single longest isoform per 'gene':
-```qq
+```
 #####################################################
 ## Stats based on ONLY LONGEST ISOFORM per 'GENE':
 #####################################################
 
-        Contig N10: 3786
-        Contig N20: 2476
-        Contig N30: 1798
-        Contig N40: 1309
-        Contig N50: 924
+        Contig N10: 4855
+        Contig N20: 2977
+        Contig N30: 2023
+        Contig N40: 1432
+        Contig N50: 999
 
-        Median contig length: 362
-        Average contig: 636.26
-        Total assembled bases: 298370046
+        Median contig length: 361
+        Average contig: 662.98
+        Total assembled bases: 247115954
 ```
 
 You can see that the Nx values based on the single longest isoform per gene are lower than the Nx stats based on all assembled contigs, as expected, and even though the Nx statistic is really not a reliable indicator of the quality of a transcriptome assembly, the Nx value based on using the longest isoform per gene is perhaps better for reasons described above.
@@ -415,8 +425,9 @@ Citation: Theissinger, K., Falckenhayn, C., Blande, D., Toljamo, A., Gutekunst, 
 
 #### a) Make run-busco-transcriptome.sh script
 ```
-nano /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/busco.sh
+nano /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/busco.sh
 ```
+
 ```
 #!/bin/bash
 #SBATCH --job-name="busco"
@@ -433,73 +444,8 @@ echo "START" $(date)
 
 labbase=/data/putnamlab
 busco_shared="${labbase}/shared/busco"
-[ -z "$query" ] && query="${labbase}/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
-[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
-
-source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
-
-# This will generate output under your $HOME/busco_output
-cd "${labbase}/${flofields}"
-busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_output -m transcriptome
-
-echo "STOP" $(date)
-```
-
-```
-sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/busco.sh
-```
-Submitted batch job 309345 on March 18th 2024
-Finished March 19th 2024
-
-The run in BUSCO failed, I checked the busco_154851.log found in the directory below. It seems there was an error with the output path.
-```
-cd /data/putnamlab
-```
-```
-2024-03-19 00:43:52 INFO:busco.ConfigManager    Configuring BUSCO with /opt/software/BUSCO/5.2.2-foss-2020b/config/config.ini
-2024-03-19 00:43:52 INFO:busco.BuscoConfig      Mode is transcriptome
-2024-03-19 00:43:52 ERROR:busco.BuscoRunner     Please do not provide a full path in --out parameter, no slash. Use out_path in the config.ini file to specify the full path.
-2024-03-19 00:43:52 DEBUG:busco.BuscoRunner     Please do not provide a full path in --out parameter, no slash. Use out_path in the config.ini file to specify the full path.
-Traceback (most recent call last):
-  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/run_BUSCO.py", line 103, in run
-    self.load_config()
-  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/run_BUSCO.py", line 94, in load_config
-    self.config_manager.load_busco_config_main(sys.argv)
-  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/BuscoLogger.py", line 62, in wrapped_func
-    self.retval = func(*args, **kwargs)
-  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/ConfigManager.py", line 56, in load_busco_config_main
-    self.config_main.validate()
-  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/BuscoConfig.py", line 407, in validate
-    self._cleanup_config()
-  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/BuscoConfig.py", line 644, in _cleanup_config
-    self._check_out_value()
-  File "/opt/software/BUSCO/5.2.2-foss-2020b/lib/python3.8/site-packages/busco/BuscoConfig.py", line 592, in _check_out_value
-    raise BatchFatalError(
-busco.Exceptions.BatchFatalError: Please do not provide a full path in --out parameter, no slash. Use out_path in the config.ini file to specify the full path.
-2024-03-19 00:43:52 ERROR:busco.BuscoRunner     BUSCO analysis failed !
-2024-03-19 00:43:52 ERROR:busco.BuscoRunner     Check the logs, read the user guide (https://busco.ezlab.org/busco_userguide.html), and check the BUSCO issue board on https://gitlab.com/ezlab/busco/issues
-```
-<<<<<<< HEAD
-In this new script I changed /data/putnamlab/flofields/denovo_transcriptome/data/busco/busco_output to busco_output
-```
-#!/bin/bash
-#SBATCH --job-name="busco"
-#SBATCH --time="100:00:00"
-#SBATCH --nodes 1 --ntasks-per-node=20
-#SBATCH --mem=250G
-#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
-#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
-##SBATCH --account=putnamlab
-##SBATCH --output="busco-%u-%x-%j"
-##SBATCH --export=NONE
-
-echo "START" $(date)
-
-labbase=/data/putnamlab
-busco_shared="${labbase}/shared/busco"
-[ -z "$query" ] && query="${labbase}/flofields/denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
-[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
-
+[ -z "$query" ] && query="${labbase}/flofields/ENCORE_Dlab_denovo_transcriptome/data/trimmed/trinity_out_dir.Trinity.fasta" #set this to the query (genome/transcriptome) you are running 
+[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
 source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
 
 # This will generate output under your $HOME/busco_output
@@ -509,149 +455,77 @@ busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -
 echo "STOP" $(date)
 ```
 
-```
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
-Submitted batch job 309636 on March 19th 2024
-```
-
-Failed again
-Changes to the script 
-```
-[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10" 
-
-#to 
-
-[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
-```
-
-Script used.
-=======
-In this new script I changed /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_output to busco_oput
->>>>>>> 4897777390d15fd11d27d78bc3417b18290e65b0
-```
-#!/bin/bash
-#SBATCH --job-name="busco"
-#SBATCH --time="100:00:00"
-#SBATCH --nodes 1 --ntasks-per-node=20
-#SBATCH --mem=250G
-#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
-#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
-##SBATCH --account=putnamlab
-##SBATCH --output="busco-%u-%x-%j"
-##SBATCH --export=NONE
-
-echo "START" $(date)
-
-labbase=/data/putnamlab
-busco_shared="${labbase}/shared/busco"
-[ -z "$query" ] && query="${labbase}/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
-[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
-
-source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
-
 # This will generate output under your $HOME/busco_output
 cd "${labbase}/${flofields}"
 busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o busco_output -m transcriptome
 
 echo "STOP" $(date)
-```
+
 
 ```
-<<<<<<< HEAD
-sbatch /data/putnamlab/flofields/denovo_transcriptome/scripts/busco.sh
-=======
-sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/busco.sh
-Submitted batch job 309636 on March 19th 2024
+sbatch /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/scripts/busco.sh
 ```
+Submitted batch job 356655 on Feb 4th 2024
+Submitted batch job 362309 2/23/2025
 
-Failed again
-Changes to the script made
-```
-[ -z "$ff_to_compare" ] && ff_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10" 
 
-#to 
-
-[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
-
->>>>>>> 4897777390d15fd11d27d78bc3417b18290e65b0
-Submitted batch job 309639 on March 19th 2024
-```
-
-Job failed again. I checked the output file which states that permission was denied for the directory '/glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv'
-Checked permissions using the code below 
-
-```
-ls -l /glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv
-```
-
-Recieved output below then consulted jill who had permissions for this folder and was able to give me permission to access the folder
-
-```
-ls -l /glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv
--rw-r--r--. 1 jillashey putnamlab 18129 Mar 11 12:52 /glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv
-```
-
-Jill used this code below to give everyone in the group access to the folder
-
-```
-chmod ugo+rwx *
-```
-Submitted batch job 309641 on March 19th 2024
-
-The busco_154851.log, busco_136325.log, busco_138450.log, busco_137567.log files where in the putnamlab folder. Moved them to /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
-The script output files slurm-309345.out, slurm-309639.out, slurm-309636.out, slurm-309641.out where found in the flofields script folder. Moved them to /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm_output
-#### The busco_output file was found in /data/putnamlab and was moved to /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/
+The busco_183341.log, busco_183888.log, busco_92172.log files where in the putnamlab folder. Moved them to /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/busco_logs
+The script output files slurm-356647.out where found in the flofields script folder. Moved them to /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/slurm_output
+#### The busco_output file was found in /data/putnamlab and was moved to /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/
 
 The entire busco dir was manually made.
 ```
-mkdir /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/
-mkdir /data/putnamlab/flofields//ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
-mkdir /data/putnamlab/flofields//ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
+mkdir /data/putnamlab/flofields//ENCORE_Dlab_denovo_transcriptome/data/busco/busco_logs
+mkdir /data/putnamlab/flofields//ENCORE_Dlab_denovo_transcriptome/data/busco/slurm-output
 ```
 ```
-mv busco_154851.log /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
-mv busco_136325.log /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
-mv busco_138450.log /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs (file to be located)
-mv busco_137567.log /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/busco_logs
-```
-```
-mv slurm-309345.out /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
-mv slurm-309639.out /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
-mv slurm-309636.out /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
-mv slurm-309641.out /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco/slurm-output
+mv busco_183341.log /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/busco_logs
+mv busco_183888.log /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/busco_logs
+mv busco_92172.log /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/busco_logs 
+mv busco_184440.log /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/busco_logs 
+mv busco_185036.log /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/busco_logs 
 
-#slurm-output folder did not exsit so this path was incorrect, as a result when I ran it did generate a single slurm-output file that had the completed busco slurm-output results.
 ```
+```
+mv slurm-356647.out /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/slurm-output
+mv slurm-356655.out /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/slurm-output
+mv slurm-356654.out /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/slurm-output
+mv slurm-356649.out /data/putnamlab/flofields/ENCORE_Dlab_denovo_transcriptome/data/busco/slurm-output
+```
+
 ```
 mv busco_output /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/busco
 ```
+The run failed for non script errors, I checked the slurm-356655.out file and it seems that permission error. 
+```
+'/glfs/brick01/gv0/putnamlab/busco_downloads/file_versions.tsv'
+
+ls -l #Checks permissions on the file/directory
+```
+Checked permissions and it seems Jill Ashey is the only one with persmissions so I contacted her to give my access
+
+Job Submitted  Feb 5th 356683
 
 ### BUSCO Resuts
 
+Transcriptomes and protein sets that are not filtered for isoforms will lead to a high proportion of duplicates. Therefore you should filter them before a BUSCO analysis".
+
+Danielle also got a high number (78.9%) of duplicated BUSCOs in her de novo transcriptome of Apulchra, but Kevin got much less duplication (6.9%) in his Past transcriptome assembly. I need to ask Danielle if she ended up using her Trinity results (which had a high duplication percentage) for her alignment for Apul. I also need to ask her if she thinks the high duplication percentage is biologically meaningful
+
+eukaryote contaminant sequences (ftp.ncbi.nlm.nih. gov/pub/kitts/contam_in_euks.fa.gz), NCBI viral (ref_ viruses_rep_genomes) and prokaryote
+
 ```
-# BUSCO version is: 5.2.2
-# The lineage dataset is: metazoa_odb10 (Creation date: 2024-01-08, number of genomes: 65, number of BUSCOs: 954)
-# Summarized benchmarking in BUSCO notation for file /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta
-# BUSCO was run in mode: transcriptome
+#!/bin/bash 
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=10
+#SBATCH --export=NONE
+#SBATCH --mem=500GB
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/flofields/Apul_Genome/assembly/scripts
+#SBATCH -o slurm-%j.out
+#SBATCH -e slurm-%j.error
 
-        ***** Results: *****
 
-        C:98.5%[S:13.6%,D:84.9%],F:0.6%,M:0.9%,n:954
-        940     Complete BUSCOs (C)
-        130     Complete and single-copy BUSCOs (S)
-        810     Complete and duplicated BUSCOs (D)
-        6       Fragmented BUSCOs (F)
-        8       Missing BUSCOs (M)
-        954     Total BUSCO groups searched
-
-Dependencies and versions:
-        hmmsearch: 3.3
-        metaeuk: GITDIR-NOTFOUND
 ```
-
-BUSCO completeness looks great. Completeness looks for the presence or absence of highly conserved genes in an assembly. The aim is to have the highest percentage of genes identified in your assembly, a BUSCO complete score above 95% is considered good.
-The complete and duplicated BUSCOs are high. Transcriptomes and protein sets that are not filtered for isoforms will lead to a high proportion of duplicates. So, next step suggestions:
-
-Filter for isoforms
-Map to closest genome
-Filter symbiont genes to check if it helps duplication
