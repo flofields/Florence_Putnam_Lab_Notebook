@@ -91,6 +91,7 @@ In the submission portal it will change the BioSample submission from in progres
 It doesn't take very long to process the samples. 
 Once they are processed, each BioSample now has an associated SAMN# with it.
 
+## 2 Create BioProject
 Next the biosamples needs to be uploaded to NCBI. To do this you must first create a BioProject
 Now you can go back to the BioSample submission portal and click BioProject in the blue box that says Start a New Submission.
 
@@ -188,5 +189,4 @@ mput *
 
 Note: It can take over a day for your sequences to show up on NCBI
 
-![17]()final look on NCBI
 

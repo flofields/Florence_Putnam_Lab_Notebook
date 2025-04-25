@@ -703,3 +703,103 @@ The complete and duplicated BUSCOs are high. Transcriptomes and protein sets tha
 Filter for isoforms
 Map to closest genome
 Filter symbiont genes to check if it helps duplication
+
+---
+
+### Uisng NCBI Foreign Contamination Screen (FCS) to remove Contaminants from Assembly
+
+Download FCS adapter and eukaryotic contaminant sequences
+```
+mkdir fcs_gx
+cd fcs_gx
+curl -LO https://github.com/ncbi/fcs/raw/main/dist/run_fcsgx.py
+
+mkdir dbs
+cd dbs
+curl -LO https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz 
+```
+Theoretically I should recieve the same results but just incase I am going to use the fasta files from trinity and fasta files that were converted from the trimmed data (trim 2)
+
+   - Converting trim2 files to a fasta
+     -  to convert the fastq R1 and R2 files to fasta files inorder to blast the sequences to the eukaryote contaminants using [seqtk](https://github.com/lh3/seqtk) 
+```
+nano data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/seqtk.sh
+```
+```
+#!/bin/bash 
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=10
+#SBATCH --export=NONE
+#SBATCH --mem=500GB
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=jillashey@uri.edu #your email to send notifications
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
+#SBATCH -o slurm-%j.out
+#SBATCH -e slurm-%j.error
+
+module load seqtk/1.3-GCC-9.3.0
+
+echo "Convert trim2 fastq file to fasta file" $(date)
+
+cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
+
+seqtk seq -a MDEC_001_Trim2_R1.fastq > MDEC_001_R1.fasta
+seqtk seq -a MDEC_001_Trim2_R2.fastq > MDEC_001_R2.fasta
+
+# Do not need the length summary but i'll still get it
+echo "Fastq to fasta complete! Summarize read lengths" $(date)
+
+awk '/^>/{printf("%s\t",substr($0,2));next;} {print length}' MDEC_001_R1.fasta > MDEC_R1_read_lengths.txt
+awk '/^>/{printf("%s\t",substr($0,2));next;} {print length}' MDEC_001_R2.fasta > MDEC_R2_read_lengths.txt
+
+echo "Read length summary complete" $(date)
+```
+```
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/seqtk.sh
+Submitted job 362995
+```
+- Next we will create a script to blast the fasta from trinity to the eukaryote contaminant database
+```
+nano data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trinity_euk_contam.sh
+```
+```
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=10
+#SBATCH --export=NONE
+#SBATCH --mem=500GB
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/
+#SBATCH -o slurm-%j.out
+#SBATCH -e slurm-%j.error
+
+module load BLAST+/2.13.0-gompi-2022a
+
+echo "BLASTing fasta from trinity against eukaryote contaminant sequences" $(date)
+
+cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
+
+blastn -query trinity_out_dir.Trinity.fasta -subject /data/putnamlab/flofields/dbs/contam_in_euks.fa.gz -task megablast -outfmt 6 -evalue 4 -perc_identity 90 -num_threads 15 -out contaminant_hits_euks_trinity.txt
+
+echo "BLAST complete, remove contaminant seqs from trinity fasta" $(date)
+
+awk '{ if( ($4 >= 50 && $4 <= 99 && $3 >=98 ) ||
+         ($4 >= 100 && $4 <= 199 && $3 >= 94 ) ||
+         ($4 >= 200 && $3 >= 90) )  {print $0}
+    }' contaminant_hits_euks_trinity.txt > contaminants_pass_filter_euks_trinity.txt
+
+echo "Contaminant seqs removed from trinity fasta" $(date)
+```
+sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trinity_euk_contam.sh
+Submitted batch job 363739
+Recieved a slum error message saying 
+```
+BLAST query error: CFastaReader: Near line 1, there's a line that doesn't look like plausible data, but it's not marked as defline or comment.
+awk: fatal: cannot open file `contaminant_hits_euks_trinity.txt' for reading (No such file or directory)
+```
+
+
+
