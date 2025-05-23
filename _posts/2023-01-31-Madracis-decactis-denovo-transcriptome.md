@@ -705,6 +705,23 @@ Map to closest genome
 Filter symbiont genes to check if it helps duplication
 
 ---
+<span style="color: red;">Note all Bioinfamatic work this far has been done in andormeda. I will now be using unity which is be reflected through subtle changes in the Sbatch scripts
+
+Make a unity strach directory
+
+    ws_allocate transcriptomes -G pi_hputnam_uri_edu
+    cd /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec
+
+Create euk filtering script
+
+sbatch /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/mdectrinity_euk_contam.sh
+
+    scratch_req.sh
+    jobs which are more than 2 days, specify -q long
+
+    trinity_euk_contam.sh
+
+    /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Mdec/
 
 ### Uisng NCBI Foreign Contamination Screen (FCS) to remove Contaminants from Assembly
 
