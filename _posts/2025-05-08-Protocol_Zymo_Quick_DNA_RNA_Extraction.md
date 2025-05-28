@@ -4,9 +4,9 @@ TITLE: Adult Coral RNA and DNA Extraction using the Zymo Quick-DNA/RNA™ Miniprep
 CATEGORY: [ Protocol ]
 TAG: [ DNA, RNA, Protocol ]
 ---
-## Designing a workflow to create a de novo transcriptome for *Diploria labyrinthiformis*
+## Adult Coral RNA and DNA Extraction using the Zymo Quick-DNA/RNA™ Miniprep Plus Kit*
 
-**About**: This post shows the steps taken for RNA/DNA extractions based off of the [Zymo Quick DNA RNA Miniprep Protocol]() and adusted for the Putnam lab specfically for coral extractions by [Dr. Emma L. Strand](https://emmastrand.github.io/EmmaStrand_Notebook/Zymo-Duet-RNA-DNA-Extraction-Protocol/),[Dr. Kevin H. Wong](https://github.com/kevinhwong1/KevinHWong_Notebook/blob/master/_posts/2019-03-13-Zymo-DNA-RNA-Extract-P.astreoides-Genome.md) and [Erin E. Chille](https://echille.github.io/E.-Chille-Open-Lab-Notebook/Protocol-for-DNA-RNA-Extractions-of-Montipora-Coral-Larvae-Using-Zymo-Duet-Extraction-Kit/). This protocol was modified by [Kristina Terpis](https://github.com/Kterpis/Putnam_Lab_Notebook/blob/master/_posts/2021-10-08-20211008-RNA-DNA-extractions-from-E5-project.md) [(*Porites* sp. example)](https://github.com/Kterpis/Putnam_Lab_Notebook/blob/master/_posts/2022-02-01-20220201-ReExtracting-DNA-and-RNA-from-E5-project.md) to extract coral clpppigs from 1mL of [DNA/RNA shield](https://www.zymoresearch.com/products/dna-rna-shield) and kept at -80ºC and based off of [Zoe Dellaert's](https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/Protocols_Zymo_Quick_DNA_RNA_Miniprep_Plus/) detailed protocol post for RNAlater .
+**About** : This post shows the steps taken for RNA/DNA extractions based off of the [Zymo Quick DNA RNA Miniprep Protocol]() and adusted for the Putnam lab specfically for coral extractions by [Dr. Emma L. Strand](https://emmastrand.github.io/EmmaStrand_Notebook/Zymo-Duet-RNA-DNA-Extraction-Protocol/),[Dr. Kevin H. Wong](https://github.com/kevinhwong1/KevinHWong_Notebook/blob/master/_posts/2019-03-13-Zymo-DNA-RNA-Extract-P.astreoides-Genome.md) and [Erin E. Chille](https://echille.github.io/E.-Chille-Open-Lab-Notebook/Protocol-for-DNA-RNA-Extractions-of-Montipora-Coral-Larvae-Using-Zymo-Duet-Extraction-Kit/). This protocol was modified by [Kristina Terpis](https://github.com/Kterpis/Putnam_Lab_Notebook/blob/master/_posts/2021-10-08-20211008-RNA-DNA-extractions-from-E5-project.md) [(*Porites* sp. example)](https://github.com/Kterpis/Putnam_Lab_Notebook/blob/master/_posts/2022-02-01-20220201-ReExtracting-DNA-and-RNA-from-E5-project.md) to extract coral clpppigs from 1mL of [DNA/RNA shield](https://www.zymoresearch.com/products/dna-rna-shield) and kept at -80ºC and based off of [Zoe Dellaert's](https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/Protocols_Zymo_Quick_DNA_RNA_Miniprep_Plus/) detailed protocol post for RNAlater.
 
 Goal: To extract high quality gemonic DNA (gDNA) and total RNA from **Madracis decactis** and **Diploria labyrinthiformis** when stored in DNA/RNA shield at -80ºC.
 
@@ -18,7 +18,8 @@ Contents
 - #### Protocol Steps
 - [**Proteinase K Digestion**](#Proteinase%20an%20K%20an%20Digestion)
 - [**DNA Extraction**](#DNA%20an%20Extraction)
-
+- [**RNA Extraction**](#RNA%20an%20Extraction)
+- 
 ### 1. <a name="Materials"></a> **Materials and Equipment**
 - Zymo Quick-DNA/RNA Miniprep Plus Kit [HERE](https://www.zymoresearch.com/products/quick-dna-rna-miniprep-plus-kit) [Protocol Booklet](https://github.com/zdellaert/ZD_Putnam_Lab_Notebook/blob/master/protocols/Base_Zymo_Quick_DNA_RNA_Miniprep_Plus_Booklet.pdf)
 - Tris-Ethylenediaminetetraacetic acid (EDTA) [1X buffer](https://www.fishersci.com/shop/products/tris-edta-1x-solution-ph-8-0-molecular-biology-fisher-bioreagents-3/bp24731#?keyword=BP24731) for DNA elution
@@ -62,7 +63,7 @@ Photograph sample tubes to record qualitative qualities such as buffer color and
 - After vortoxing, check to see if most of the tissue has come off the skeleton and that the DNA/RNA shield has darkened in color.
 - Remove supernatant and place in a new 1.5mL microcentrifuge tube and proceed to Proteinase K didestion.
 
-### 5. Proteinase K Digestion
+### 5. <a name="Proteinase K Digestion"></a> **Proteinase K Digestion**
 - Labelled clean 1.5 mL microcentrifuge tubes for each sample with sample number and place 300uL of sample in each.
 - Save the bead tube with the skeleton fragment and leftover aliquoted supernatant tube in -80 °C freezer as a potential back-up in case the extraction doesn't work. Label 1.5 mL microcentrifuge tube as desired. 
 - dd 30 µl of PK digestion buffer to each sample tube (1:10 ratio of PK Digestion Buffer:Sample).
@@ -70,7 +71,7 @@ Photograph sample tubes to record qualitative qualities such as buffer color and
 - Vortex for 5-10 seconds and spin down.
 - Proceed to extraction steps.
 
-### DNA Extraction
+### 6. <a name="DNA Extraction"></a> **DNA Extraction**
 1. Set up yellow DNA spin columns and collection tubes, label appropriately
 2. Warm elution liquids to 70 degrees &deg;C (10mM Tris HCl pH. 8.0 and RNase free water)
 3. Add equal volume (345 µl) DNA/RNA lysis buffer to each sample tube
@@ -94,7 +95,7 @@ Photograph sample tubes to record qualitative qualities such as buffer color and
 21. Repeat steps 18-20 for a final elution volume of 100 µl
 22. Label tubes, store at 4 &deg;C if quantifying the same day or the next, if waiting longer store in -20 &deg;C
 
-## RNA Extraction
+### 7. <a name="RNA Extraction"></a> **RNA Extraction**
 *Can do concurrently with DNA Extraction after DNA Extraction Step 7*
 1. Add equal volume (700 µl) 100% EtOH to the 1.5mL tubes labeled for RNA containing the original yellow column flow through
 2. Vortex and spin down to mix
@@ -139,4 +140,5 @@ Follow Broad Range dsDNA and RNA Qubit [protocol](https://meschedl.github.io/MES
 
 ### DNA Quality  
 If DNA quantity is sufficient (typically >10 ng/µL) follow the Agarose Gel [Protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-23-05-Gel-Protocol.md) to determine DNA quality. "Good" DNA should form a distinct band a the very top of the gel. See example below:
+
 ![annotated-biomin-gel-batches-4-5.png](https://raw.githubusercontent.com/echille/E.-Chille-Open-Lab-Notebook/master/images/annotated-biomin-gel-batches-4-5.png)
