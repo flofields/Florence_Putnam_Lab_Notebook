@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 2025-24-05 ENCORE Priming RNA and DNA Extractions
-date:  2025-24-05 
+title: 2025-05-24 ENCORE Priming RNA and DNA Extractions
+date:  2025-05-24 
 categories: Processing
 tags: [DNA, RNA, ENCORE, Madracis decactis]
 ---
