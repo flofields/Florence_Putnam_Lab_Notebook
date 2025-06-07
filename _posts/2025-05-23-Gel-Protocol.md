@@ -1,7 +1,7 @@
 ---
 layout: post
 title: PPP Lab Agarose Gel Protocol
-date: '2023-23-05'
+date: 2023-05-23
 categories: Protocols
 tags: [DNA, RNA Protocol]
 ---
