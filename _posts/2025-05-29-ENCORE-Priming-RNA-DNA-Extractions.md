@@ -39,7 +39,7 @@ tags: [DNA, RNA, ENCORE, Madracis decactis]
 | MD-5-1    | *Madracis decactis*       |   18.6     | 16.6       |   17.6       |
 | MD-1-8   | *Madracis decactis*       |   OUT OF RANGE     |        |          |
 
-## DNA and RNA Quality Check: Gel, using this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-23-05-Gel-Protocol.md)
+## DNA and RNA Quality Check: Gel, using this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-05-23-Gel-Protocol.md)
 
 ![Gel_DNA_RNA_29May2025.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/28a50dba09c3459997e3a6cebd31b6f8d383c6d2/images/RNA_DNA_gels/Gel_DNA_RNA_29May2025_FF.png?raw=true)
 

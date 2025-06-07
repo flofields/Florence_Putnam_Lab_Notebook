@@ -38,7 +38,7 @@ These samples are apart of day 2 of processing. Samples were randomly selected o
 | MD- 5-17  | *Madracis decactis*       |   15.2     |   14.8     |   15         |
      
 
-## DNA and RNA Quality Check: Gel, using [Kristina's gel protocol at the bottom of this page.](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-23-05-Gel-Protocol.md)
+## DNA and RNA Quality Check: Gel, using this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-05-23-Gel-Protocol.md)
 - Gel ran on 80V for 45 minutes
 
 ![Gel_DNA_RNA_24May2025_FF.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/6f2496cdc305491cd9f3f4ba1dafd7296148ddcf/images/RNA_DNA_gels/Gel_DNA_RNA_24May2025_FF.png?raw=true)

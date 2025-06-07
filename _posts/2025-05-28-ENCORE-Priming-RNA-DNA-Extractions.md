@@ -42,7 +42,7 @@ These samples are apart of day 6 of processing. Samples were randomly selected o
 | MD-1-2    | *Madracis decactis*       |   20.2     | 19.6       |   19.9       |
 | MD-2-12   | *Madracis decactis*       |   18.2     | 17.2       |   17.7       |
 
-## DNA and RNA Quality Check: Gel, using this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-23-05-Gel-Protocol.md)
+## DNA and RNA Quality Check: Gel, using this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-05-23-Gel-Protocol.md)
 
 ![Gel_DNA_RNA_28May2025.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/28a50dba09c3459997e3a6cebd31b6f8d383c6d2/images/RNA_DNA_gels/Gel_DNA_RNA_28May2025_FF.png?raw=true)
 
