@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 2025-05-28 ENCORE Priming RNA and DNA Extractions
-date:  2025-05-28 
+title: 2025-05-30 ENCORE Priming RNA and DNA Extractions
+date:  2025-05-30 
 categories: Processing
 tags: [DNA, RNA, ENCORE, Madracis decactis]
 ---
@@ -14,7 +14,7 @@ tags: [DNA, RNA, ENCORE, Madracis decactis]
 
 ## Samples
 
-These samples are apart of day 6 of processing. Samples were randomly selected out of the 100 total being used for Extractions. Samples were either apart of a three phase priming experiment that included the first stage; Priming where the coral were exposed to 3 treatments high temperature (31ºC), low pH (~7.75) and control (~27ºC)~). The second stage; recovery, where they underwent a week recovery period under control conditions (28ºC). The thrid stage was exposure to a stress which was high temperature (32ºC).
+These samples are apart of day 8 of processing. Samples were randomly selected out of the 100 total being used for Extractions. Samples were either apart of a three phase priming experiment that included the first stage; Priming where the coral were exposed to 3 treatments high temperature (31ºC), low pH (~7.75) and control (~27ºC)~). The second stage; recovery, where they underwent a week recovery period under control conditions (28ºC). The thrid stage was exposure to a stress which was high temperature (32ºC).
 
 ## Notes
 
@@ -33,16 +33,16 @@ These samples are apart of day 6 of processing. Samples were randomly selected o
 
 | colony_id | Species                   | RNA_QBIT_1 | RNA_QBIT_2 | RNA_QBIT_AVG |
 |-----------|---------------------------|------------|------------|--------------|
-| MD-5-6    | *Madracis decactis*		|   15.4     | 14.8       |   15.1       |
-| MD-4-20   | *Madracis decactis*       |   13     | 11.6       |   12.3       |
-| MD-1-14   | *Madracis decactis*       |   20     | 19.2       |   19.6       |
-| MD-2-10   | *Madracis decactis*       |   10.8     | 10.4       |   10.6       |
-| MD-4-23   | *Madracis decactis*       |   13.6     | 12.8       |   13.2       |
-| MD-2-2    | *Madracis decactis*       |   10.8     | 10.0       |   10.4       |
-| MD-1-2    | *Madracis decactis*       |   20.2     | 19.6       |   19.9       |
-| MD-2-12   | *Madracis decactis*       |   18.2     | 17.2       |   17.7       |
-
+| MD-5-22    | *Madracis decactis*		|   21.2     | 20.8       |   21       |
+| MD-2-21   | *Madracis decactis*       |   24.6     | 24.2       |   24.4       |
+| MD-5-3    | *Madracis decactis*       |   43.8     | 43.2       |   43.5       |
+| MD-2-9    | *Madracis decactis*       |   29.8     | 29.8       |   29.8       |
+| MD-1-9    | *Madracis decactis*       |   39.8     | 39.4       |   39.6       |
+| MD-2-18    | *Madracis decactis*       |   36.2     | 36.0       |   36.1     |
+| MD-1-17    | *Madracis decactis*       |   16.6   	|16.8	   |16.7     | 
+| MD-1-16    | *Madracis decactis*       |  10.6	| 10.2	   |10.4     |
 ## DNA and RNA Quality Check: Gel, using this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-23-05-Gel-Protocol.md)
 
-![Gel_DNA_RNA_28May2025.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/28a50dba09c3459997e3a6cebd31b6f8d383c6d2/images/RNA_DNA_gels/Gel_DNA_RNA_28May2025_FF.png?raw=true)
+![Gel_DNA_RNA_30May2025.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/6f2496cdc305491cd9f3f4ba1dafd7296148ddcf/images/RNA_DNA_gels/Gel_DNA_RNA_30May2025_FF.png?raw=true)
 
+Note: Sample MD-1-17 and MD-1-16 were extracted by NC

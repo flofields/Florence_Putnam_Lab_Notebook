@@ -6,19 +6,19 @@ categories: Processing
 tags: [DNA, RNA, ENCORE, Madracis decactis]
 ---
 
-## RNA and DNA Extractions for ENCORE Project, October 05, 2022
+## RNA and DNA Extractions for ENCORE Priming Project
 
-### [Protocol Link](https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/Protocols_Zymo_Quick_DNA_RNA_Miniprep_Plus/) and Here (insert my protocol link)
+### [Protocol Link](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/cebc21eb5df7339f0eb12b5a8dd32e6f5f25e433/_posts/2025-05-08-Protocol-Zymo-Quick-DNA-RNA-Extraction.md) and [Here](https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/Protocols_Zymo_Quick_DNA_RNA_Miniprep_Plus/)
 
 ### Extraction of 4 samples from ENCORE Priming Project. These samples were collected in Bermuda in June 2024 for the ENCORE Priming project. There are 100 *Madracis decactis* (MDEC) samples total.
 
 ## Samples
 
-These samples are apart of day 1 of processing. Samples were randomly selected out of the 100 total being used for Extractions. Samples were either apart of a three phase priming experiment that included the first stage; Priming where the coral were exposed to 3 treatments high temperature (31ºC), low pH (~7.75) and control (~27ºC)~). The second stage; recovery, where they underwent a week recovery period under control conditions (28ºC). The thrid stage was exposure to a stress which was high temperature (32ºC).
+These samples are apart of day 2 of processing. Samples were randomly selected out of the 100 total being used for Extractions. Samples were either apart of a three phase priming experiment that included the first stage; Priming where the coral were exposed to 3 treatments high temperature (31ºC), low pH (~7.75) and control (~27ºC)~). The second stage; recovery, where they underwent a week recovery period under control conditions (28ºC). The thrid stage was exposure to a stress which was high temperature (32ºC).
 
 ## Notes
 
-- Followed this [protocol](https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/Protocols_Zymo_Quick_DNA_RNA_Miniprep_Plus/) exactly. 
+- Followed this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/cebc21eb5df7339f0eb12b5a8dd32e6f5f25e433/_posts/2025-05-08-Protocol-Zymo-Quick-DNA-RNA-Extraction.md) exactly. 
 - RNA and DNA were extracted from frozen samples in 1mL of [DNA/RNA shield](https://www.zymoresearch.com/products/dna-rna-shield)
 - For sample preperation bead beat was used and added to the orginal tube. The sample was then votexed for 1 mintue and spinned downed after.
 - Durin the DNA extraction samples were inverted in step 5 not flicked.
