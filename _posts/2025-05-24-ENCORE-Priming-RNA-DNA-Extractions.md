@@ -22,13 +22,13 @@ These samples are apart of day 2 of processing. Samples were randomly selected o
 - RNA and DNA were extracted from frozen samples in 1mL of [DNA/RNA shield](https://www.zymoresearch.com/products/dna-rna-shield)
 - For sample preperation bead beat was used and added to the orginal tube. The sample was then votexed for 1 mintue and spinned downed after.
 - Durin the DNA extraction samples were inverted in step 5 not flicked.
-- During both extractions samples were eluted in 80uL of Tris or DNase/RNase free water (50uL on the first elution and 30 on the next).
+- During both extractions samples were eluted in 80uL of Tris or DNase/RNase free water (50uL on the first elution and 30 on the next). 
 ## Qubit Results
 
 - Used Broad range dsDNA and RNA Qubit Protocol [HERE](https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/Qubit-Protocol/) and [HERE](https://github.com/meschedl/MESPutnam_Open_Lab_Notebook/blob/master/_posts/2019-03-08-Qubit-Protocol.md)
 - All samples read twice, standard only read once
 
- RNA Standards: 412.67 (S1) & 9635.27 (S2)
+ RNA Standards: 395.58 (S1) & 8009.87 (S2)
 
 | colony_id | Species                   | RNA_QBIT_1 | RNA_QBIT_2 | RNA_QBIT_AVG |
 |-----------|---------------------------|------------|------------|--------------|
@@ -39,8 +39,9 @@ These samples are apart of day 2 of processing. Samples were randomly selected o
      
 
 ## DNA and RNA Quality Check: Gel, using [Kristina's gel protocol at the bottom of this page.](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-23-05-Gel-Protocol.md)
+- Gel ran on 80V for 45 minutes
 
-![Gel_DNA_RNA_24May2025.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/8aea3f663167f52b5d132e8dcc0aefe6a7440e52/images/RNA_DNA_gels/Gel_DNA_RNA_24May2025.png?raw=true)
+![Gel_DNA_RNA_24May2025_FF.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/6f2496cdc305491cd9f3f4ba1dafd7296148ddcf/images/RNA_DNA_gels/Gel_DNA_RNA_24May2025_FF.png?raw=true)
 
 Next steps
 After all extractions are complete I will rerun the qubit for MD-2-17

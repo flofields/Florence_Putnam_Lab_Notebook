@@ -22,7 +22,7 @@ These samples are apart of day 1 of processing. Samples were randomly selected o
 - RNA and DNA were extracted from frozen samples in 1mL of [DNA/RNA shield](https://www.zymoresearch.com/products/dna-rna-shield)
 - For sample preperation bead beat was not used. Instead the samples were votexed for 1 minute then spinned down.
 - Durin the DNA extraction samples were inverted in step 5 not flicked.
-- During both extractions samples were eluted in 100uL of Tris or DNase/RNase free water (50uL on the first elution and 30 on the next).
+- During both extractions samples were eluted in 100uL of Tris or DNase/RNase free water (50uL on the first elution and 50 on the next).
 - 2uL of DNA was stored for the Qbit
 
 ## Qubit Results
@@ -41,8 +41,9 @@ These samples are apart of day 1 of processing. Samples were randomly selected o
      
 
 ## DNA and RNA Quality Check: Gel, using this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-23-05-Gel-Protocol.md)
+- Gel ran on 80V for 45 minutes
 
-![Gel_DNA_RNA_24May2025.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/8aea3f663167f52b5d132e8dcc0aefe6a7440e52/images/RNA_DNA_gels/Gel_DNA_RNA_24May2025.png?raw=true)
+![Gel_DNA_RNA_23May2025_FF.jpg](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/6f2496cdc305491cd9f3f4ba1dafd7296148ddcf/images/RNA_DNA_gels/Gel_DNA_RNA_23May2025_FF.jpg?raw=true)
 
 Next steps
 I collected another 9uL for the gel. The already collected 9uL fell with the tube mouth open.

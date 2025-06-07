@@ -28,22 +28,24 @@ These samples are apart of day 4 of processing. Samples were randomly selected o
 
 - Used Broad range dsDNA and RNA Qubit Protocol [HERE](https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/Qubit-Protocol/) and [HERE](https://github.com/meschedl/MESPutnam_Open_Lab_Notebook/blob/master/_posts/2019-03-08-Qubit-Protocol.md)
 - All samples read twice, standard only read once
-
- RNA Standards: 437.39 (S1) & 8539.04 (S2)
+- Samples MD-5-26 and MD-1-15 qbit was redone
+- 
+ RNA Standards: 420.60 (S1) & 8892.55 (S2)
 
 | colony_id | Species                   | RNA_QBIT_1 | RNA_QBIT_2 | RNA_QBIT_AVG |
 |-----------|---------------------------|------------|------------|--------------|
-| MD-5-6    | *Madracis decactis*		|   15.4     | 14.8       |   15.1       |
-| MD-4-20   | *Madracis decactis*       |   13.0     | 11.6       |   12.3       |
-| MD-1-14   | *Madracis decactis*       |   20.0     | 19.2       |   19.6       |
-| MD-2-10   | *Madracis decactis*       |   10.8     | 10.4       |   10.6       |
-| MD-4-23   | *Madracis decactis*       |   13.6     | 12.8       |   13.2       |
-| MD-2-2    | *Madracis decactis*       |   10.8     | 10.0       |   10.4       |
-| MD-1-2    | *Madracis decactis*       |   20.2     | 19.6       |   19.9       |
-| MD-2-12   | *Madracis decactis*       |   18.2     | 17.2       |   17.7       |
+| MD-5-25    | *Madracis decactis*		|   OUT OF RANGE       |          |
+| MD-1-10   | *Madracis decactis*       |   11.2     | 11.0       |   11.1       |
+| MD-1-4   | *Madracis decactis*       |   13.8     | 13.6       |   12       |
+| MD-4-22   | *Madracis decactis*       |   12.2     | 11.8       |   12       |
+| MD-2-1   | *Madracis decactis*       |   29.8     | 29.4       |   29.6       |
+| MD-1-15    | *Madracis decactis*       |   13.8     | 13.4       |   13.6       |
+| MD-5-26    | *Madracis decactis*       |   10.6     | OUT OF RANGE       |   10.6       |
+| MD-1-5   | *Madracis decactis*       |   OUT OF RANGE     |             |
 
 ## DNA and RNA Quality Check: Gel, using this [protocol](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/master/_posts/2025-23-05-Gel-Protocol.md)
+- Gel ran on 80V for 45 minutes
 
-![Gel_DNA_RNA_26May2025_FF_.png](?raw=true)
+![Gel_DNA_RNA_26May2025_FF.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/6f2496cdc305491cd9f3f4ba1dafd7296148ddcf/images/RNA_DNA_gels/Gel_DNA_RNA_26May2025_FF.png?raw=true)
 
-Note: While inserting Sample MD-4-20 most of it dissipated in the gel medium so when the gel ran there was a very low amount causing the signal to be weak but as you can see they are two bands they are just faint.
+Note: DNA sample MD-1-4 dissipated in the gel medium.
