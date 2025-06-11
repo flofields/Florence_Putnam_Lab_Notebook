@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Genomic and D5000 Tape Station Protocol
-date: '2025-06-09'
+date: 2025-06-09
 categories:Protocols
 tags: [DNA, Protocols]
 projects: ENCORE Priming 
@@ -19,9 +19,9 @@ projects: ENCORE Priming
 
 2. Take out appropriate number of Tape Station strip tubes and tube caps (separate boxes per lab)
 3. Vortex and spin down buffer, ladder, and samples
-4. Add 10µl of the appropraite DNA buffer (sample buffer) to the number of tubes needed + 1 (# of samples + 1 ladder). The first tube is always the ladder (see example figure below)
-5. Add 1µl DNA ladder to the first tube
-6. Add 1µl of each sample to each sample tube
+4. Add 10Âµl of the appropraite DNA buffer (sample buffer) to the number of tubes needed + 1 (# of samples + 1 ladder). The first tube is always the ladder (see example figure below)
+5. Add 1Âµl DNA ladder to the first tube
+6. Add 1Âµl of each sample to each sample tube
 
 ![DNA-Tape-Ex.png](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/c9bb0c4ff6329c3ce26b16ddc7bdd6905b54ee20/images/Zymo%20switch%20free/DNA-Tape-Ex.png?raw=true)
 
