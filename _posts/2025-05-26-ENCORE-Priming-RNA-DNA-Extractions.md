@@ -48,4 +48,4 @@ These samples are apart of day 4 of processing. Samples were randomly selected o
 
 ![Gel_DNA_RNA_26May2025_FF.png](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/6f2496cdc305491cd9f3f4ba1dafd7296148ddcf/images/RNA_DNA_gels/Gel_DNA_RNA_26May2025_FF.png?raw=true)
 
-Note: DNA sample MD-1-4 dissipated in the gel medium.
+Note: DNA sample MD-1-4 dissipated in the gel medium.Sample MD-1-15 and MD-1-5 were already done by FS but the orginal sample was left in the orginal sample box and accidently redone.
