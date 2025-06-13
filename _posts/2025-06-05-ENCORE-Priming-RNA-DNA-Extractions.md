@@ -14,7 +14,7 @@ tags: [DNA, RNA, ENCORE, Madracis decactis]
 
 ## Samples
 
-These samples are apart of day 13 of processing. Samples were randomly selected out of the 100 total being used for Extractions. Samples were either apart of a three phase priming experiment that included the first stage; Priming where the coral were exposed to 3 treatments high temperature (31ºC), low pH (~7.75) and control (~27ºC)~). The second stage; recovery, where they underwent a week recovery period under control conditions (28ºC). The thrid stage was exposure to a stress which was high temperature (32ºC).
+These samples are apart of day 13 of processing. Samples were randomly selected out of the 100 total being used for Extractions. Samples were either apart of a three phase priming experiment that included the first stage; Priming where the coral were exposed to 3 treatments high temperature (31ºC), low pH (~7.75) and control (27ºC). The second stage; recovery, where they underwent a week recovery period under control conditions (28ºC). The thrid stage was exposure to a stress which was high temperature (32ºC).
 
 Samples MD-5, MD-5-18, MD-4, MD-4-4, MD-4-6, MD-1-19 were extracted 2025-06-05 by FF but qbitted and ran on a gel the next day with the other samples which was extracted by PP as part of molecular training. 
 
