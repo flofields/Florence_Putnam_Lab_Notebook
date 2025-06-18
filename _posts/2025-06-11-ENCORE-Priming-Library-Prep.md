@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: Library Prep for The ENCORE Priming Project in Bermuda
 date: 2025-06-11
