@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: Library Prep for The ENCORE Priming Project in Bermuda
 date: 2025-06-12
@@ -6,6 +6,7 @@ categories: Protocols
 tags: [DNA, RNA, Library prep, Madracis decactis]
 projects: ENCORE Priming 
 ---
+
 ## Library Prep for The ENCORE Priming Project in Bermuda 
 
 ### Protocols used 
