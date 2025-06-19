@@ -707,116 +707,68 @@ Filter symbiont genes to check if it helps duplication
 ---
 <span style="color: red;">Note all Bioinfamatic work this far has been done in andormeda. I will now be using unity which is be reflected through subtle changes in the Sbatch scripts
 
-Make a unity strach directory
+Make a unity strach directory and folders to suit
 
     ws_allocate transcriptomes -G pi_hputnam_uri_edu
-    cd /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec
+    cd /scratch3/workspace/ffields_uri_edu-transcriptomes
+    mkdir mdec
+    cd mdec
+    mkdir data
+    mkdir scripts
+    cd scripts
 
 Create euk filtering script
 
-sbatch /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/mdectrinity_euk_contam.sh
+    nano trinity_euk_contam.sh
 
-    scratch_req.sh
-    jobs which are more than 2 days, specify -q long
+    #!/bin/bash
+    #SBATCH --job-name=filter_euk_mdec
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_euk_mdec.out  # %j = job ID
+    #SBATCH -e slurm-filter_euk_mdec.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Mdec/trim2
 
-    trinity_euk_contam.sh
+    module load BLAST+/2.13.0-gompi-2022a
+    module load seqtk  # Load seqtk for sequence processing
 
-    /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Mdec/
+    echo "Creating output directory: filter_euk_mdec" $(date)
+    mkdir -p /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec
 
-### Uisng NCBI Foreign Contamination Screen (FCS) to remove Contaminants from Assembly
+    echo "BLASTing fasta against eukaryote contaminant sequences" $(date)
 
-Download FCS adapter and eukaryotic contaminant sequences
-```
-mkdir fcs_gx
-cd fcs_gx
-curl -LO https://github.com/ncbi/fcs/raw/main/dist/run_fcsgx.py
+    cd /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Mdec/trim2
 
-mkdir dbs
-cd dbs
-curl -LO https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_euks.fa.gz 
-```
-Theoretically I should recieve the same results but just incase I am going to use the fasta files from trinity and fasta files that were converted from the trimmed data (trim 2)
+    # Step 1: Run BLAST to identify contaminants
+    blastn -query trinity_out_dir.Trinity.fasta \
+           -subject /project/pi_hputnam_uri_edu/ffields/dbs/contam_in_euks.fa.gz \
+           -task megablast -outfmt 6 -evalue 4 -perc_identity 90 \
+           -num_threads 15 -out /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_hits_euks_trinity.txt
 
-   - Converting trim2 files to a fasta
-     -  to convert the fastq R1 and R2 files to fasta files inorder to blast the sequences to the eukaryote contaminants using [seqtk](https://github.com/lh3/seqtk) 
-```
-nano data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/seqtk.sh
-```
-```
-#!/bin/bash 
-#SBATCH -t 100:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --export=NONE
-#SBATCH --mem=500GB
-#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
-#SBATCH --mail-user=jillashey@uri.edu #your email to send notifications
-#SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
-#SBATCH -o slurm-%j.out
-#SBATCH -e slurm-%j.error
+    echo "BLAST complete, filtering contaminant sequences" $(date)
 
-module load seqtk/1.3-GCC-9.3.0
+    # Step 2: Extract contaminant IDs from BLAST output
+    awk '{print $1}' /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_hits_euks_trinity.txt | sort | uniq > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_ids.txt
 
-echo "Convert trim2 fastq file to fasta file" $(date)
+    # Step 3: Create list of sequences to KEEP (non-contaminants)
+    grep "^>" trinity_out_dir.Trinity.fasta | sed 's/^>//' > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/all_sequence_ids.txt
+    comm -23 /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/all_sequence_ids.txt \
+             /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_ids.txt \
+             > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/retained_ids.txt
 
-cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
+    echo "Filtering non-contaminant sequences with seqtk" $(date)
 
-seqtk seq -a MDEC_001_Trim2_R1.fastq > MDEC_001_R1.fasta
-seqtk seq -a MDEC_001_Trim2_R2.fastq > MDEC_001_R2.fasta
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq trinity_out_dir.Trinity.fasta \
+            /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/retained_ids.txt \
+            > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/cleaneuk_trinity_sequences.fasta
 
-# Do not need the length summary but i'll still get it
-echo "Fastq to fasta complete! Summarize read lengths" $(date)
+    echo "Processing complete. All outputs saved in filter_euk_mdec." $(date)
 
-awk '/^>/{printf("%s\t",substr($0,2));next;} {print length}' MDEC_001_R1.fasta > MDEC_R1_read_lengths.txt
-awk '/^>/{printf("%s\t",substr($0,2));next;} {print length}' MDEC_001_R2.fasta > MDEC_R2_read_lengths.txt
+sbatch /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/mdec/trinity_euk_contam.sh
 
-echo "Read length summary complete" $(date)
-```
-```
-sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/seqtk.sh
-Submitted job 362995
-```
-- Next we will create a script to blast the fasta from trinity to the eukaryote contaminant database
-```
-nano data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trinity_euk_contam.sh
-```
-```
-#!/bin/bash
-#SBATCH -t 100:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --export=NONE
-#SBATCH --mem=500GB
-#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
-#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
-#SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/
-#SBATCH -o slurm-%j.out
-#SBATCH -e slurm-%j.error
-
-module load BLAST+/2.13.0-gompi-2022a
-
-echo "BLASTing fasta from trinity against eukaryote contaminant sequences" $(date)
-
-cd /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2
-
-blastn -query trinity_out_dir.Trinity.fasta -subject /data/putnamlab/flofields/dbs/contam_in_euks.fa.gz -task megablast -outfmt 6 -evalue 4 -perc_identity 90 -num_threads 15 -out contaminant_hits_euks_trinity.txt
-
-echo "BLAST complete, remove contaminant seqs from trinity fasta" $(date)
-
-awk '{ if( ($4 >= 50 && $4 <= 99 && $3 >=98 ) ||
-         ($4 >= 100 && $4 <= 199 && $3 >= 94 ) ||
-         ($4 >= 200 && $3 >= 90) )  {print $0}
-    }' contaminant_hits_euks_trinity.txt > contaminants_pass_filter_euks_trinity.txt
-
-echo "Contaminant seqs removed from trinity fasta" $(date)
-```
-sbatch /data/putnamlab/flofields/ENCORE_MDEC_denovo_transcriptome/scripts/trinity_euk_contam.sh
-Submitted batch job 363739
-Recieved a slum error message saying 
-```
-BLAST query error: CFastaReader: Near line 1, there's a line that doesn't look like plausible data, but it's not marked as defline or comment.
-awk: fatal: cannot open file `contaminant_hits_euks_trinity.txt' for reading (No such file or directory)
-```
-
-
+Submitted batch job 38370142
 
