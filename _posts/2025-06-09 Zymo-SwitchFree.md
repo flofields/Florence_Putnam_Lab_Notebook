@@ -8,7 +8,7 @@ projects: ENCORE Priming
 ---
 ## Library Prep for The ENCORE Priming Project 
 
-
+We used all of Zymos recommendations for library prep found [here](https://fscucchia-labnotebooks.github.io/FScucchia_Putnam_Lab_Notebook/Troubleshooting-LibraryPrep-ZymoSwitch/)
 
 | Sample ID | TS RNA (ng/uL) | Strip tube # | RNA (uL) | Ultrapure water (uL) | Total starting volume (ul) | Primer |
 | ------ | -------------- | ------------ | -------- | -------------------- | -------------------------- | ------ |
@@ -47,3 +47,11 @@ This step only needs to be done once a new kit is opened.
 - Turn on thermocycler day-of to preheat 
 - Pre-calculate how much to dilute RNA samples
 
+Full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/471d7aa8cff1dae3044867ae2c954d952be3852b/images/D5000_ScreenTape/2025_06_09/2025-06-09%20-%20trial.pdf)
+
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_09/20250609_1.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_09/20250609_2.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_09/20250609_3.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_09/20250609_4.jpg)
+
+Note: All both samples failed, this could be because of primer dimer or adapter dimers. Next steps is to change the amount of cycles from 19 to 21 during amplification. 
