@@ -731,12 +731,19 @@ Create euk filtering script
     #SBATCH --mail-type=BEGIN,END,FAIL
     #SBATCH --mail-user=ffields@uri.edu
     #SBATCH -D /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Mdec/trim2
+    #SBATCH --constraint=avx512
 
-    module load BLAST+/2.13.0-gompi-2022a
-    module load seqtk  # Load seqtk for sequence processing
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
 
     echo "Creating output directory: filter_euk_mdec" $(date)
     mkdir -p /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec
+
+    echo "Unzipping contaminant database" $(date)
+    gunzip -c /project/pi_hputnam_uri_edu/ffields/dbs/contam_in_euks.fa.gz \
+      > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/contam_in_euks.fa
 
     echo "BLASTing fasta against eukaryote contaminant sequences" $(date)
 
@@ -744,9 +751,10 @@ Create euk filtering script
 
     # Step 1: Run BLAST to identify contaminants
     blastn -query trinity_out_dir.Trinity.fasta \
-           -subject /project/pi_hputnam_uri_edu/ffields/dbs/contam_in_euks.fa.gz \
+           -subject /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/contam_in_euks.fa \
            -task megablast -outfmt 6 -evalue 4 -perc_identity 90 \
-           -num_threads 15 -out /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_hits_euks_trinity.txt
+           -num_threads 15 \ 
+           -out /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_hits_euks_trinity.txt
 
     echo "BLAST complete, filtering contaminant sequences" $(date)
 
@@ -754,7 +762,8 @@ Create euk filtering script
     awk '{print $1}' /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_hits_euks_trinity.txt | sort | uniq > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_ids.txt
 
     # Step 3: Create list of sequences to KEEP (non-contaminants)
-    grep "^>" trinity_out_dir.Trinity.fasta | sed 's/^>//' > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/all_sequence_ids.txt
+    grep "^>" trinity_out_dir.Trinity.fasta | sed 's/^>//' | sort \
+    > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/all_sequence_ids.txt
     comm -23 /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/all_sequence_ids.txt \
              /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/contaminant_ids.txt \
              > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/retained_ids.txt
@@ -766,9 +775,11 @@ Create euk filtering script
             /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/retained_ids.txt \
             > /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_euk_mdec/cleaneuk_trinity_sequences.fasta
 
-    echo "Processing complete. All outputs saved in filter_euk_mdec." $(date)
+    echo "Done. All outputs saved in filter_euk_mdec." $(date)
 
+```
 sbatch /scratch3/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/mdec/trinity_euk_contam.sh
 
-Submitted batch job 38370142
+Submitted batch job 38651686
+```
 

@@ -514,18 +514,79 @@ Danielle also got a high number (78.9%) of duplicated BUSCOs in her de novo tran
 
 eukaryote contaminant sequences (ftp.ncbi.nlm.nih. gov/pub/kitts/contam_in_euks.fa.gz), NCBI viral (ref_ viruses_rep_genomes) and prokaryote
 
+<span style="color: red;">Note all Bioinfamatic work this far has been done in andormeda. I will now be using unity which is be reflected through subtle changes in the Sbatch scripts
+
+A unity strach directory was already made so only need to make the folders to suit
+directory - /scratch3/workspace/ffields_uri_edu-transcriptomes
+
+    cd /scratch3/workspace/ffields_uri_edu-transcriptomes
+    mkdir dlab
+    cd dlab
+    mkdir data
+    mkdir scripts
+    cd scripts
+
+Create euk filtering script
+
+    nano trinity_euk_contam.sh
+
+    #!/bin/bash
+    #SBATCH --job-name=filter_euk_dlab
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_euk_dlab.out  # %j = job ID
+    #SBATCH -e slurm-filter_euk_dlab.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Dlab/data
+    #SBATCH --constraint=avx512
+
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
+    echo "Creating output directory: filter_euk_dlab" $(date)
+    mkdir -p /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab
+
+    echo "Unzipping contaminant database" $(date)
+    gunzip -c /project/pi_hputnam_uri_edu/ffields/dbs/contam_in_euks.fa.gz \
+      > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/contam_in_euks.fa
+
+    echo "BLASTing fasta against eukaryote contaminant sequences" $(date)
+
+    cd /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Dlab/data
+
+    # Step 1: Run BLAST to identify contaminants
+    blastn -query trinity_out_dir.Trinity.fasta \
+           -subject /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/contam_in_euks.fa \
+           -task megablast -outfmt 6 -evalue 4 -perc_identity 90 \
+           -num_threads 15 \
+           -out /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_hits_euks_trinity.txt
+
+    echo "BLAST complete, Extracting contaminant sequences from BLAST output" $(date)
+
+    # Step 2: Extract contaminant IDs from BLAST output
+    awk '{print $1}' /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_hits_euks_trinity.txt | sort | uniq > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_ids.txt
+
+    # Step 3: Create list of sequences to KEEP (non-contaminants)
+    grep "^>" trinity_out_dir.Trinity.fasta | sed 's/^>//' | sort \
+    > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/all_sequence_ids.txt
+    comm -23 /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/all_sequence_ids.txt \
+             /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_ids.txt \
+             > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/retained_ids.txt
+
+    echo "Filtering non-contaminant sequences with seqtk" $(date)
+
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq trinity_out_dir.Trinity.fasta \
+            /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/retained_ids.txt \
+            > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/cleaneuk_trinity_sequences.fasta
+
+    echo "Done. All outputs saved in filter_euk_dlab." $(date)
+
 ```
-#!/bin/bash 
-#SBATCH -t 100:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --export=NONE
-#SBATCH --mem=500GB
-#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
-#SBATCH --mail-user=ffields@uri.edu #your email to send notifications
-#SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/flofields/Apul_Genome/assembly/scripts
-#SBATCH -o slurm-%j.out
-#SBATCH -e slurm-%j.error
+sbatch /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/scripts/trinity_euk_contam.sh
 
-
+Submitted batch job 38647431
 ```
