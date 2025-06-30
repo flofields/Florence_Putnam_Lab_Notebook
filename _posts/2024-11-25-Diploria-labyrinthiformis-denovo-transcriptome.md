@@ -510,16 +510,16 @@ Job Submitted  Feb 5th 356683
 
 Transcriptomes and protein sets that are not filtered for isoforms will lead to a high proportion of duplicates. Therefore you should filter them before a BUSCO analysis".
 
-Danielle also got a high number (78.9%) of duplicated BUSCOs in her de novo transcriptome of Apulchra, but Kevin got much less duplication (6.9%) in his Past transcriptome assembly. I need to ask Danielle if she ended up using her Trinity results (which had a high duplication percentage) for her alignment for Apul. I also need to ask her if she thinks the high duplication percentage is biologically meaningful
+Danielle also got a high number (78.9%) of duplicated BUSCOs in her de novo transcriptome of Apulchra, but Kevin got much less duplication (6.9%) in his Past transcriptome assembly. Danielle aligned her transcriptome with the Apul Jill and Trinity worked on. I also need to ask her if she thinks the high duplication percentage is biologically meaningful
 
 eukaryote contaminant sequences (ftp.ncbi.nlm.nih. gov/pub/kitts/contam_in_euks.fa.gz), NCBI viral (ref_ viruses_rep_genomes) and prokaryote
 
 <span style="color: red;">Note all Bioinfamatic work this far has been done in andormeda. I will now be using unity which is be reflected through subtle changes in the Sbatch scripts
 
 A unity strach directory was already made so only need to make the folders to suit
-directory - /scratch3/workspace/ffields_uri_edu-transcriptomes
+directory - /scratch/workspace/ffields_uri_edu-transcriptomes
 
-    cd /scratch3/workspace/ffields_uri_edu-transcriptomes
+    cd /scratch/workspace/ffields_uri_edu-transcriptomes
     mkdir dlab
     cd dlab
     mkdir data
@@ -547,11 +547,11 @@ Create euk filtering script
     module load uri/main seqtk/1.4-GCC-12.3.0
 
     echo "Creating output directory: filter_euk_dlab" $(date)
-    mkdir -p /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab
 
     echo "Unzipping contaminant database" $(date)
     gunzip -c /project/pi_hputnam_uri_edu/ffields/dbs/contam_in_euks.fa.gz \
-      > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/contam_in_euks.fa
+      > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/contam_in_euks.fa
 
     echo "BLASTing fasta against eukaryote contaminant sequences" $(date)
 
@@ -559,34 +559,152 @@ Create euk filtering script
 
     # Step 1: Run BLAST to identify contaminants
     blastn -query trinity_out_dir.Trinity.fasta \
-           -subject /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/contam_in_euks.fa \
+           -subject /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/contam_in_euks.fa \
            -task megablast -outfmt 6 -evalue 4 -perc_identity 90 \
            -num_threads 15 \
-           -out /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_hits_euks_trinity.txt
+           -out /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_hits_euks_trinity.txt
 
     echo "BLAST complete, Extracting contaminant sequences from BLAST output" $(date)
 
     # Step 2: Extract contaminant IDs from BLAST output
-    awk '{print $1}' /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_hits_euks_trinity.txt | sort | uniq > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_ids.txt
+    awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_hits_euks_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_ids.txt
 
     # Step 3: Create list of sequences to KEEP (non-contaminants)
     grep "^>" trinity_out_dir.Trinity.fasta | sed 's/^>//' | sort \
     > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/all_sequence_ids.txt
-    comm -23 /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/all_sequence_ids.txt \
-             /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_ids.txt \
-             > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/retained_ids.txt
+    comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/all_sequence_ids.txt \
+             /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/contaminant_ids.txt \
+             > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/retained_ids.txt
 
     echo "Filtering non-contaminant sequences with seqtk" $(date)
 
     # Step 4: Remove contaminants using seqtk
     seqtk subseq trinity_out_dir.Trinity.fasta \
-            /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/retained_ids.txt \
-            > /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/cleaneuk_trinity_sequences.fasta
+            /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/retained_ids.txt \
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/cleaneuk_trinity_sequences.fasta
 
     echo "Done. All outputs saved in filter_euk_dlab." $(date)
 
 ```
-sbatch /scratch3/workspace/ffields_uri_edu-transcriptomes/dlab/scripts/trinity_euk_contam.sh
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/scripts/trinity_euk_contam.sh
 
 Submitted batch job 38647431
 ```
+
+### Had already downloaded the prokaryotic contaminant sequences by using the code below
+
+curl -o /project/pi_hputnam_uri_edu/ffields/dbs/contam_in_prok.fa https://ftp.ncbi.nlm.nih.gov/pub/kitts/contam_in_prok.fa
+
+### Create prokaryote filtering script
+
+    nano trinity_prok_contam.sh
+
+    #!/bin/bash
+    #SBATCH --job-name=filter_prok_dlab
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_prok_mdec.out  # %j = job ID
+    #SBATCH -e slurm-filter_prok_mdec.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/
+    #SBATCH --constraint=avx512
+
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
+    echo "Creating output directory: filter_prok_dlab" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab
+
+    echo "BLASTing the fasta against prokaryote contaminant sequences" $(date)
+
+    cd /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_euk_dlab/
+
+    # Step 1: Run BLAST to identify contaminants
+    blastn -query cleaneuk_trinity_sequences.fasta \
+           -subject /project/pi_hputnam_uri_edu/ffields/dbs/contam_in_prok.fa \
+           -task megablast -outfmt 6 -evalue 4 -perc_identity 90 \
+           -num_threads 15 \
+           -out /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/contaminant_hits_prok_trinity.txt
+
+    echo "BLAST complete, filtering contaminant sequences" $(date)
+
+    # Step 2: Extract contaminant IDs from BLAST output
+    awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/contaminant_hits_prok_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/contaminant_ids.txt
+
+    # Step 3: Create list of sequences to KEEP (non-contaminants)
+    grep "^>" cleaneuk_trinity_sequences.fasta | sed 's/^>//' | sort \
+    > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/all_sequence_ids.txt
+    comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/all_sequence_ids.txt \
+             /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/contaminant_ids.txt \
+             > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/retained_ids.txt
+
+    echo "Filtering non-contaminant sequences with seqtk" $(date)
+
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq cleaneuk_trinity_sequences.fasta \
+            /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/retained_ids.txt \
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/cleaneukandprok_trinity_sequences.fasta
+
+    echo "Done. All outputs saved in filter_prok_dlab." $(date)
+
+```
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/scripts/trinity_prok_contam.sh
+Submitted batch job 38755096
+```
+
+### Unity has a ref virus geneome from NCBI, I will be using ref genome to filter any sequences that are encoded for viral contaminants. The path is below Create a viral filtering script
+
+/datasets/bio/ncbi-db/2025-06-22/
+
+```
+nano trinity_filter_viral_contam.sh
+
+    #!/bin/bash
+    #SBATCH --job-name=filter_viral_dlab
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_viral_mdec.out  # %j = job ID
+    #SBATCH -e slurm-filter_viral_mdec.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_dlab/
+    #SBATCH --constraint=avx512
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
+    echo "Creating output directory: filter_viral_mdec" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_dlab
+
+echo "Run BLAST to identify any contaminants" $(date)
+
+blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/cleaneukandprok_trinity_sequences.fasta \
+       -db /datasets/bio/ncbi-db/2025-06-22/ref_viruses_rep_genomes \
+       -out contaminant_hits_viral_trinity.txt \
+       -outfmt 6 \
+       -evalue 1e-4 \
+       -perc_identity 90
+
+# Step 2: Extract contaminant IDs from BLAST output
+    awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/contaminant_hits_viral_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/contaminant_ids.txt
+
+    # Step 3: Create list of sequences to KEEP (non-contaminants)
+    grep "^>" cleaneukandprok_trinity_sequences.fasta | sed 's/^>//' | sort \
+    > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/all_sequence_ids.txt
+    comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/all_sequence_ids.txt \
+             /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/contaminant_ids.txt \
+             > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/retained_ids.txt
+
+             echo "Filtering non-contaminant sequences with seqtk" $(date)
+
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq cleaneukandprok_trinity_sequences.fasta \
+            /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/retained_ids.txt \
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/clean_euk_prok_viral_trinity_sequences.fasta
+
+    echo "Done. All outputs saved in filter_viral_dlab." $(date)
+
