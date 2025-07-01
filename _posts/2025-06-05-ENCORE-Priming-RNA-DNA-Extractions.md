@@ -37,7 +37,8 @@ Samples MD-5, MD-5-18, MD-4, MD-4-4, MD-4-6, MD-1-19 were extracted 2025-06-05 b
 |-----------|---------------------------|------------|------------|--------------|
 | MD-4    | *Madracis decactis*		|   56.8     | 58.0       |   57.4       |
 | MD-4-6   | *Madracis decactis*       |   OUT OF RANGE     |       |          |
-| MD-5-8    | *Madracis decactis*       |   37.8     | 38.6       |   38.2       |
+| MD-5    | *Madracis decactis*       |   37.8     | 38.6       |   38.2       |
+| MD-5-8    | *Madracis decactis*       |   OUT OF RANGE     |       |         |
 | MD-5-18    | *Madracis decactis*       |   14.4     | 13.4       |   13.9       |
 | MD-4-4    | *Madracis decactis*       |   11.6     | 11.4       |   11.5       |
 | MD-1-19    | *Madracis decactis*       |   OUT OF RANGE        |          |
