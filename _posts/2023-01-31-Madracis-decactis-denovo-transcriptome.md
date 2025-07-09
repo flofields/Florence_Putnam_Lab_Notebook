@@ -943,10 +943,187 @@ blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter
 sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/trinity_filter_viral_contam.sh
 Submitted batch job 38815587
 
-### Unity has a ref virus geneome from NCBI
+### Filitering sym sequences from the fasta file
+
+Download symbiont files from [marine genomics](https://marinegenomics.oist.jp/symb/gallery) in designated folder and unzipped them
+
+    curl -L -o symbB.v1.0.genome.fa.gz "https://marinegenomics.oist.jp/symb/download/symbB.v1.0.genome.fa.gz"
+    curl -L -o symC_scaffold_40.fasta.gz "https://marinegenomics.oist.jp/symb/download/symC_scaffold_40.fasta.gz"
+    curl -L -o symA3_37.fasta.gz "https://marinegenomics.oist.jp/symb/download/symA3_37.fasta.gz"
+
+    gunzip symA3_37.fasta.gz
+    gunzip symbB.v1.0.genome.fa.gz
+    gunzip symC_scaffold_40.fasta.gz
+
+Download symbiont files from NCBI using [accession numbers](https://static-content.springer.com/esm/art%3A10.1007%2Fs00248-021-01868-8/MediaObjects/248_2021_1868_MOESM1_ESM.pdf)
+
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/AB704015.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=AB704015.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/AF333506.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=AF333506.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/KM816410.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=KM816410.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/EU139607.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=EU139607.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/AF180120.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=AF180120.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/AF333504.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=AF333504.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/KT149343.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=KT149343.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/KT149344.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=KT149344.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/KT149341.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=KT149341.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/MK024930.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=MK024930.1&rettype=fasta&retmode=text"
+    curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/KT149340.1.fasta \
+      "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=KT149340.1&rettype=fasta&retmode=text"
+
+Combined all symbiodiniaceae files so I can make a blast database (db)
+
+cat /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/*.fasta > symbiodiniaceae_combined.fasta
+makeblastdb -in symbiodiniaceae_combined.fasta -dbtype nucl -out symbiont_db_combined
+
+#### Using the combined files and making a db with sbatch then filtering all the hit sequences
+
+    nano trinity_filter_sym_contam.sh
+
+    #!/bin/bash
+    #SBATCH --job-name=filter_sym_mdec
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_sym_mdec.out  # %j = job ID
+    #SBATCH -e slurm-filter_sym_mdec.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/
+    #SBATCH --constraint=avx512
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
+    echo "Creating the db for the combined sym files"
+    makeblastdb -in /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiodiniaceae_combined.fasta \
+            -dbtype nucl \
+            -out /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiont_db_combined
+
+    echo "Run BLAST to identify any contaminants" $(date)
+
+    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta \
+           -db /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiont_db_combined
+           -out contaminant_hits_sym_trinity.txt \
+           -outfmt 6 \
+           -evalue 1e-4 \
+           -perc_identity 90
+
+    # Step 2: Extract contaminant IDs from BLAST output
+        awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt
+
+        # Step 3: Create list of sequences to KEEP (non-contaminants)
+        grep "^>" clean_euk_prok_viral_trinity_sequences.fasta | sed 's/^>//' | sort \
+        > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/all_sequence_ids.txt
+        comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/all_sequence_ids.txt \
+                 /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt \
+                 > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt
+
+                 echo "Filtering non-contaminant sequences with seqtk" $(date)
+
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta \
+            /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt \
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/Filtered_trinity_sequences.fasta
+
+    echo "Done. All outputs saved in filter_sym_mdec." $(date)
+
+
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/trinity_filter_sym_contam.sh
+Submitted batch job 39137931
+
+Recieved an error file
+
+    Removing uri version main
+    Loading uri version main
+    NOTE: The modules under this branch will not run on the login node. Use
+    --constraint=avx512 for sbatch or srun sessions. 
+    Removing uri version main
+    Loading uri version main
+    NOTE: The modules under this branch will not run on the login node. Use
+    --constraint=avx512 for sbatch or srun sessions. 
+    FASTA-Reader: Ignoring invalid residues at position(s): On line 12: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
+    FASTA-Reader: Ignoring invalid residues at position(s): On line 13: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
+    FASTA-Reader: Ignoring invalid residues at position(s): On line 25: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
+    FASTA-Reader: Ignoring invalid residues at position(s): On line 32: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
+    FASTA-Reader: Ignoring invalid residues at position(s): On line 33: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
+    /var/spool/slurm/slurmd/job39137931/slurm_script: line 25: -out: command not found
+    awk: fatal: cannot open file `/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt' for reading: No such file or directory
+    grep: clean_euk_prok_viral_trinity_sequences.fasta: No such file or directory
+
+I will first find lines that don't conform to proper FASTA then isolate the clean squences and remove the rest in an interactive job and then rebuild the db 
+
+    grep -n -v -E '^>|\b[ACGTNacgtn]+\b' symbiodiniaceae_combined.fasta
+
+    srun --nodes=1 --cpus-per-task=1 --mem=2G --time=00:30:00 --constraint=avx512 --pty bash
+    module load uri/main seqtk/1.4-GCC-12.3.0
+    seqtk seq -A symbiodiniaceae_combined.fasta > cleaned2_symbionts.fasta
+
+Reruning the script below with the new fasta and including the entire dir for the out blast file
+
+    #!/bin/bash
+    #SBATCH --job-name=filter_sym_mdec
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_sym_mdec.out  # %j = job ID
+    #SBATCH -e slurm-filter_sym_mdec.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/
+    #SBATCH --constraint=avx512
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
+    echo "Creating the db for the combined sym files"
+    makeblastdb -in /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/cleaned2_symbionts.fasta \
+            -dbtype nucl \
+            -out /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiont_db_combined
+
+    echo "Run BLAST to identify any contaminants" $(date)
+
+    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta \
+           -db /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiont_db_combined
+           -out /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt \
+           -outfmt 6 \
+           -evalue 1e-4 \
+           -perc_identity 90
+   
+
+    # Step 2: Extract contaminant IDs from BLAST output
+        awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt
+
+        # Step 3: Create list of sequences to KEEP (non-contaminants)
+        grep "^>" clean_euk_prok_viral_trinity_sequences.fasta | sed 's/^>//' | sort \
+        > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/all_sequence_ids.txt
+        comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/all_sequence_ids.txt \
+                 /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt \
+                 > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt
+
+                 echo "Filtering non-contaminant sequences with seqtk" $(date)
+
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta \
+            /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt \
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/Filtered_trinity_sequences.fasta
+
+    echo "Done. All outputs saved in filter_sym_mdec." $(date)
+ 
+ sbatch trinity_filter_sym_contam.sh
+Submitted batch job 39198426
 
 ### Running BUSCO on filtered fasta and downloading metazoa db
-curl -o /project/pi_hputnam_uri_edu/ffields/dbs/metazoa_odb10.2020-09-10.tar.gz https://bioinformaticsonline.com/bookmarks/view/42621/busco-datasets/metazoa_odb10.2020-09-10.tar.gz 
+curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec/metazoa_odb10.2020-09-10.tar.gz https://bioinformaticsonline.com/bookmarks/view/42621/busco-datasets/metazoa_odb10.2020-09-10.tar.gz 
 
 tar -xzf metazoa_odb10.2020-09-10.tar.gz
 busco -i Trinity_filtered.fasta -l metazoa_odb10 -m transcriptome -o busco_output 
@@ -958,7 +1135,7 @@ nano filter_busco_mdec
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=15
 #SBATCH --mem=200G
-#SBATCH --time=72:00:00
+#SBATCH --time=24:00:00
 #SBATCH -o slurm-filter_busco.out
 #SBATCH -e slurm-filter_busco.err
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -966,23 +1143,54 @@ nano filter_busco_mdec
 #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec/
 #SBATCH --constraint=avx512
 
-module load uri/main BLAST+/2.15.0-gompi-2023a
 
-echo "Creating output directory: filter_viral_mdec" $(date)
+echo “Creating output directory: busco analysis mdec” $(date)
 mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec
+
+echo “START” $(date)
+#configure BUSCO ini file
+busco --config /scratch/workspace/ffields_uri_edu-transcriptomes/myconfig.ini
+
+#set your de novo transcriptome query file
+query=“/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta”
+
+#run busco with your config file against your db of interest
+busco --config “/scratch/workspace/ffields_uri_edu-transcriptomes/myconfig.ini” -f -c 15 -i “${query}” -l metazoa_odb10 -o mdec_busco_output -m transcriptome
+echo “STOP” $(date)
+
+sbatch filter_busco_mdec
+Submitted batch job 39135465
 
 echo "START" $(date)
 
-labbase=/scratch/workspace/ffields_uri_edu-transcriptomes
+labbase=/data/putnamlab
 busco_shared="${labbase}/shared/busco"
-query="${labbase}/mdec/data/filter_busco_mdec/filtered_out_dir.Trinity.fasta"
+[ -z "$query" ] && query="${labbase}/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
+[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
 
-source "${busco_shared}/scripts/busco_init.sh"
+source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
 
-cd "${labbase}/mdec/data/filter_busco_mdec"
-busco --config "$EBROOTBUSCO/config/config.ini" -f -c 15 --long -i "${query}" -l metazoa_odb10 -o busco_output -m transcriptome
+# This will generate output under your $HOME/busco_output
+cd "${labbase}/${flofields}"
+busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o busco_output -m transcriptome
+
 
 echo "STOP" $(date)
 
-sbatch filter_busco_mdec
-Submitted batch job 38920696
+## From here down move to new md
+Translate it to amino acids
+
+    transdecoder.LongOrfs -t filtered_transcripts.fasta
+    transdecoder.Predict -t filtered_transcripts.fasta
+
+Format headers for Broccoli
+
+    sed 's/^>/>Mdec|/' filtered_transcripts.fasta.transdecoder.pep > Mdec.faa
+
+Organize multi-species input
+Place all species FASTAs into one directory
+
+broccoli.py -i /PATH/orthofiles/ \
+            -o broccoli_output/ \
+            -t 16
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/filter_busco_mdec.sh

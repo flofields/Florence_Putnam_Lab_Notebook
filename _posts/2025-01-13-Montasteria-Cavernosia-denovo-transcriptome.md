@@ -625,3 +625,66 @@ nano trinity_prok_contam.sh
 ```
 sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/scripts/trinity_prok_contam.sh
 Submitted batch job 38760979
+
+### Unity has a ref virus geneome from NCBI, I will be using ref genome to filter any sequences that are encoded for viral contaminants. The path is below Create a viral filtering script
+
+/datasets/bio/ncbi-db/2025-06-22/
+
+
+    nano trinity_filter_viral_contam.sh
+
+    #!/bin/bash
+    #SBATCH --job-name=filter_viral_mcav
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_viral_mcav.out  # %j = job ID
+    #SBATCH -e slurm-filter_viral_mcav.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/
+    #SBATCH --constraint=avx512
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
+    echo "Creating output directory: filter_viral_mcav" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav
+
+    echo "Run BLAST to identify any contaminants" $(date)
+
+    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/cleaneukandprok_trinity_sequences.fasta \
+       -db /datasets/bio/ncbi-db/2025-06-22/ref_viruses_rep_genomes \
+       -out contaminant_hits_viral_trinity.txt \
+       -outfmt 6 \
+       -evalue 1e-4 \
+       -perc_identity 90
+
+# Step 2: Extract contaminant IDs from BLAST output
+    awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/contaminant_hits_viral_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/contaminant_ids.txt
+
+    # Step 3: Create list of sequences to KEEP (non-contaminants)
+    grep "^>" cleaneukandprok_trinity_sequences.fasta | sed 's/^>//' | sort \
+    > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/all_sequence_ids.txt
+    comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/all_sequence_ids.txt \
+             /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/contaminant_ids.txt \
+             > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/retained_ids.txt
+
+             echo "Filtering non-contaminant sequences with seqtk" $(date)
+
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/data/filter_prok_mdec/cleaneukandprok_trinity_sequences.fasta \
+            /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/retained_ids.txt \
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/clean_euk_prok_viral_trinity_sequences.fasta
+
+    echo "Done. All outputs saved in filter_viral_mdec." $(date)
+
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/scripts/trinity_filter_viral_contam.sh
+Submitted batch job 39208925
+
+### Filitering sym sequences from the fasta file
+
+Download symbiont files from [marine genomics](https://marinegenomics.oist.jp/symb/gallery) in designated folder and unzipped them
+
+    curl -L -o symbB.v1.0.genome.fa.gz "https://marinegenomics.oist.jp/symb/download/symbB.v1.0.genome.fa.gz"
+    curl -L -o symC_scaffold_40.fasta.gz "https://marinegenomics.oist.jp/symb/download/symC_scaffold_40.fasta.gz"

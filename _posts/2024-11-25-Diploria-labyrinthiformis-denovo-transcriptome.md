@@ -667,34 +667,33 @@ nano trinity_filter_viral_contam.sh
     #SBATCH --nodes=1 --cpus-per-task=15
     #SBATCH --mem=200G  # Requested Memory
     #SBATCH --time=24:00:00
-    #SBATCH -o slurm-filter_viral_mdec.out  # %j = job ID
-    #SBATCH -e slurm-filter_viral_mdec.err  # %j = job ID
+    #SBATCH -o slurm-filter_viral_dlab.out  # %j = job ID
+    #SBATCH -e slurm-filter_viral_dlab.err  # %j = job ID
     #SBATCH --mail-type=BEGIN,END,FAIL
     #SBATCH --mail-user=ffields@uri.edu
-    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_dlab/
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/
     #SBATCH --constraint=avx512
 
     module load uri/main BLAST+/2.15.0-gompi-2023a
     module load uri/main seqtk/1.4-GCC-12.3.0
 
-    echo "Creating output directory: filter_viral_mdec" $(date)
-    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_dlab
+    echo "Creating output directory: filter_viral_dlab" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab
 
-echo "Run BLAST to identify any contaminants" $(date)
+    echo "Run BLAST to identify any contaminants" $(date)
 
-blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/cleaneukandprok_trinity_sequences.fasta \
+    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/cleaneukandprok_trinity_sequences.fasta \
        -db /datasets/bio/ncbi-db/2025-06-22/ref_viruses_rep_genomes \
        -out contaminant_hits_viral_trinity.txt \
        -outfmt 6 \
        -evalue 1e-4 \
        -perc_identity 90
 
-# Step 2: Extract contaminant IDs from BLAST output
+    # Step 2: Extract contaminant IDs from BLAST output
     awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/contaminant_hits_viral_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/contaminant_ids.txt
 
     # Step 3: Create list of sequences to KEEP (non-contaminants)
-    grep "^>" cleaneukandprok_trinity_sequences.fasta | sed 's/^>//' | sort \
-    > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/all_sequence_ids.txt
+    grep "^>" /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/cleaneukandprok_trinity_sequences.fasta | cut -c2- | sed 's/\r//' | sort > all_sequence_ids.txt
     comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/all_sequence_ids.txt \
              /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/contaminant_ids.txt \
              > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/retained_ids.txt
@@ -702,9 +701,163 @@ blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter
              echo "Filtering non-contaminant sequences with seqtk" $(date)
 
     # Step 4: Remove contaminants using seqtk
-    seqtk subseq cleaneukandprok_trinity_sequences.fasta \
+    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_prok_dlab/cleaneukandprok_trinity_sequences.fasta \
             /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/retained_ids.txt \
             > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/clean_euk_prok_viral_trinity_sequences.fasta
-
     echo "Done. All outputs saved in filter_viral_dlab." $(date)
 
+```
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/scripts/trinity_filter_viral_contam.sh
+Submitted batch job 39225061
+
+### Filitering sym sequences from the fasta file
+
+Download symbiont files from [marine genomics](https://marinegenomics.oist.jp/symb/gallery) in designated folder and unzipped them
+
+    curl -L -o symbB.v1.0.genome.fa.gz "https://marinegenomics.oist.jp/symb/download/symbB.v1.0.genome.fa.gz"
+    curl -L -o symC_scaffold_40.fasta.gz "https://marinegenomics.oist.jp/symb/download/symC_scaffold_40.fasta.gz"
+    curl -L -o symbd_genome_scaffold.fa.gz "https://marinegenomics.oist.jp/symbd/download/102_symbd_genome_scaffold.fa.gz"
+
+    gunzip symbB.v1.0.genome.fa.gz
+    gunzip symC_scaffold_40.fasta.gz
+    gunzip symbd_genome_scaffold.fa.gz
+ 
+    grep -v '^>' symC_scaffold_40.fasta | grep -v '^[ACGTNacgtn]*$'
+    grep -v '^>' symbd_genome_scaffold.fa | grep -v '^[ACGTNacgtn]*$'
+    grep -v '^>' symbB.v1.0.genome.fa | grep -v '^[ACGTNacgtn]*$'
+
+    echo "Creating the db for the combined sym files"
+    makeblastdb -in /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/sym_dbs/cleaned_symbionts.fasta \
+            -dbtype nucl \
+            -out /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/symbiont_db_combined
+
+    #!/bin/bash
+    #SBATCH --job-name=filter_sym_dlab
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_sym_dlab.out  # %j = job ID
+    #SBATCH -e slurm-filter_sym_dlab.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/
+    #SBATCH --constraint=avx512
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
+    # Paths to input files
+    SYM_DIR="/scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/sym_dbs"
+    TRINITY_FASTA="/scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/clean_euk_prok_viral_trinity_sequences.fasta"
+    COMBINED_SYMFA="${SYM_DIR}/symbiont_refs_combined.fasta"
+    CLEANED_SYMFA="${SYM_DIR}/cleaned_symbiont_refs.fasta"
+    BLAST_DB_PREFIX="${SYM_DIR}/symbiont_db_combined"
+    BLAST_OUT="${SYM_DIR}/contaminant_hits_sym_trinity.txt"
+
+    # Combine and clean reference symbiont FASTAs
+    echo "Combining Symbiodiniaceae references" $(date)
+    cat ${SYM_DIR}/symC_scaffold_40.fasta \
+    ${SYM_DIR}/symbd_genome_scaffold.fa \
+    ${SYM_DIR}/symbB.v1.0.genome.fa \
+    > ${COMBINED_SYMFA}
+
+    echo "Creating output directory: filter_sym_dlab" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab
+
+    echo "Run BLAST to identify any contaminants" $(date)
+
+    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/clean_euk_prok_viral_trinity_sequences.fasta \
+           -db /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/symbiont_db_combined
+           -out /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/contaminant_hits_sym_trinity.txt \
+           -outfmt 6 \
+           -evalue 1e-4 \
+           -perc_identity 90
+   
+
+    # Step 2: Extract contaminant IDs from BLAST output
+        awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/contaminant_hits_sym_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/contaminant_ids.txt
+
+        # Step 3: Create list of sequences to KEEP (non-contaminants)
+        grep "^>" /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/clean_euk_prok_viral_trinity_sequences.fasta | sed 's/^>//' | sort \
+        > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/all_sequence_ids.txt
+        comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/all_sequence_ids.txt \
+                 /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/contaminant_ids.txt \
+                 > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/retained_ids.txt
+
+                 echo "Filtering non-contaminant sequences with seqtk" $(date)
+
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dab/clean_euk_prok_viral_trinity_sequences.fasta \
+            /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/retained_ids.txt \
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/Filtered_trinity_sequences.fasta
+
+    echo "Done. All outputs saved in filter_sym_dlab" $(date)
+
+
+
+    #!/bin/bash
+#SBATCH --job-name=filter_sym_dlab
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=15
+#SBATCH --mem=200G
+#SBATCH --time=24:00:00
+#SBATCH --constraint=avx512
+#SBATCH -o slurm-filter_sym_dlab.out
+#SBATCH -e slurm-filter_sym_dlab.err
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=ffields@uri.edu
+#SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab/
+
+module load uri/main BLAST+/2.15.0-gompi-2023a
+module load uri/main seqtk/1.4-GCC-12.3.0
+
+echo "[START] filter_sym_dlab pipeline" $(date)
+
+# Paths to input files
+SYM_DIR="/scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_dlab"
+TRINITY_FASTA="/scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_viral_dlab/clean_euk_prok_viral_trinity_sequences.fasta"
+COMBINED_SYMFA="${SYM_DIR}/symbiont_refs_combined.fasta"
+CLEANED_SYMFA="${SYM_DIR}/cleaned_symbiont_refs.fasta"
+BLAST_DB_PREFIX="${SYM_DIR}/symbiont_db_combined"
+BLAST_OUT="${SYM_DIR}/contaminant_hits_sym_trinity.txt"
+
+# Step 1: Combine and clean reference symbiont FASTAs
+echo "[STEP 1] Combining Symbiodiniaceae references" $(date)
+cat ${SYM_DIR}/symC_scaffold_40.fasta \
+    ${SYM_DIR}/symbd_genome_scaffold.fa \
+    ${SYM_DIR}/symbB.v1.0.genome.fa \
+    > ${COMBINED_SYMFA}
+
+echo "[STEP 1B] Cleaning FASTA (seqtk uppercasing)" $(date)
+seqtk seq -A ${COMBINED_SYMFA} > ${CLEANED_SYMFA}
+
+# Step 2: Create BLAST DB
+echo "[STEP 2] Building BLAST DB" $(date)
+makeblastdb -in ${CLEANED_SYMFA} -dbtype nucl -out ${BLAST_DB_PREFIX}
+
+# Step 3: Run BLAST to find matches
+echo "[STEP 3] Running BLAST to identify symbiont matches" $(date)
+blastn -query ${TRINITY_FASTA} \
+       -db ${BLAST_DB_PREFIX} \
+       -out ${BLAST_OUT} \
+       -outfmt 6 \
+       -evalue 1e-4 \
+       -perc_identity 90
+
+# Step 4: Extract hit transcript IDs
+echo "[STEP 4] Extracting contaminant transcript IDs" $(date)
+awk '{print $1}' ${BLAST_OUT} | sort | uniq > ${SYM_DIR}/contaminant_ids.txt
+
+# Step 5: Make a list of all transcript IDs (cleaned format)
+echo "[STEP 5] Generating list of all transcript IDs" $(date)
+grep "^>" ${TRINITY_FASTA} | cut -d' ' -f1 | sed 's/^>//' | sort > ${SYM_DIR}/all_sequence_ids.txt
+
+# Step 6: Compute retained sequences
+echo "[STEP 6] Identifying retained (non-contaminant) sequences" $(date)
+comm -23 ${SYM_DIR}/all_sequence_ids.txt ${SYM_DIR}/contaminant_ids.txt > ${SYM_DIR}/retained_ids.txt
+
+# Step 7: Extract retained sequences from input FASTA
+echo "[STEP 7] Filtering transcriptome with seqtk" $(date)
+seqtk subseq ${TRINITY_FASTA} ${SYM_DIR}/retained_ids.txt > ${SYM_DIR}/Filtered_trinity_sequences.fasta
+
+echo "[COMPLETE] All outputs written to: ${SYM_DIR}" $(date)
