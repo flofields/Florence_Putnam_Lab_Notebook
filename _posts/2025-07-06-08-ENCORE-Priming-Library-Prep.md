@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Library Prep for The ENCORE Priming Project in Bermuda
-date: 2025-06-22
+date: 2025-07-08
 categories: Protocols
 tags: [DNA, RNA, Library prep, Madracis decactis]
 ---
@@ -19,7 +19,7 @@ I will be prepping samples from the [ENCORE priming experiment conducted in Berm
 
 The kit needs a minimum of 10 ng of total RNA or a maximum of 500 ng of total RNA, which is a large range. We will be using 12 ng of total RNA as input. Here's a breakdown of input RNA volumes for each sample:
 
-I will be doing 7 samples with the modifications below
+I will be doing 4 samples with the modifications below
 
 Modifications 
 
@@ -30,14 +30,10 @@ Total RNA volume used was rounded to 3 decmal places and used to calulate the DN
 
 | Sample ID | TS RNA (ng/uL) | Strip tube # | RNA (uL) | DNAse/RNAse Free Water (uL) | Total starting volume (ul) | Primer |
 | ------ | -------------- | ------------ | -------- | -------------------- | -------------------------- | ------ |
-| MD-4-4| 11.5           | 55            | 1.043478261	|3.957                 | 5.0                        | 90      |
-| MD-4-6| 10           | 56            | 1.2	|3.8                 | 5.0                        | 91      |
-| MD-2-26| 13           | 57            | 0.9230769231	|4.077                  | 5.0                        | 92      |
-| MD-4-16| 13.3           | 58            | 0.9022556391	|4.098                 | 5.0                        | 93      |
-| MD-4-17| 20.6           | 59            | 0.5825242718	|4.417                | 5.0                        | 94      |
-| MD-4-3| 11.2           | 60            | 1.071428571	|3.929               | 5.0                        | 95      |
-| MD-4-11 |7.03           | 61            |1.706970128	|3.293                 | 5.0                        | 96      |
-
+| MD-1-19| 6.27           | 1            | 1.913875598	|3.086124402                 | 5.0                        | 23      |
+| MD-1-15| 15.15           | 2            | 0.7920792079	|4.207920792                 | 5.0                        | 24      |
+| MD-5-19| 12           | 3            |1	|4                 | 5.0                        | 25      |
+| MD-4-24| 18.3           | 4            | 0.6557377049	|4.344262295                 | 5.0                        | 26      |
 
 Zymo SwitchFree library prep workflow
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/85a6e4a1cfdee2851b568f8d417ef4271da868a6/images/Zymo-Seq_SwitchFree_3'_mRNA_Library_Kit_Workflow.jpg?raw=true)
@@ -57,16 +53,25 @@ Here I’m using UDI primers from the 96 well plate (CAT. D3096, LOT. 255118) pr
 
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/fd3b63aea71aa8571e6614d968c75bc7a751b25a/images/Zymo%20switch%20free/Zymo%20switch%20free%20kit%20contents.jpg?raw=true)
 
-See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/490343c2322421ee95de6f4a16bd43af07947222/images/D5000_ScreenTape/2025_06_22/DNA_ENCORE_20250622.pdf).
+#### Qbit dsDNA HS result
+| Sample ID | ug/uL #1 | ug/uL #2 | avg ug/uL  | 
+| ------ | -------------- | ------------ | -------- | --- |
+|Standard #1|47.85| | |
+|Standard #2|22623.95| | |
+| MD-1-19| 4.54           | 4.52            | 4.53	|
+| MD-1-15| 6.50           | 6.10            | 6.30	|
+| MD-5-19| 4.62           | 4.62            |4.62	|
 
 
-#### Note: Samples MD-1-19 had many peaks and needs to be redone
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_1.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_2.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_3.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_4.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_5.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_6.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_7.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_8.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_22/20250622_9.jpg)
+See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/099ae070f0e217b4c8217a9d672c209a4eb9ca68/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2.pdf).
+
+
+#### Note: Samples MD-4-24 had many peaks and needs to be redone
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0001.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0002.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0003.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0004.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0005.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0006.jpg)
+
+MD-4-24 failed however it was done previously on [2025-06-30](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/a8a8cae85446da5ec7f49bc8c2bf0045e0ff406d/_posts/2025-06-30-ENCORE-Priming-Library-Prep.md), after consulting Dr. Jill Ashey I decided it was good enough to use therefore i do not need to redo the sample. 
