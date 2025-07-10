@@ -36,7 +36,7 @@ Total RNA volume used was rounded to 3 decmal places and used to calulate the DN
 | MD-4-13| 16.55           | 4            | 0.7250755287	|4.274924471                 | 5.0                        | 11      |
 | MD-2-18| 36.1           | 5            | 0.3324099723	|4.667590028                | 5.0                        | 12      |
 | MD-1-26| 9.23           | 6            | 1.300108342	|3.699891658               | 5.0                        | 13      |
-| MD-1-19 |6.27           | 7            |0.5940594059	4.405940594                 | 5.0                        | 14      |
+| MD-1-19 |6.27           | 7            |0.5940594059	|4.405940594                 | 5.0                        | 14      |
 
 
 Zymo SwitchFree library prep workflow
@@ -59,7 +59,7 @@ Here I’m using UDI primers from the 96 well plate (CAT. D3096, LOT. 255118) pr
 
 #### Qbit dsDNA HS result
 | Sample ID | ug/uL #1 | ug/uL #2 | avg ug/uL  | 
-| ------ | -------------- | ------------ | -------- | ---
+| ------ | -------------- | ------------ | -------- | --- |
 |Standard #1|50.83| | |
 |Standard #2|23857.17| | |
 | MD-1-24| 2.58           | 2.56            | 2.57	|

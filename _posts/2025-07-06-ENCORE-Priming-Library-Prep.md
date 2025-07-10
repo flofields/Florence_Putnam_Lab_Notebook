@@ -60,7 +60,7 @@ Here I’m using UDI primers from the 96 well plate (CAT. D3096, LOT. 255118) pr
 
 #### Qbit dsDNA HS result
 | Sample ID | ug/uL #1 | ug/uL #2 | avg ug/uL  | 
-| ------ | -------------- | ------------ | -------- | ---
+| ------ | -------------- | ------------ | -------- | --- |
 |Standard #1|53.15| | |
 |Standard #2|24156.17| | |
 | MD-1-18| 5.34           | 5.30            | 5.32	|
@@ -72,17 +72,19 @@ Here I’m using UDI primers from the 96 well plate (CAT. D3096, LOT. 255118) pr
 | MD-1-21 |5.58          | 5.56            | 5.57|
 | MD-2-12 |6.50           | 6.48            |6.49|
 
-See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/cb8d9307b23d527ec5f9855e90e69198036f1fe0/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF.pdf) and [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/cb8d9307b23d527ec5f9855e90e69198036f1fe0/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF2.pdf).
+See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/e09cbc3a668bb4e7138ebb08abb2ce54ee6a6a93/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF.pdf) and [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/cb8d9307b23d527ec5f9855e90e69198036f1fe0/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF2.pdf).
 
 
 #### Note: Samples MD-4-24 had many peaks and needs to be redone
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0001.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0002.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0003.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0004.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0005.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0006.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0007.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0009.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250702_FF_page-0001.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0001.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0002.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0003.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0004.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0005.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0006.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0007.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0008.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0009.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF_page-0010.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF2_page-0001.jpg)
 ![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_06/DNA_ENCORE_20250707_FF2_page-0003.jpg)
