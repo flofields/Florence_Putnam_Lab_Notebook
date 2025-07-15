@@ -59,7 +59,7 @@ Here I’m using UDI primers from the 96 well plate (CAT. D3096, LOT. 255118) pr
 
 #### Qbit dsDNA HS result
 | Sample ID | ug/uL #1 | ug/uL #2 | avg ug/uL  | 
-| ------ | -------------- | ------------ | -------- | --- |
+| ------ | -------------- | ------------ | -------- |
 |Standard #1|50.83| | |
 |Standard #2|23857.17| | |
 | MD-1-24| 2.58           | 2.56            | 2.57	|
@@ -68,7 +68,7 @@ Here I’m using UDI primers from the 96 well plate (CAT. D3096, LOT. 255118) pr
 | MD-4-13| 4.16           | 4.16            | 4.16	|
 | MD-2-18| 2.42           | 2.42            | 2.42	|
 | MD-1-26| 2.26           | 2.26            | 2.26	|
-| MD-1-19 |Out of Range           |             |
+| MD-1-19 |Out of Range           |             | |
 
 
 See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/5771205c8c2d10c10f647c1cff36553ce4280780/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF.pdf).
