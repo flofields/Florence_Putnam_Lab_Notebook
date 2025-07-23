@@ -3,7 +3,7 @@ layout: post
 title: dsDNA and RNA Qubit Quantification Protocol 
 date: 2025-06-29
 categories: Processing
-tags: [DNA, ENCORE, Madracis decactis]
+tags: [DNA, RNA, Protocol]
 ---
 
 ## Broad Range dsDNA, High Sensitivity dsDNA, Broad Range RNA, and High Sensitivity RNA

@@ -1129,7 +1129,7 @@ tar -xzf metazoa_odb10.2020-09-10.tar.gz
 busco -i Trinity_filtered.fasta -l metazoa_odb10 -m transcriptome -o busco_output 
 
 nano filter_busco_mdec
-
+```
 #!/bin/bash
 #SBATCH --job-name=filter_busco_mdec
 #SBATCH --nodes=1
@@ -1143,23 +1143,28 @@ nano filter_busco_mdec
 #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec/
 #SBATCH --constraint=avx512
 
-
-echo “Creating output directory: busco analysis mdec” $(date)
-mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec
+module load conda/latest
+conda activate /work/pi_hputnam_uri_edu/conda/envs/env-busco
 
 echo “START” $(date)
 #configure BUSCO ini file
-busco --config /scratch/workspace/ffields_uri_edu-transcriptomes/myconfig.ini
+busco --config /work/pi_hputnam_uri_edu/conda/envs/env-busco/myconfig.ini
 
 #set your de novo transcriptome query file
 query=“/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta”
 
 #run busco with your config file against your db of interest
-busco --config “/scratch/workspace/ffields_uri_edu-transcriptomes/myconfig.ini” -f -c 15 -i “${query}” -l metazoa_odb10 -o mdec_busco_output -m transcriptome
+busco --config “/work/pi_hputnam_uri_edu/conda/envs/env-busco/myconfig.ini” -f -c 15 -i “${query}” -l metazoa_odb10 -o mdec_busco_output -m transcriptome
 echo “STOP” $(date)
 
 sbatch filter_busco_mdec
 Submitted batch job 39135465
+```
+
+removed
+echo “Creating output directory: busco analysis mdec” $(date)
+mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec
+
 
 echo "START" $(date)
 

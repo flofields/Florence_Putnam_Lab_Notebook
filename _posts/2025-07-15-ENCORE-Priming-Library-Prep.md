@@ -19,7 +19,7 @@ I will be prepping samples from the [ENCORE priming experiment conducted in Berm
 
 The kit needs a minimum of 10 ng of total RNA or a maximum of 500 ng of total RNA, which is a large range. We will be using 12 ng of total RNA as input. Here's a breakdown of input RNA volumes for each sample:
 
-I will be doing 4 samples with the modifications below
+I will be doing 1 samples with the modifications below
 
 Modifications 
 
@@ -28,12 +28,9 @@ Modifications
 
 Total RNA volume used was rounded to 3 decmal places and used to calulate the DNAse/RNAse Free Water used
 
-| Sample ID | TS RNA (ng/uL) | Strip tube # | RNA (uL) | DNAse/RNAse Free Water (uL) | Total starting volume (ul) | Primer |
+| Sample ID | TS RNA (ng/uL)| RNA (uL) | DNAse/RNAse Free Water (uL) | Total starting volume (ul) | Primer |
 | ------ | -------------- | ------------ | -------- | -------------------- | -------------------------- | ------ |
-| MD-1-19| 6.27           | 1            | 1.913875598	|3.086124402                 | 5.0                        | 23      |
-| MD-1-15| 15.15           | 2            | 0.7920792079	|4.207920792                 | 5.0                        | 24      |
-| MD-5-19| 12           | 3            |1	|4                 | 5.0                        | 25      |
-| MD-4-24| 18.3           | 4            | 0.6557377049	|4.344262295                 | 5.0                        | 26      |
+| MD-5| 38.2             | 0.314136	|4.685                 | 5.0                        | 28      |
 
 Zymo SwitchFree library prep workflow
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/85a6e4a1cfdee2851b568f8d417ef4271da868a6/images/Zymo-Seq_SwitchFree_3'_mRNA_Library_Kit_Workflow.jpg?raw=true)
@@ -59,22 +56,15 @@ See [here](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/b77256
 
 | Sample ID | ug/uL #1 | ug/uL #2 | avg ug/uL  | 
 | ------ | -------------- | ------------ | -------- | --- |
-|Standard #1|47.85| | |
-|Standard #2|22623.95| | |
-| MD-1-19| 4.54           | 4.52            | 4.53	|
-| MD-1-15| 6.50           | 6.10            | 6.30	|
-| MD-5-19| 4.62           | 4.62            |4.62	|
+|Standard #1|50.55| | |
+|Standard #2|24004.99| | |
+| MD-1-19| 5.34           | 5.32            | 5.33	|
 
 
-See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/099ae070f0e217b4c8217a9d672c209a4eb9ca68/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2.pdf).
+See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/81a2198dbfb46d68bab6794135d67055ed8f6a33/images/D5000_ScreenTape/2025_07_15/2025-07-15-MD-5.pdf).
 
 
 #### Note: Samples MD-4-24 had many peaks and needs to be redone
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0001.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0002.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0003.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0004.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0005.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_08/DNA_ENCORE_20250708_FF2_page-0006.jpg)
-
-MD-4-24 failed however it was done previously on [2025-06-30](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/a8a8cae85446da5ec7f49bc8c2bf0045e0ff406d/_posts/2025-06-30-ENCORE-Priming-Library-Prep.md), after consulting Dr. Jill Ashey I decided it was good enough to use therefore i do not need to redo the sample. 
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_15/2025-07-15-MD-5_page-0001.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_15/2025-07-15-MD-5_page-0002.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_15/2025-07-15-MD-5_page-0003.jpg)

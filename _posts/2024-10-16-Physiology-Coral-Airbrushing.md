@@ -18,7 +18,7 @@ Before starting things to remember:
 - Sterilize materials between each sample with 10% bleach and 70% ethanol
 
 ### Analysis workflow
-![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/ad6df7ce4309322b8e5a2df6f469f1166acd8e2d/images/ENCORE/Priming_Experiment/Analysis_workflow.png)
+![](https://raw.githubusercontent.com/flofields/Florence_Putnam_Lab_Notebook/refs/heads/master/images/ENCORE/Priming_Experiment/Analysis_workflow.png)
 ---
 Contents  
 - [**Materials**](#Materials)  
@@ -107,10 +107,10 @@ Contents
 Also look at Putnam Lab Management Page [here](https://github.com/Putnam-Lab/Lab_Management/tree/master/Lab_Resources/Physiology_Protocols)
 
 
-![Iwata_airbrush_setup with airbrush](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/2b00d71018794d2c6bad67e8935dd7b03defb367/images/ENCORE/Priming_Experiment/Airbrush_setup.jpg)
+![Iwata_airbrush_setup with airbrush](https://raw.githubusercontent.com/flofields/Florence_Putnam_Lab_Notebook/refs/heads/master/images/ENCORE/Priming_Experiment/Airbrush_setup.jpg)
 
 ![micro](https://github.com/emmastrand/EmmaStrand_Notebook/blob/master/images/microhomogenizer.JPG?raw=true)
 
-![bleach](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/b041ac6a4e7ef58631b41bf133f737cac38a87b7/images/ENCORE/Priming_Experiment/samples_in_bleaching_container_with_label.jpg).
+![bleach](https://raw.githubusercontent.com/flofields/Florence_Putnam_Lab_Notebook/refs/heads/master/images/ENCORE/Priming_Experiment/samples_in_bleaching_container_with_label.jpg).
 
-![drying](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/56d485e3316cd9ea46edd20d225e958e81096b44/images/ENCORE/Priming_Experiment/drying_bleached_coral_fragments.jpg).
+![drying](https://raw.githubusercontent.com/flofields/Florence_Putnam_Lab_Notebook/refs/heads/master/images/ENCORE/Priming_Experiment/prep_for_oven2.jpg).

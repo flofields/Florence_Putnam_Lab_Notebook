@@ -59,6 +59,9 @@ Here I’m using UDI primers from the 96 well plate (CAT. D3096, LOT. 255118) pr
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/fd3b63aea71aa8571e6614d968c75bc7a751b25a/images/Zymo%20switch%20free/Zymo%20switch%20free%20kit%20contents.jpg?raw=true)
 
 #### Qbit dsDNA HS result
+See [here](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/b7725656ec24e76646ef842d6fc135e1e046528c/_posts/2025-06-29-dsDNA-and-RNA-Qubit-Quantification-Protocol.md) for protocol.
+
+
 | Sample ID | ug/uL #1 | ug/uL #2 | avg ug/uL  | 
 | ------ | -------------- | ------------ | -------- | --- |
 |Standard #1|53.15| | |

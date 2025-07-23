@@ -10,7 +10,7 @@ tags: [DNA, ENCORE, Madracis decactis]
 
 ### Using the dsDNA Qubit Quantification on all successful library prepped ENCORE Priming samples and another form of QC.
 
-### Manufacturer's protocol can be found [here](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/4068f91eeccec460ef74c2a1c7617f3a85335b5d/protocols/MAN0017455_Qubit_1X_dsDNA_HS_Assay_Kit_UG.pdf) and lab protocol can be found [here](https://zdellaert.github.io/ZD_Putnam_Lab_Notebook/Qubit-Protocol/)
+### Manufacturer's protocol can be found [here](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/4068f91eeccec460ef74c2a1c7617f3a85335b5d/protocols/MAN0017455_Qubit_1X_dsDNA_HS_Assay_Kit_UG.pdf) and lab protocol can be found [here](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/b7725656ec24e76646ef842d6fc135e1e046528c/_posts/2025-06-29-dsDNA-and-RNA-Qubit-Quantification-Protocol.md)
 
 
 | Sample ID | #1 ug/uL| #2 ug/uL | avg ug/uL
