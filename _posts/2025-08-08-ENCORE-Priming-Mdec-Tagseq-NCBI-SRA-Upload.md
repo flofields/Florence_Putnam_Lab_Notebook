@@ -1,17 +1,17 @@
 ﻿---
 LAYOUT: post
-TITLE: ENCORE NVBI SRA upload of Mdec Taqseq
-CATEGORY: [ Protocol ]
+TITLE: Workflow ENCORE Priming SRA upload of Madracis decactis
+CATEGORY: [ Protocol, Tagseq ]
 TAG: [ Madracis decactis, Bioinformatics Tagseq, NCBI SRA, sequences ]
 ---
 
-# ENCORE Mdec Tagseq SRA upload TO NCBI 
+# ENCORE Priming Mdec Tagseq SRA upload TO NCBI 
 
-This post details the NCBI Sequence Read Archive upload for the Tagseq data of ENCORE Pi-TPC experiment. The github repo with the data from that project can be found [here](https://github.com/hputnam/Bermuda_PICurve_TPC.git). Summary of the extraction protocol can be found [here](https://github.com/flofields/ENCORE_Transcriptomes/blob/3d9f7151e80add1718b7148b2424f8f00ada97a6/MDEC_Reference_Transcriptome/notebook_post/Project-Summary-ENCORE-MDEC-RNA-DNA-Extractions.md)  This protocol is based off the Lab protocol to submit raw sequence files to [NCBI Sequence Read Archive](https://github.com/Putnam-Lab/Lab_Management/blob/master/Bioinformatics_%26_Coding/Data_Mangament/SRA-Upload_Protocol.md)
+This post details the NCBI Sequence Read Archive upload for the Tagseq data of ENCORE Priming experiment only focusing on Mdec molecular responses. The github repo with the data from that project can be found [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024.git). All molecular metadata can be found [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/tree/5dba240ac13474e911af17f6027ad065f7b6b03c/data/Molecular). This protocol is based off the Lab protocol to submit raw sequence files to [NCBI Sequence Read Archive](https://github.com/Putnam-Lab/Lab_Management/blob/master/Bioinformatics_%26_Coding/Data_Mangament/SRA-Upload_Protocol.md)
 
 ## Overview
 
-These sequences are from the ENCORE Photosynthesis irradiance - Thermal performance curve project which accesses how temperatur and light interact to influence the coral's photosynthesis efficiency   ps://github.com/flofields/ENCORE_Transcriptomes)
+These sequences are from the ENCORE Priming project which exams the role of environmental priming (cis = same stressor and trans = different stressor) in coral tolerance response mechanisms.
 
 
 ### 1. Create a BioSample first
@@ -40,15 +40,13 @@ Sample Type
 
 Attributes
 
-[Link to Attribute spreadsheet](https://github.com/flofields/Mdec-Tagseq/blob/main/NCBI_Uploads/Invertebrate.1.0.xlsx). 
+[Link to Attribute spreadsheet](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/07c4d476a08f71132955d54f1289de5805fc2cdc/NCBI_Uploads/Invertebrate.1.0%20(2).xlsx). 
 
-It is important to note that although my sample name and title were uniquly distingushable, the sample name, titel and description does not count when the sample is checking for distinguishable attributes. Since my sequences all were collected from the sample location, treated similarly and were the same species I included a colunm named sample number to show sample uniqueness to allow the spreedsheet to be uploaded and accepted.
+It is important to note that although my sample name and title were uniquly distingushable, the sample name, title and description does not count when the sample is checking for distinguishable attributes. Since my sequences all were collected from the sample location, treated similarly and were the same species I included a colunm named sample number to show sample uniqueness to allow the spreedsheet to be uploaded and accepted.
 
 <span style="color:red;"> BioSample Submission ID SUB15267914
 
-The BioSample were approved under the following numbers
-SAMN48100007, SAMN48100008, SAMN48100009, SAMN48100010, SAMN48100011, SAMN48100012, SAMN48100013, SAMN48100014, SAMN48100015, SAMN48100016, SAMN48100017, SAMN48100018, SAMN48100019, SAMN4810020, SAMN48100021, SAMN48100022, SAMN48100023, SAMN48100024, SAMN48100025, SAMN48100026, SAMN48100027, SAMN48100028, SAMN48100029, SAMN48100030, SAMN48100031, SAMN48100032, SAMN48100033, SAMN48100034, SAMN48100035, SAMN48100036, SAMN48100037, SAMN48100038, SAMN48100039, SAMN48100040, SAMN48100041, SAMN48100042, SAMN48100043 
-
+The BioSample were approved under the following Accession numbers found at this [link](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/07c4d476a08f71132955d54f1289de5805fc2cdc/NCBI_Uploads/BioSampleObjects.txt)
 
 I do not have an exsisting BioProject for this data so I will be creating one
 
@@ -73,13 +71,13 @@ Project Type
 Target
 
 	Organism name: Madracis decactis
-	Description: Adult life stage Madracis decactis samples from 6 colonies were exposed to photosynthesis irradiance - thermal performance curves at 7 different temperatures.
+	Description: Adult life stage Madracis decactis samples from four colonies were subjected to an environmental priming experiment. Individuals were exposed to one of three primary treatments for two weeks: decreased pH (~7.75), heat stress (30°C), or a control temperature (27°C). Following this priming phase, all samples underwent a two-week recovery period at 28°C. Subsequently, they were exposed to a secondary stressor consisting of either continued ambient conditions (28°C) or elevated heat stress (32°C).
 
 General Info
 
 	When should this submission be released to the public?: Release immediately following processing
 	Project title: Madracis decactis Taq-seq sequences when exposed to photosynthesis irradiance - thermal performance curves
-	Public description: This study aims to understand Madracis decactis thermal performance mechanisms through exposure to photosynthesis irradiance - thermal performance curves at 7 different.
+	Public description: This study aims to understand the role of environmental priming and tolerance induced mechanisms involved in Madracis decactis' ability to tolerate heat stress. Adult life stage Madracis decactis individuals from 4 colonies were first exposed to one of three priming treatments: low pH, heat stress or control. Followed by a two week recovery period and secondary stressor exposed to either heat stress or control.
 	Relevance: Environmental
 
 
@@ -92,8 +90,8 @@ no publications with these sequences
 
 The next step is review then submit.
 
-<span style = "color:red;">BioProject submission ID SUB15274698. 
-BioProject ID: PRJNA1254643 : Madracis decactis Taq-seq sequences when exposed to photosynthesis irradiance - thermal performance curves (TaxID: 123769)
+<span style = "color:red;">BioProject submission ID SUB15549287. 
+BioProject ID: PRJNA1308128 : Madracis decactis Taq-seq sequences when exposed to photosynthesis irradiance - thermal performance curves (TaxID: 123769)
 
 
 ### 3. Sequence Read Archive (SRA)

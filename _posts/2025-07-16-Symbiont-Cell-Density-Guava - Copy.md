@@ -18,8 +18,11 @@ Contents
 - [**Hemocytometer and Microscope Materials**](#HMMMaterials)    
 - [**Step 1 - Hemocytometer and Microscope Protocol**](#HMMProtocol)    
 - [**Guava Materials**](#GMaterials)    
-- [**Step 2 - Guava Sample Preperation**](#GPrep)  
+- [**Step 2 - Guava Protocol**](#GProtocol)  
+- [**Hemocytometer and Microscope Materials References**](#References)
 
+
+ 
 <a name="Instrumentdetails"></a> **Instrument details**
 
 The Hemocytometer and microscope 
@@ -27,7 +30,8 @@ The Hemocytometer and microscope
 
 The Millipore Guava easyCyte HT Flow Cytometer located at the URI Coastal Institute Building (Bay Campus).
 
-![Millipore Guava easyCyte HT Flow Cytometer](https://raw.githubusercontent.com/flofields/Florence_Putnam_Lab_Notebook/refs/heads/master/images/ENCORE/sym_counts/guava_cytometer.png)
+
+
  
  <a name="HMMMaterials"></a> **Hemocytometer and Microscope Materials**
    - Microscrope
@@ -61,15 +65,16 @@ Symbionts at 10X
 Symbionts at 40X
 ![40x](https://raw.githubusercontent.com/flofields/Florence_Putnam_Lab_Notebook/refs/heads/master/images/ENCORE/sym_counts/X40.jpg)
 
-
+RESULTS HERE
 |Samples|Squares|Count1|Count2|Count3|Count4|Count5|Count6|
 |-------|-------|------|------|------|------|------|------|
-|DL-1-10|1      |134   |190   |166   |153   |148   |141   |
-|MD-4-25|2      |182   |146   |107   |81    |152   |137   |
-|DL-2-9 |1      |118   |121   |123   |111   |166   |112   |
-|DL-3-25|3      |191   |181   |440   |475   |370   |277   |
-|MD-2-11|1      |296   |254   |252   |223   |299   |241   |
-|MD-1-22|1      |215   |154   |145   |178   |203   |160   |
+
+
+
+
+|Samples|Dilution percentage|replicates|Volume per replicate (uL)| Total volume needed (uL)|Stock volume (uL)|Dilutent (uL)|
+|-------------------|------------------------------------|-------------------------|-----------------|-------------|
+|
 
 <a name="GMaterials"></a> **Guava Materials**
 
@@ -83,51 +88,18 @@ All specific equipment for use can be found in the GUAVA manual.
 - Bleach (sodium hypochlorite solution)
 - GUAVA easyCheck Kit (contains Guava easyCheck Bead Reagent and Guava Check Diluent)
 
-<a name="GPrep"></a> **Step 2 - Guava Sample Preperation**
+<a name="GProtocol"></a> **Step 2 - Guava Protocol**
 
-Changes made to the protocol used 800uL instead of 650uL this allowed me to add a 30% dilution. Dilutions of 20%, 30%, 50%, 80% were used in duplicate.
-
-- Thaw coral homogenate aliquot (800uL) and vortex sample for 15 seconds.
+- Thaw coral homogenate aliquot (650uL) and vortex sample for 15 seconds.
 - To separate host and algae, centrifuge the 1.5 tube for 4 minutes at 5000rpm at 4°C.
 - Remove the supernatant (host tissue) work with pellet (algae).
-- Resuspend the algae with 800uL 1XPBS and homogenize.
+- Resuspend the algae with 650uL 1XPBS and homogenize.
 - Centrifuge for 5 minutes at 5000rpm at 4°C.
 - Remove the supernatant.
-- Resuspend the algae with 800uL PBS and homogenize.
+- Resuspend the algae with 650uL PBS and homogenize.
 - Centrifuge for 5 minutes at 5000rpm at 4°C.
 - Remove the supernatant thoroughly.
-- Resuspend the algae with 800uL PBS and homogenize.
+- Resuspend the algae with 650uL PBS and homogenize.
 - Make a 25% dilution with PBS (we ran several trials and found that this is the best dilution for coral samples for the GUAVA, 25% sample and 75% PBS, but dilutions between 20% to 50% also work well, depending on how clear the sample looks - very clear sample might need not to be diluted) of each sample, load in triplicates in a 96 wells plate (round bottom), 240 ul per well.
 
-SERIAL DULUTIONS FOR GUAVA
-
-Dilution percentage|replicates|Volume per replicate (uL)| Total volume needed (uL)|Stock volume (uL)|Dilutent (uL)|
-|-------------------|------------------------------------|-------------------------|-----------------|-------------|
-|20| 2| 220| 440| 88| 352|
-|30| 2| 220| 440|132| 308|
-|50| 2| 220| 440|200|220|
-|80| 2| 220| 440|352| 88|
-
-PLATEMAP
-R1 = REPLICATE 1
-R2 = REPLICATE 2
-
-|Samples| R1 0.8| R2 0.8| R1 0.5| R2 0.5| R1 0.3| R2 0.3| R1 0.2| R2 0.2|
-|-------|----|----|----|----|----|----|----|---|
-|DL-1-10|F4|H1|F8|C10|H5|B9|E1|E11|
-|MD-4-25|E6|B5|H12|B7|E3|B6|D5|G3|
-|DL-2-9|A1|D2|A6|G7|A8|E12|B10|H7|
-|DL-3-25|D7|G10|X|H2|G1|A4|H11|A12|
-|MD-2-11|C4|F1|E4|C8|C1|B3|B2|G5|
-|MD-1-22|E9|B11|A3|D6|C12|F12|C2|A4
-
-Notes: C2 and D5 were became contaminated. Only one rep for DL-3-25 0.5
-
-<span style="color:red"> Note: You want to make sure that the samples ARE free of host remainings and dirt, which may clog the GUAVA.</span>
-
-See [Here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/tree/main/data/Physiology/Symbiont_Density/curve) for raw curve data.
-
-[Image Comparison between Hemocytometer and Guava Cell Counts](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/main/output/physiology/Symbiont_Density/curve.pdf)
-
-
-
+<span style="color:red"> Note: You want to make sure that the samples is free of host remainings and dirt, which may clog the GUAVA.</span>

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Library Prep for The ENCORE Priming Project in Bermuda
-date: 2025-07-02
+date: 2025-06-17
 categories: Protocols
 tags: [DNA, RNA, Library prep, Madracis decactis]
 ---
@@ -19,7 +19,7 @@ I will be prepping samples from the [ENCORE priming experiment conducted in Berm
 
 The kit needs a minimum of 10 ng of total RNA or a maximum of 500 ng of total RNA, which is a large range. We will be using 12 ng of total RNA as input. Here's a breakdown of input RNA volumes for each sample:
 
-I will be doing 7 samples with the modifications below
+I will be doing 14 samples with the modifications below. Steps 1 and 2 on the first 7 samples were done on the 17th but tapestation occurred on the 18th once library prep was completed. Library prep for the other 7 samples were completed on the 18th.
 
 Modifications 
 
@@ -30,14 +30,20 @@ Total RNA volume used was rounded to 3 decmal places and used to calulate the DN
 
 | Sample ID | TS RNA (ng/uL) | Strip tube # | RNA (uL) | DNAse/RNAse Free Water (uL) | Total starting volume (ul) | Primer |
 | ------ | -------------- | ------------ | -------- | -------------------- | -------------------------- | ------ |
-| MD-1-24| 19.9           | 1            | 0.6030150754	|4.396984925                 | 5.0                        | 8      |
-| MD-4-26| 11.4           | 2            | 1.052631579	|3.947368421                 | 5.0                        | 9      |
-| MD-4-2| 15.2           | 3            |0.7894736842	|4.210526316                 | 5.0                        | 10      |
-| MD-4-13| 16.55           | 4            | 0.7250755287	|4.274924471                 | 5.0                        | 11      |
-| MD-2-18| 36.1           | 5            | 0.3324099723	|4.667590028                | 5.0                        | 12      |
-| MD-1-26| 9.23           | 6            | 1.300108342	|3.699891658               | 5.0                        | 13      |
-| MD-1-19 |6.27           | 7            |0.5940594059	|4.405940594                 | 5.0                        | 14      |
-
+| MD-2-4| 10.5           | 29            | 1.142857143	|3.857142857                | 5.0                        | 53      |
+| MD-1-20| 10.35           | 30            | 1.15942029	|3.84057971                 | 5.0                        | 54      |
+| MD-2-10| 19.6           | 31            |0.612245	|4.387755                 | 5.0                        | 55      |
+| MD-5-5| 11           | 32            | 1.090909	|3.909091                 | 5.0                        | 56      |
+| MD-5-6| 15.1           | 33            | 0.7947019868	|4.205298013                | 5.0                        | 57      |
+| MD-1-6| 36.5           | 34            | 0.3287671233	|4.671232877               | 5.0                        | 58      |
+| MD-1-11 |12.35           | 35            |0.971659919	|4.028340081                 | 5.0                        | 59      |
+ MD-2-25| 11.4           | 36            | 1.052631579	|3.947368421                 | 5.0                        | 60      |
+| MD-4-6| 10           | 37            | 1.2	|3.8                 | 5.0                        | 61      |
+| MD-1-3| 16.4           | 39            |0.7317073171	|4.268292683                 | 5.0                        | 62      |
+| MD-4-25| 18.3           |40            | 0.6557377049	|4.344262295                 | 5.0                        | 63      |
+| MD-1-15| 15.15           | 41            | 0.7920792079	|4.207920792                | 5.0                        | 64      |
+| MD-2-2| 24.4           | 42            | 0.4918032787	|4.508196721               | 5.0                        | 65      |
+| MD-4-9 |15.9           | 43            |0.7547169811	|4.245283019                 | 5.0                        | 66      |
 
 Zymo SwitchFree library prep workflow
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/85a6e4a1cfdee2851b568f8d417ef4271da868a6/images/Zymo-Seq_SwitchFree_3'_mRNA_Library_Kit_Workflow.jpg?raw=true)
@@ -57,32 +63,30 @@ Here I’m using UDI primers from the 96 well plate (CAT. D3096, LOT. 255118) pr
 
 ![](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/fd3b63aea71aa8571e6614d968c75bc7a751b25a/images/Zymo%20switch%20free/Zymo%20switch%20free%20kit%20contents.jpg?raw=true)
 
-#### Qbit dsDNA HS results
-See [here](https://github.com/flofields/Florence_Putnam_Lab_Notebook/blob/b7725656ec24e76646ef842d6fc135e1e046528c/_posts/2025-06-29-dsDNA-and-RNA-Qubit-Quantification-Protocol.md) for protocol.
 
-| Sample ID | ug/uL #1 | ug/uL #2 | avg ug/uL  | 
-| ------ | -------------- | ------------ | -------- |
-|Standard #1|50.83| | |
-|Standard #2|23857.17| | |
-| MD-1-24| 2.58           | 2.56            | 2.57	|
-| MD-4-26| 3.20           | 3.20            | 3.20	|
-| MD-4-2| 4.74           | 4.72            |4.73	|
-| MD-4-13| 4.16           | 4.16            | 4.16	|
-| MD-2-18| 2.42           | 2.42            | 2.42	|
-| MD-1-26| 2.26           | 2.26            | 2.26	|
-| MD-1-19 |Out of Range           |             | |
+See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/5dba240ac13474e911af17f6027ad065f7b6b03c/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1.pdf). and [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/5dba240ac13474e911af17f6027ad065f7b6b03c/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2.pdf)
 
 
-See the full report [here](https://github.com/flofields/Coral_Priming_Experiments_Summer_2024/blob/5771205c8c2d10c10f647c1cff36553ce4280780/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF.pdf).
+#### Note: All samples except for MD-5-14 and MD-2-23 failed and will need to be redone
 
-
-#### Note: Samples MD-4-24 had many peaks and needs to be redone
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0001.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0002.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0003.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0004.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0005.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0006.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0007.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0008.jpg)
-![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_07_02/DNA_ENCORE_20250702_FF_page-0009.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0001.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0002.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0003.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0004.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0005.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0006.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0007.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0008.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0009.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0010.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0011.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0012.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0001.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0002.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0003.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0004.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0005.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0006.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0007.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0008.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF2_page-0009.jpg)

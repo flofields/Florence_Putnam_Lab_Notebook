@@ -500,6 +500,9 @@ directory - /scratch/workspace/ffields_uri_edu-transcriptomes
     mkdir scripts
     cd scripts
 
+## 11) Filter any contaminant sequences from the fasta file (eukaryote, prokaryote, viral and symbionts)
+
+
 #### Create euk filtering script
 
     nano trinity_euk_contam.sh
@@ -626,10 +629,10 @@ nano trinity_prok_contam.sh
 sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/scripts/trinity_prok_contam.sh
 Submitted batch job 38760979
 
-### Unity has a ref virus geneome from NCBI, I will be using ref genome to filter any sequences that are encoded for viral contaminants. The path is below Create a viral filtering script
-
-/datasets/bio/ncbi-db/2025-06-22/
-
+### Unity has a ref virus geneome from NCBI, I will be using ref genome to filter any sequences that are encoded for viral contaminants. NCBI viral db is already downloaded on unity, seen in the path below now create a viral filtering script
+```
+/datasets/bio/ncbi-db/2025-07-27/
+```
 
     nano trinity_filter_viral_contam.sh
 
@@ -653,38 +656,376 @@ Submitted batch job 38760979
 
     echo "Run BLAST to identify any contaminants" $(date)
 
-    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/cleaneukandprok_trinity_sequences.fasta \
-       -db /datasets/bio/ncbi-db/2025-06-22/ref_viruses_rep_genomes \
-       -out contaminant_hits_viral_trinity.txt \
-       -outfmt 6 \
-       -evalue 1e-4 \
-       -perc_identity 90
+    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_prok_mcav/cleaneukandprok_trinity_sequences.fasta \
+        -db /datasets/bio/ncbi-db/2025-07-27/ref_viruses_rep_genomes \
+        -out contaminant_hits_viral_trinity.txt \
+        -outfmt 6 \
+        -evalue 1e-4 \
+        -perc_identity 90
 
-# Step 2: Extract contaminant IDs from BLAST output
+    # Step 2: Extract contaminant IDs from BLAST output
     awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/contaminant_hits_viral_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/contaminant_ids.txt
 
     # Step 3: Create list of sequences to KEEP (non-contaminants)
-    grep "^>" cleaneukandprok_trinity_sequences.fasta | sed 's/^>//' | sort \
-    > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/all_sequence_ids.txt
+    grep "^>" /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_prok_mcav/cleaneukandprok_trinity_sequences.fasta | sed 's/^>//' | sort > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/all_sequence_ids.txt
     comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/all_sequence_ids.txt \
-             /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/contaminant_ids.txt \
-             > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/retained_ids.txt
+                /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/contaminant_ids.txt \
+                > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/retained_ids.txt
 
-             echo "Filtering non-contaminant sequences with seqtk" $(date)
+                echo "Filtering non-contaminant sequences with seqtk" $(date)
 
     # Step 4: Remove contaminants using seqtk
-    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/data/filter_prok_mdec/cleaneukandprok_trinity_sequences.fasta \
+    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_prok_mcav/cleaneukandprok_trinity_sequences.fasta \
             /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/retained_ids.txt \
             > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/clean_euk_prok_viral_trinity_sequences.fasta
 
-    echo "Done. All outputs saved in filter_viral_mdec." $(date)
-
+    echo "Done. All outputs saved in filter_viral_mcav." $(date)
+```
 sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/scripts/trinity_filter_viral_contam.sh
-Submitted batch job 39208925
+Submitted batch job 40379385
+```
 
 ### Filitering sym sequences from the fasta file
 
 Download symbiont files from [marine genomics](https://marinegenomics.oist.jp/symb/gallery) in designated folder and unzipped them
 
-    curl -L -o symbB.v1.0.genome.fa.gz "https://marinegenomics.oist.jp/symb/download/symbB.v1.0.genome.fa.gz"
     curl -L -o symC_scaffold_40.fasta.gz "https://marinegenomics.oist.jp/symb/download/symC_scaffold_40.fasta.gz"
+    curl -L -o symbd_genome_scaffold.fa.gz "https://marinegenomics.oist.jp/symbd/download/102_symbd_genome_scaffold.fa.gz"
+
+    gunzip symbd_genome_scaffold.fa.gz
+    gunzip symC_scaffold_40.fasta.gz
+
+Removes all header lines (starting with >), so you're left with just the sequence lines and filters out lines that only contain valid DNA characters
+
+
+    grep -v '^>' symC_scaffold_40.fasta | grep -v '^[ACGTNacgtn]*$'
+    grep -v '^>' symbd_genome_scaffold.fa | grep -v '^[ACGTNacgtn]*$'
+
+Combining genomes 
+
+    cat symbd_genome_scaffold.fa symC_scaffold_40.fasta > cleaned_symbionts.fasta
+
+Running interative job to combine the sym genomes to generate several output files to run queries with blastn against your symbiont sequences for filtering.
+
+    mkdir filter_sym_mcav
+
+    srun --nodes=1 --ntasks=4 --mem=1G --time=01:00:00 --pty bash
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    makeblastdb -in /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/sym_dbs/cleaned_symbionts.fasta \
+            -dbtype nucl \
+            -out /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/symbiont_db_combined
+---
+
+    nano scratch/workspace/ffields_uri_edu-transcriptomes/mcav/scripts/trinity_filter_sym.sh
+
+    #!/bin/bash
+    #SBATCH --job-name=filter_sym_mcav
+    #SBATCH --nodes=1 --cpus-per-task=15
+    #SBATCH --mem=200G  # Requested Memory
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_sym_dlab.out  # %j = job ID
+    #SBATCH -e slurm-filter_sym_dlab.err  # %j = job ID
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/data/filter_sym_mcav/
+    #SBATCH --constraint=avx512
+
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    module load uri/main seqtk/1.4-GCC-12.3.0
+
+
+    echo "Run BLAST to identify any contaminants" $(date)
+
+    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/clean_euk_prok_viral_trinity_sequences.fasta \
+            -db /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/symbiont_db_combined \
+            -out /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/contaminant_hits_sym_trinity.txt \
+            -outfmt 6 \
+            -evalue 1e-4 \
+            -perc_identity 90
+   
+
+    # Step 2: Extract contaminant IDs from BLAST output
+        awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/contaminant_hits_sym_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/contaminant_ids.txt
+
+    # Step 3: Create list of sequences to KEEP (non-contaminants)
+    grep "^>" /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/clean_euk_prok_viral_trinity_sequences.fasta | sed 's/^>//' | sort \
+    > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/all_sequence_ids.txt
+    comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/all_sequence_ids.txt \
+                /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/contaminant_ids.txt \
+                > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/retained_ids.txt
+
+                echo "Filtering non-contaminant sequences with seqtk" $(date)
+
+    # Step 4: Remove contaminants using seqtk
+    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_viral_mcav/clean_euk_prok_viral_trinity_sequences.fasta \
+            /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/retained_ids.txt \
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/Filtered_trinity_sequences.fasta
+
+    echo "Done. All outputs saved in filter_sym_dlab" $(date)
+
+sbatch trinity_filter_sym.sh
+Submitted batch job 40390651
+
+Changed Filtered_trinity_sequences.fasta name to filtered_dlab.fasta
+
+    mv Filtered_trinity_sequences.fasta filtered_mcav.fasta
+
+## 12) Re-run Busco (Benchmarking Universal Single-Copy Orthologs)
+
+```
+nano busco_mcav
+```
+
+    #!/bin/bash
+    #SBATCH --job-name=busco_mcav
+    #SBATCH --nodes=1
+    #SBATCH --cpus-per-task=15
+    #SBATCH --mem=200G
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_busco.out
+    #SBATCH -e slurm-filter_busco.err
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/busco_mcav/
+    #SBATCH --constraint=avx512
+
+    echo "Creating output directory: filter_busco_dlab" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/mcav/busco_mcav/
+    export PATH="/work/pi_hputnam_uri_edu/conda/envs/env-busco/bin:$PATH"
+
+    module load conda/latest 
+    conda activate /work/pi_hputnam_uri_edu/conda/envs/env-busco
+   
+    echo "START" $(date)
+
+    #set your de novo transcriptome query file
+    query="/scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/filtered_mcav.fasta"
+
+    #configure BUSCO ini file
+    busco --config /work/pi_hputnam_uri_edu/conda/envs/env-busco/myconfig.ini \
+      -f -c 15 \
+      -i "${query}" \
+      -l metazoa_odb10 \
+      -o mcav_busco_output \
+      -m transcriptome \
+      --download_path /work/pi_hputnam_uri_edu/lineages
+
+    echo "STOP" $(date)
+
+ ```
+   sbatch busco_mcav
+   Submitted batch job 40474713
+```
+BUSCO RESULTS before CD-HIT
+
+    cd /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/busco_mcav/mcav_busco_output
+    less short_summary.specific.metazoa_odb10.dlab_busco_output.txt
+
+            ***** Results: *****
+
+            C:98.4%[S:21.3%,D:77.1%],F:0.6%,M:0.9%,n:954
+            939     Complete BUSCOs (C)
+            203     Complete and single-copy BUSCOs (S)
+            736     Complete and duplicated BUSCOs (D)
+            6       Fragmented BUSCOs (F)
+            9       Missing BUSCOs (M)
+            954     Total BUSCO groups searched
+
+## 12) Use CD_HIT to reduce redundancy to improve the transcriptome quality
+
+[CD-HIT](https://sites.google.com/view/cd-hit) (Cluster Database at High Identity with Tolerance) is a clustering and protein/nucleotide comparitive program. The goal of using CD-HIT here is to clusster similar proteins/ nucleotide based on sequence idenity thresholds. This can reduce redundancy which may play a role in a high duplication rate and shinks dataset without losing any biological information or diversity. They are a few CD_HIT function specfic for different purposes. I will be using the CD-HIT-EST fuction (Cluster Database at High Identity with Tolerance for ESTs (Expressed Sequence Tags)) which takes the FASTAformat sequence db as the input and produces the non-redundant representative sequences as the output. 
+URI currently has the CD-HIT downloaded as a module so that will be used in this script: CD-HIT/4.8.1-GCC-11.3.0 . In this script refer to the table for the flags used and their purpose
+
+|flag|purpose|
+|----|-------|
+|-i|Input FASTA file|
+|-o|Output FASTA file(representative sequences after clustering)|
+|-c 0.95|Identity threshold (95% sequence similarity required to cluster)|
+|-n 10|Word size — appropriate for high identity thresholds like 0.95|
+|-d 0|Description length (0 = suppress extra info in output FASTA headers)|
+|-M 16000|Max memory usage in MB (16 GB)|
+|-T 8|Number of CPU threads (parallel processing across 8 threads)|
+
+```
+    nano /scratch/workspace/ffields_uri_edu-transcriptomes/dlab/scripts/mcav_cd-hit-est.sh
+```
+
+    #!/bin/bash
+    #SBATCH --job-name=cd-hit_mcav
+    #SBATCH --nodes=1
+    #SBATCH --cpus-per-task=15
+    #SBATCH --mem=200G
+    #SBATCH -p uri-cpu        
+    #SBATCH --time=6-00:00:00
+    #SBATCH -o slurm-cd-hit.out
+    #SBATCH -e slurm-cd-hit.err
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/cd-hit/
+    #SBATCH --constraint=avx512
+
+    echo "Creating cd-hit folder" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/cd-hit/
+    
+    echo "Load cd-hit module" $(date)
+    module load uri/main CD-HIT/4.8.1-GCC-11.3.0
+    
+
+    echo "Define input and output file paths" $(date)
+    INPUT_FILE="/scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/filter_sym_mcav/filtered_mcav.fasta"
+    OUTPUT_FILE="/scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/cd-hit/mcav_cdhit.fasta"
+
+    echo "Run CD-HIT" $(date)
+    cd-hit-est -i $INPUT_FILE -o $OUTPUT_FILE -c 0.95 -n 10 -d 0 -M 16000 -T 8
+
+    echo "DONE" $(date)
+```
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/scripts/mcav_cd-hit-est.sh
+Submitted batch job 40653939
+```
+
+Asses Trinity output with N50 before filtering
+
+    srun --nodes=1 --ntasks=4 --mem=2G --time=00:30:00 --pty bash
+
+    module load uri/main Trinity/2.15.1-foss-2022a
+
+    perl /modules/uri_apps/software/Trinity/2.15.1-foss-2022a/trinityrnaseq-v2.15.1/util/TrinityStats.pl \
+        /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Mcav/data/trinity_out_dir.Trinity.fasta \
+        > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/cd-hit/mcav_orginal_stats.txt
+
+    ################################
+    ## Counts of transcripts, etc.
+    ################################
+    Total trinity 'genes':  437746
+    Total trinity transcripts:      634134
+    Percent GC: 44.33
+
+    ########################################
+    Stats based on ALL transcript contigs:
+    ########################################
+
+            Contig N10: 5332
+            Contig N20: 3594
+            Contig N30: 2620
+            Contig N40: 1966
+            Contig N50: 1456
+
+            Median contig length: 411
+            Average contig: 813.01
+            Total assembled bases: 515556578
+
+
+    #####################################################
+    ## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+    #####################################################
+
+            Contig N10: 4346
+            Contig N20: 2718
+            Contig N30: 1896
+            Contig N40: 1347
+            Contig N50: 934
+
+            Median contig length: 351
+            Average contig: 634.12
+            Total assembled bases: 277584354
+
+## 13) Rerun Busco after CD-HIT
+
+```
+nano busco_CDHIT-mcav
+```
+    #!/bin/bash
+    #SBATCH --job-name=buscoCDHIT_mcav
+    #SBATCH --nodes=1
+    #SBATCH --cpus-per-task=15
+    #SBATCH --mem=200G
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-cdhit_busco.out
+    #SBATCH -e slurm-cdhit_busco.err
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/busco_CDHIT-mcav/
+    #SBATCH --constraint=avx512
+
+    echo "Creating output directory: busco_mdec" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/busco_CDHIT-mcav/
+    export PATH="/work/pi_hputnam_uri_edu/conda/envs/env-busco/bin:$PATH"
+
+    module load conda/latest 
+    conda activate /work/pi_hputnam_uri_edu/conda/envs/env-busco
+   
+    echo "START" $(date)
+
+    #set your de novo transcriptome query file
+    query="/scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/cd-hit/mcav_cdhit.fasta"
+
+    #configure BUSCO ini file
+    busco --config /work/pi_hputnam_uri_edu/conda/envs/env-busco/myconfig.ini \
+        -f -c 15 \
+        -i "${query}" \
+        -l metazoa_odb10 \
+        -o mcav_cdhit_busco_output \
+        -m transcriptome \
+        --download_path /work/pi_hputnam_uri_edu/lineages
+
+    echo "STOP" $(date)
+
+```
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/scripts/busco_CDHIT-mcav
+Submitted batch job 40654099
+
+***** Results: *****
+
+	C:98.2%[S:39.7%,D:58.5%],F:0.7%,M:1.0%,n:954	   
+	937	Complete BUSCOs (C)			   
+	379	Complete and single-copy BUSCOs (S)	   
+	558	Complete and duplicated BUSCOs (D)	   
+	7	Fragmented BUSCOs (F)			   
+	10	Missing BUSCOs (M)			   
+	954	Total BUSCO groups searched
+
+Asses CD-HIT output with N50
+
+    srun --nodes=1 --ntasks=4 --mem=2G --time=00:30:00 --pty bash
+
+    module load uri/main Trinity/2.15.1-foss-2022a
+
+    perl /modules/uri_apps/software/Trinity/2.15.1-foss-2022a/trinityrnaseq-v2.15.1/util/TrinityStats.pl \
+        /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/cd-hit/mcav_cdhit.fasta \
+        > /scratch/workspace/ffields_uri_edu-transcriptomes/mcav/data/cd-hit/mcav_cdhit_stats.txt
+
+        ################################
+    ## Counts of transcripts, etc.
+    ################################
+    Total trinity 'genes':  430426
+    Total trinity transcripts:      533078
+    Percent GC: 44.72
+
+    ########################################
+    Stats based on ALL transcript contigs:
+    ########################################
+
+            Contig N10: 4800
+            Contig N20: 3157
+            Contig N30: 2260
+            Contig N40: 1660
+            Contig N50: 1194
+
+            Median contig length: 384
+            Average contig: 725.61
+            Total assembled bases: 386808215
+
+    #####################################################
+    ## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+    #####################################################
+
+            Contig N10: 4360
+            Contig N20: 2731
+            Contig N30: 1907
+            Contig N40: 1357
+            Contig N50: 943
+
+            Median contig length: 354
+            Average contig: 638.68
+            Total assembled bases: 274904227

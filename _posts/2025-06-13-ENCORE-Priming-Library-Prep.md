@@ -92,6 +92,9 @@ I will run the tapestation on all libraries on 6/16/25. See the full report [her
 ![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_13/20250613_18.jpg)
 ![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_13/20250613_19.jpg)
 
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0003.jpg)
+![](https://raw.githubusercontent.com/flofields/Coral_Priming_Experiments_Summer_2024/refs/heads/main/images/D5000_ScreenTape/2025_06_17/DNA_ENCORE_2025-18_FF1_page-0004.jpg)
+
 #### Note: two peaks were seen for samples MD-1-18, MD-2-5, however bp size was so small and they were close togetheir that the sample does not need to be redone.
-#### Note: Two peaks were seen for samples MD-4-5 and will be redone 20250619 by Dr. Jill Ashey(jill), 2-23, 5-14 however bp size was so small and they were close together that the sample does not need to be redone. MD-1-22 needs to be redone.
+#### Note: Two peaks were seen for samples MD-4-5 and will be redone 20250619 by Dr. Jill Ashey(jill). 2-23 and 5-14 tapestation were ran on 20250617. Their bp size small and they had two peaks but the peaks were close together that the sample does not need to be redone. MD-1-22 needs to be redone.
 

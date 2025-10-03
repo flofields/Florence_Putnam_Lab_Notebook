@@ -947,15 +947,43 @@ Submitted batch job 38815587
 
 Download symbiont files from [marine genomics](https://marinegenomics.oist.jp/symb/gallery) in designated folder and unzipped them
 
-    curl -L -o symbB.v1.0.genome.fa.gz "https://marinegenomics.oist.jp/symb/download/symbB.v1.0.genome.fa.gz"
     curl -L -o symC_scaffold_40.fasta.gz "https://marinegenomics.oist.jp/symb/download/symC_scaffold_40.fasta.gz"
-    curl -L -o symA3_37.fasta.gz "https://marinegenomics.oist.jp/symb/download/symA3_37.fasta.gz"
+    curl -L -o symbd_genome_scaffold.fa.gz "https://marinegenomics.oist.jp/symbd/download/102_symbd_genome_scaffold.fa.gz"
+    cp /work/pi_hputnam_uri_edu/Symbiont_Genomes/C_goreaui_cladeC1/SymbC1.Genome.Scaffolds.fasta.gz /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs
+    cp /work/pi_hputnam_uri_edu/Symbiont_Genomes/Cladocopium_goreaui_SCF055/Cladocopium_goreaui/Cladocopium_goreaui.genome.fa.gz /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs
+    cp /work/pi_hputnam_uri_edu/Symbiont_Genomes/Cladocopium_sp_C92/Cladocopium_sp_C92/Cladocopium_sp_C92.genome.fa.gz /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs
+    
 
-    gunzip symA3_37.fasta.gz
-    gunzip symbB.v1.0.genome.fa.gz
+    gunzip symbd_genome_scaffold.fa.gz
     gunzip symC_scaffold_40.fasta.gz
+    gunzip SymbC1.Genome.Scaffolds.fasta.gz
+    gunzip Cladocopium_goreaui.genome.fa.gz
+    gunzip Cladocopium_sp_C92.genome.fa.gz
 
-Download symbiont files from NCBI using [accession numbers](https://static-content.springer.com/esm/art%3A10.1007%2Fs00248-021-01868-8/MediaObjects/248_2021_1868_MOESM1_ESM.pdf)
+Removes all header lines (starting with >), so you're left with just the sequence lines and filters out lines that only contain valid DNA characters
+
+
+    grep -v '^>' symC_scaffold_40.fasta | grep -v '^[ACGTNacgtn]*$'
+    grep -v '^>' symbd_genome_scaffold.fa | grep -v '^[ACGTNacgtn]*$'
+    grep -v '^>' SymbC1.Genome.Scaffolds.fasta | grep -v '^[ACGTNacgtn]*$'
+    grep -v '^>' Cladocopium_goreaui.genome.fa | grep -v '^[ACGTNacgtn]*$'
+    grep -v '^>' Cladocopium_sp_C92.genome.fa | grep -v '^[ACGTNacgtn]*$'
+
+Combining genomes 
+
+    cat symbd_genome_scaffold.fa symC_scaffold_40.fasta SymbC1.Genome.Scaffolds.fasta Cladocopium_goreaui.genome.fa Cladocopium_sp_C92.genome.fa > cleaned_symbionts.fasta
+
+Running interative job to combine the sym genomes to generate several output files to run queries with blastn against your symbiont sequences for filtering.
+
+    mkdir filter_sym_mdec
+
+    srun --nodes=1 --ntasks=4 --mem=1G --time=01:00:00 --pty bash
+    module load uri/main BLAST+/2.15.0-gompi-2023a
+    makeblastdb -in /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/cleaned_symbionts.fasta \
+            -dbtype nucl \
+            -out /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/symbiont_db_combined
+---
+
 
     curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/AB704015.1.fasta \
       "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=AB704015.1&rettype=fasta&retmode=text"
@@ -1004,198 +1032,374 @@ makeblastdb -in symbiodiniaceae_combined.fasta -dbtype nucl -out symbiont_db_com
     module load uri/main BLAST+/2.15.0-gompi-2023a
     module load uri/main seqtk/1.4-GCC-12.3.0
 
-    echo "Creating the db for the combined sym files"
-    makeblastdb -in /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiodiniaceae_combined.fasta \
-            -dbtype nucl \
-            -out /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiont_db_combined
-
+    
     echo "Run BLAST to identify any contaminants" $(date)
 
     blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta \
-           -db /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiont_db_combined
-           -out contaminant_hits_sym_trinity.txt \
-           -outfmt 6 \
-           -evalue 1e-4 \
-           -perc_identity 90
+            -db /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/symbiont_db_combined \
+            -out /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt \
+            -outfmt 6 \
+            -evalue 1e-4 \
+            -perc_identity 90
+
 
     # Step 2: Extract contaminant IDs from BLAST output
         awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt
 
         # Step 3: Create list of sequences to KEEP (non-contaminants)
-        grep "^>" clean_euk_prok_viral_trinity_sequences.fasta | sed 's/^>//' | sort \
+        grep "^>" /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta | sed 's/^>//' | sort \
         > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/all_sequence_ids.txt
         comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/all_sequence_ids.txt \
-                 /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt \
-                 > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt
+                    /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt \
+                    > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt
 
-                 echo "Filtering non-contaminant sequences with seqtk" $(date)
+                    echo "Filtering non-contaminant sequences with seqtk" $(date)
 
     # Step 4: Remove contaminants using seqtk
     seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta \
             /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt \
-            > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/Filtered_trinity_sequences.fasta
+            > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/filtered_mdec.fasta
 
-    echo "Done. All outputs saved in filter_sym_mdec." $(date)
+    echo "Done. All outputs saved in filter_sym_mdec" $(date)
 
 
 sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/trinity_filter_sym_contam.sh
-Submitted batch job 39137931
+Submitted batch job 40590515
 
-Recieved an error file
-
-    Removing uri version main
-    Loading uri version main
-    NOTE: The modules under this branch will not run on the login node. Use
-    --constraint=avx512 for sbatch or srun sessions. 
-    Removing uri version main
-    Loading uri version main
-    NOTE: The modules under this branch will not run on the login node. Use
-    --constraint=avx512 for sbatch or srun sessions. 
-    FASTA-Reader: Ignoring invalid residues at position(s): On line 12: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
-    FASTA-Reader: Ignoring invalid residues at position(s): On line 13: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
-    FASTA-Reader: Ignoring invalid residues at position(s): On line 25: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
-    FASTA-Reader: Ignoring invalid residues at position(s): On line 32: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
-    FASTA-Reader: Ignoring invalid residues at position(s): On line 33: 1-3, 6, 8-10, 12-13, 18, 20-21, 23, 26-27, 29-30, 32, 34-36, 38-39, 42, 44-64, 66, 70-78, 80, 82-87
-    /var/spool/slurm/slurmd/job39137931/slurm_script: line 25: -out: command not found
-    awk: fatal: cannot open file `/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt' for reading: No such file or directory
-    grep: clean_euk_prok_viral_trinity_sequences.fasta: No such file or directory
-
-I will first find lines that don't conform to proper FASTA then isolate the clean squences and remove the rest in an interactive job and then rebuild the db 
-
-    grep -n -v -E '^>|\b[ACGTNacgtn]+\b' symbiodiniaceae_combined.fasta
-
-    srun --nodes=1 --cpus-per-task=1 --mem=2G --time=00:30:00 --constraint=avx512 --pty bash
-    module load uri/main seqtk/1.4-GCC-12.3.0
-    seqtk seq -A symbiodiniaceae_combined.fasta > cleaned2_symbionts.fasta
-
-Reruning the script below with the new fasta and including the entire dir for the out blast file
-
-    #!/bin/bash
-    #SBATCH --job-name=filter_sym_mdec
-    #SBATCH --nodes=1 --cpus-per-task=15
-    #SBATCH --mem=200G  # Requested Memory
-    #SBATCH --time=24:00:00
-    #SBATCH -o slurm-filter_sym_mdec.out  # %j = job ID
-    #SBATCH -e slurm-filter_sym_mdec.err  # %j = job ID
-    #SBATCH --mail-type=BEGIN,END,FAIL
-    #SBATCH --mail-user=ffields@uri.edu
-    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/
-    #SBATCH --constraint=avx512
-
-    module load uri/main BLAST+/2.15.0-gompi-2023a
-    module load uri/main seqtk/1.4-GCC-12.3.0
-
-    echo "Creating the db for the combined sym files"
-    makeblastdb -in /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/cleaned2_symbionts.fasta \
-            -dbtype nucl \
-            -out /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiont_db_combined
-
-    echo "Run BLAST to identify any contaminants" $(date)
-
-    blastn -query /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta \
-           -db /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/symbiont_dbs/symbiont_db_combined
-           -out /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt \
-           -outfmt 6 \
-           -evalue 1e-4 \
-           -perc_identity 90
-   
-
-    # Step 2: Extract contaminant IDs from BLAST output
-        awk '{print $1}' /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_hits_sym_trinity.txt | sort | uniq > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt
-
-        # Step 3: Create list of sequences to KEEP (non-contaminants)
-        grep "^>" clean_euk_prok_viral_trinity_sequences.fasta | sed 's/^>//' | sort \
-        > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/all_sequence_ids.txt
-        comm -23 /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/all_sequence_ids.txt \
-                 /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/contaminant_ids.txt \
-                 > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt
-
-                 echo "Filtering non-contaminant sequences with seqtk" $(date)
-
-    # Step 4: Remove contaminants using seqtk
-    seqtk subseq /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta \
-            /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/retained_ids.txt \
-            > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/Filtered_trinity_sequences.fasta
-
-    echo "Done. All outputs saved in filter_sym_mdec." $(date)
- 
- sbatch trinity_filter_sym_contam.sh
-Submitted batch job 39198426
 
 ### Running BUSCO on filtered fasta and downloading metazoa db
-curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec/metazoa_odb10.2020-09-10.tar.gz https://bioinformaticsonline.com/bookmarks/view/42621/busco-datasets/metazoa_odb10.2020-09-10.tar.gz 
 
+curl -o /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec/metazoa_odb10.2020-09-10.tar.gz https://bioinformaticsonline.com/bookmarks/view/42621/busco-datasets/metazoa_odb10.2020-09-10.tar.gz 
+curl -o metazoa_odb10.2020-09-10.tar.gz https://bioinformaticsonline.com/bookmarks/view/42621/busco-datasets/metazoa_odb10.2020-09-10.tar.gz 
 tar -xzf metazoa_odb10.2020-09-10.tar.gz
 busco -i Trinity_filtered.fasta -l metazoa_odb10 -m transcriptome -o busco_output 
 
-nano filter_busco_mdec
 ```
-#!/bin/bash
-#SBATCH --job-name=filter_busco_mdec
-#SBATCH --nodes=1
-#SBATCH --cpus-per-task=15
-#SBATCH --mem=200G
-#SBATCH --time=24:00:00
-#SBATCH -o slurm-filter_busco.out
-#SBATCH -e slurm-filter_busco.err
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=ffields@uri.edu
-#SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec/
-#SBATCH --constraint=avx512
+nano busco_mdec
+```
+    #!/bin/bash
+    #SBATCH --job-name=busco_mdec
+    #SBATCH --nodes=1
+    #SBATCH --cpus-per-task=15
+    #SBATCH --mem=200G
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-filter_busco.out
+    #SBATCH -e slurm-filter_busco.err
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/busco_mdec/
+    #SBATCH --constraint=avx512
 
-module load conda/latest
-conda activate /work/pi_hputnam_uri_edu/conda/envs/env-busco
+    echo "Creating output directory: busco_mdec" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/busco_mdec/
+    export PATH="/work/pi_hputnam_uri_edu/conda/envs/env-busco/bin:$PATH"
 
-echo “START” $(date)
-#configure BUSCO ini file
-busco --config /work/pi_hputnam_uri_edu/conda/envs/env-busco/myconfig.ini
+    module load conda/latest 
+    conda activate /work/pi_hputnam_uri_edu/conda/envs/env-busco
+   
+    echo "START" $(date)
 
-#set your de novo transcriptome query file
-query=“/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_viral_mdec/clean_euk_prok_viral_trinity_sequences.fasta”
+    #set your de novo transcriptome query file
+    query="/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data//filter_sym_mdec/filtered_mdec.fasta"
 
-#run busco with your config file against your db of interest
-busco --config “/work/pi_hputnam_uri_edu/conda/envs/env-busco/myconfig.ini” -f -c 15 -i “${query}” -l metazoa_odb10 -o mdec_busco_output -m transcriptome
-echo “STOP” $(date)
+    #configure BUSCO ini file
+    busco --config /work/pi_hputnam_uri_edu/conda/envs/env-busco/myconfig.ini \
+        -f -c 15 \
+        -i "${query}" \
+        -l metazoa_odb10 \
+        -o mdec_busco_output \
+        -m transcriptome \
+        --download_path /work/pi_hputnam_uri_edu/lineages
 
-sbatch filter_busco_mdec
-Submitted batch job 39135465
+    echo "STOP" $(date)
+
+```
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/busco_mdec
+Submitted batch job 40645601
 ```
 
-removed
-echo “Creating output directory: busco analysis mdec” $(date)
-mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_busco_mdec
+BUSCO RESULTS before CD-HIT
+
+    cd /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/busco_mdec/mdec_busco_output
+    less short_summary.specific.metazoa_odb10.mdec_busco_output.txt
+
+        ***** Results: *****
+
+	    C:97.5%[S:12.9%,D:84.6%],F:1.2%,M:1.4%,n:954	   
+	    930	Complete BUSCOs (C)			   
+	    123	Complete and single-copy BUSCOs (S)	   
+	    807	Complete and duplicated BUSCOs (D)	   
+	    11	Fragmented BUSCOs (F)			   
+	    13	Missing BUSCOs (M)			   
+	    954	Total BUSCO groups searched
+---
+
+Asses BUSCO output with N50 after filtering
+
+    srun --nodes=1 --ntasks=4 --mem=2G --time=00:30:00 --pty bash
+
+    module load uri/main Trinity/2.15.1-foss-2022a
+
+    perl /modules/uri_apps/software/Trinity/2.15.1-foss-2022a/trinityrnaseq-v2.15.1/util/TrinityStats.pl \
+        /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/filtered_mdec.fasta \
+        > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/busco_mdec/mdec_filtered_busco_stats.txt
+
+    ################################
+    ## Counts of transcripts, etc.
+    ################################
+    Total trinity 'genes':  360287
+    Total trinity transcripts:      621947
+    Percent GC: 42.47
+
+    ########################################
+    Stats based on ALL transcript contigs:
+    ########################################
+
+            Contig N10: 4613
+            Contig N20: 3117
+            Contig N30: 2312
+            Contig N40: 1750
+            Contig N50: 1302
+
+            Median contig length: 435
+            Average contig: 794.59
+            Total assembled bases: 494193435
+
+    #####################################################
+    ## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+    #####################################################
+
+            Contig N10: 4102
+            Contig N20: 2670
+            Contig N30: 1908
+            Contig N40: 1374
+            Contig N50: 958
+
+            Median contig length: 367
+            Average contig: 652.43
+            Total assembled bases: 235062114
+
+## 12) Use CD_HIT to reduce redundancy to improve the transcriptome quality
+
+[CD-HIT](https://sites.google.com/view/cd-hit) (Cluster Database at High Identity with Tolerance) is a clustering and protein/nucleotide comparitive program. The goal of using CD-HIT here is to clusster similar proteins/ nucleotide based on sequence idenity thresholds. This can reduce redundancy which may play a role in a high duplication rate and shinks dataset without losing any biological information or diversity. They are a few CD_HIT function specfic for different purposes. I will be using the CD-HIT-EST fuction (Cluster Database at High Identity with Tolerance for ESTs (Expressed Sequence Tags)) which takes the FASTAformat sequence db as the input and produces the non-redundant representative sequences as the output. 
+URI currently has the CD-HIT downloaded as a module so that will be used in this script: CD-HIT/4.8.1-GCC-11.3.0 . In this script refer to the table for the flags used and their purpose
+
+|flag|purpose|
+|----|-------|
+|-i|Input FASTA file|
+|-o|Output FASTA file(representative sequences after clustering)|
+|-c 0.95|Identity threshold (95% sequence similarity required to cluster)|
+|-n 10|Word size — appropriate for high identity thresholds like 0.95|
+|-d 0|Description length (0 = suppress extra info in output FASTA headers)|
+|-M 16000|Max memory usage in MB (16 GB)|
+|-T 8|Number of CPU threads (parallel processing across 8 threads)|
+
+```
+ nano /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/mdec_cd-hit-est.sh
+```
+
+    #!/bin/bash
+    #SBATCH --job-name=cd-hit_mdec
+    #SBATCH --nodes=1
+    #SBATCH --cpus-per-task=15
+    #SBATCH --mem=200G
+    #SBATCH -p uri-cpu        
+    #SBATCH --time=6-00:00:00
+    #SBATCH -o slurm-cd-hit.out
+    #SBATCH -e slurm-cd-hit.err
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/cd-hit/
+    #SBATCH --constraint=avx512
+
+    echo "Creating cd-hit folder" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/cd-hit/
+    
+    echo "Load cd-hit module" $(date)
+    module load uri/main CD-HIT/4.8.1-GCC-11.3.0
+    
+
+    echo "Define input and output file paths" $(date)
+    INPUT_FILE="/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/filter_sym_mdec/filtered_mdec.fasta"
+    OUTPUT_FILE="/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/cd-hit/mdec_cdhit.fasta"
+
+    echo "Run CD-HIT" $(date)
+    cd-hit-est -i $INPUT_FILE -o $OUTPUT_FILE -c 0.95 -n 10 -d 0 -M 16000 -T 8
+
+    echo "DONE" $(date)
+
+ ```
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/mdec_cd-hit-est.sh
+Submitted batch job 40653856
+```
+CD-HIT-EST Output file
+
+    ================================================================
+                                Output
+    ----------------------------------------------------------------
+    total seq: 621947
+    longest and shortest : 50454 and 61
+    Total letters: 494193435
+    Sequences have been sorted
+
+    Approximated minimal memory consumption:
+    Sequence        : 580M
+    Buffer          : 8 X 30M = 242M
+    Table           : 2 X 26M = 53M
+    Miscellaneous   : 11M
+    Total           : 888M
+
+Asses CD-HIT-EST output with N50 and BUSCO
+
+    srun --nodes=1 --ntasks=4 --mem=2G --time=00:30:00 --pty bash
+
+    module load uri/main Trinity/2.15.1-foss-2022a
+
+    perl /modules/uri_apps/software/Trinity/2.15.1-foss-2022a/trinityrnaseq-v2.15.1/util/TrinityStats.pl \
+        /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/cd-hit/mdec_cdhit.fasta \
+        > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/cd-hit/mdec_cdhit_stats.txt
+
+        ################################
+        ## Counts of transcripts, etc.
+        ################################
+        Total trinity 'genes':  346840
+        Total trinity transcripts:      470425
+        Percent GC: 42.71
+
+        ########################################
+        Stats based on ALL transcript contigs:
+        ########################################
+
+            Contig N10: 4113
+            Contig N20: 2723
+            Contig N30: 1976
+            Contig N40: 1460
+            Contig N50: 1054
+
+            Median contig length: 402
+            Average contig: 703.64
+            Total assembled bases: 331008332
+
+The N10 through N50 values are shown computed based on all assembled contigs. Here 10% of assembled bases found in trancript contigs are at least 4113 and 50% are 1054 bases in length
+Assemblier programs (Trinity) often generate multiple isoforms per gene which can inflate N50 which should reflect the contig length distribution ut can be misleading. To fix this issue Nx values based only on the longest isoform per gene seen below.
+
+    #####################################################
+    ## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+    #####################################################
+
+            Contig N10: 4137
+            Contig N20: 2696
+            Contig N30: 1933
+            Contig N40: 1402
+            Contig N50: 985
+
+            Median contig length: 374
+            Average contig: 664.59
+            Total assembled bases: 230507264
+It was expected that the Nx values based only on the longest isoform per gene are lower than the Nx values based on all assembled contigs.
+
+## 13) Rerun Busco after CD-HIT
+
+```
+nano busco_CDHIT-mdec
+```
+    #!/bin/bash
+    #SBATCH --job-name=buscoCDHIT_mdec
+    #SBATCH --nodes=1
+    #SBATCH --cpus-per-task=15
+    #SBATCH --mem=200G
+    #SBATCH --time=24:00:00
+    #SBATCH -o slurm-cdhit_busco.out
+    #SBATCH -e slurm-cdhit_busco.err
+    #SBATCH --mail-type=BEGIN,END,FAIL
+    #SBATCH --mail-user=ffields@uri.edu
+    #SBATCH -D /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/busco_CDHIT-mdec/
+    #SBATCH --constraint=avx512
+
+    echo "Creating output directory: busco_mdec" $(date)
+    mkdir -p /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/busco_CDHIT-mdec/
+    export PATH="/work/pi_hputnam_uri_edu/conda/envs/env-busco/bin:$PATH"
+
+    module load conda/latest 
+    conda activate /work/pi_hputnam_uri_edu/conda/envs/env-busco
+   
+    echo "START" $(date)
+
+    #set your de novo transcriptome query file
+    query="/scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/cd-hit/mdec_cdhit.fasta"
+
+    #configure BUSCO ini file
+    busco --config /work/pi_hputnam_uri_edu/conda/envs/env-busco/myconfig.ini \
+        -f -c 15 \
+        -i "${query}" \
+        -l metazoa_odb10 \
+        -o mdec_cdhit_busco_output \
+        -m transcriptome \
+        --download_path /work/pi_hputnam_uri_edu/lineages
+
+    echo "STOP" $(date)
+
+```
+sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/busco_CDHIT-mdec
+Submitted batch job 40654068
+```
+BUSCO RESULTS sfter CD-HIT
+
+    cd /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/cd-hit/mdec_cdhit.fasta
+    less short_summary.specific.metazoa_odb10.mdec_cdhit_busco_output.txt
+
+    ***** Results: *****
+
+	C:97.4%[S:48.4%,D:49.0%],F:1.3%,M:1.4%,n:954	   
+	929	Complete BUSCOs (C)			   
+	462	Complete and single-copy BUSCOs (S)	   
+	467	Complete and duplicated BUSCOs (D)	   
+	12	Fragmented BUSCOs (F)			   
+	13	Missing BUSCOs (M)			   
+	954	Total BUSCO groups searched
+
+Assess Trinity output with N50 before filtering
+
+    srun --nodes=1 --ntasks=4 --mem=2G --time=00:30:00 --pty bash
+
+    module load uri/main Trinity/2.15.1-foss-2022a
+
+    perl /modules/uri_apps/software/Trinity/2.15.1-foss-2022a/trinityrnaseq-v2.15.1/util/TrinityStats.pl \
+        /project/pi_hputnam_uri_edu/ffields/Transcriptomes/Mdec/trim2/trinity_out_dir.Trinity.fasta \
+        > /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/data/cd-hit/mdec_orginal_stats.txt
+
+    ################################
+    ## Counts of transcripts, etc.
+    ################################
+    Total trinity 'genes':  360287
+    Total trinity transcripts:      621947
+    Percent GC: 42.47
+
+    ########################################
+    Stats based on ALL transcript contigs:
+    ########################################
+
+            Contig N10: 4613
+            Contig N20: 3117
+            Contig N30: 2312
+            Contig N40: 1750
+            Contig N50: 1302
+
+            Median contig length: 435
+            Average contig: 794.59
+            Total assembled bases: 494193435
 
 
-echo "START" $(date)
+    #####################################################
+    ## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+    #####################################################
+            Contig N10: 4102
+            Contig N20: 2670
+            Contig N30: 1908
+            Contig N40: 1374
+            Contig N50: 958
 
-labbase=/data/putnamlab
-busco_shared="${labbase}/shared/busco"
-[ -z "$query" ] && query="${labbase}/flofields/ENCORE_MDEC_denovo_transcriptome/data/trim2/trinity_out_dir.Trinity.fasta" # set this to the query (genome/transcriptome) you are running
-[ -z "$db_to_compare" ] && db_to_compare="${busco_shared}/downloads/lineages/metazoa_odb10"
+            Median contig length: 367
+            Average contig: 652.43
+            Total assembled bases: 235062114
 
-source "${busco_shared}/scripts/busco_init.sh"  # sets up the modules required for this in the right order
-
-# This will generate output under your $HOME/busco_output
-cd "${labbase}/${flofields}"
-busco --config "$EBROOTBUSCO/config/config.ini"  -f -c 20 --long -i "${query}" -l metazoa_odb10 -o busco_output -m transcriptome
-
-
-echo "STOP" $(date)
-
-## From here down move to new md
-Translate it to amino acids
-
-    transdecoder.LongOrfs -t filtered_transcripts.fasta
-    transdecoder.Predict -t filtered_transcripts.fasta
-
-Format headers for Broccoli
-
-    sed 's/^>/>Mdec|/' filtered_transcripts.fasta.transdecoder.pep > Mdec.faa
-
-Organize multi-species input
-Place all species FASTAs into one directory
-
-broccoli.py -i /PATH/orthofiles/ \
-            -o broccoli_output/ \
-            -t 16
-sbatch /scratch/workspace/ffields_uri_edu-transcriptomes/mdec/scripts/filter_busco_mdec.sh
